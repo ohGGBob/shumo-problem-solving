@@ -1,8 +1,8 @@
 ---
 name: shumo-problem-solving
-description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）、2026 国赛 AI 使用声明与使用详情合规生成，并支持时间极紧时的紧急全自动模式（emergency_run 不跳步走完 7 阶段 + 一键收口）。当用户给出数模题目、要求建立模型或求解、撰写数模论文或 AI 使用报告、或要求紧急全流程产出时使用。
-whenToUse: 用户给出数模竞赛题、要求建模/求解/检验、撰写数模论文与摘要、生成 AI 使用声明/详情（2026 合规），或时间紧急要求全自动走完全流程时。
-version: 1.6.0
+description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）、2026 国赛 AI 使用声明与使用详情合规生成，支持时间极紧时的紧急全自动模式（emergency_run 不跳步走完 7 阶段 + 一键收口），并按 DeepSeek V4 Pro / V4 Flash 双引擎适配（Pro 想、Flash 做）。当用户给出数模题目、要求建立模型或求解、撰写数模论文或 AI 使用报告、要求紧急全流程产出、或询问 V4 Pro/Flash 任务分工时使用。
+whenToUse: 用户给出数模竞赛题、要求建模/求解/检验、撰写数模论文与摘要、生成 AI 使用声明/详情（2026 合规）、时间紧急要求全自动走完全流程，或询问 DeepSeek V4 Pro/Flash 双引擎分工与适配时。
+version: 1.7.0
 updated: 2026-09-02
 ---
 
@@ -110,6 +110,7 @@ updated: 2026-09-02
 | **交稿收口** | `reproducibility.md` + 跑 `scripts/prize_gate.py`（一键计分板，聚合全部校验） |
 | **紧急模式** | `emergency-mode.md` + 跑 `scripts/emergency_run.py`（7 阶段不跳步 + 红警 + 一键收口） |
 | **AI 使用报告（2026 合规）** | `ai-usage-report.md` + 跑 `scripts/gen_ai_report.py`（声明 + 使用详情四要素 + 匿名） |
+| **模型适配（V4 双引擎）** | `model-adaptation.md` + 跑 `scripts/model_profile.py`（Pro 想 / Flash 做：分工 + token 预算 + 升级降级） |
 
 脚本（位于本 SKILL.md 同级 `scripts/` 目录；除 `plot_style.py` 需 matplotlib 外，其余零第三方依赖，PIL 可选降级）：
 
@@ -129,6 +130,7 @@ updated: 2026-09-02
 | `decision_log.py` | **决策日志**：每次拍板留痕（环节/决策/理由/取舍/风险/AI参与），可导出论文「设计意图」素材与 AI 使用详情素材；紧急模式与 AI 报告的共同数据源 |
 | `gen_ai_report.py` | **2026 国赛 AI 使用报告**：按官方规定生成参考文献前的「AI工具使用声明」+ 支撑材料「AI工具使用详情」（四要素+匿名，自动汇总决策日志；有 pandoc 可转 PDF） |
 | `emergency_run.py` | **紧急全流程编排器**：7 阶段 checkpoint 不跳步 + 红警（时间vs进度自动给"砍什么保什么"）+ finish 一键收口（prize_gate+AI报告+提交清单） |
+| `model_profile.py` | **V4 双引擎画像**：按模型输出推荐配置（token 预算/加载策略/分工/升级降级信号），`model_profile.py v4-pro|v4-flash [--json]` |
 
 > 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；唯一例外 `plot_style.py` 需 matplotlib（画图本来就要，见 `code-templates.md`）。
 >
@@ -147,6 +149,15 @@ updated: 2026-09-02
 7. **论文与摘要**：按国赛或美赛规范成文，摘要覆盖四要素，过 `paper-quality-gate.md`（支柱三）。
 
 赛程节奏（详见 `references/timeline.md`）：国赛 3 天、美赛 4 天。**第 2 天晚还没跑通全部模型 = 红警，立即砍复杂度保可交付**。**开赛前 10 分钟先跑 `check_env.py` 体检环境（在真正建模用的那个 Python 环境里），缺库/过旧立刻修，别等赛中才发现。**
+
+## 模型适配（DeepSeek V4 Pro / V4 Flash 双引擎）
+
+默认由 V4-Pro / V4-Flash 双引擎驱动，分工一句话：**Pro 想、Flash 做**（详见 `references/model-adaptation.md`，画像见 `scripts/model_profile.py`）。
+
+- **V4-Pro（贵、慢、强）**：省着用，只喂高价值推理——模型选型、创新点设计、假设自洽、论文论证段、复杂求解。提示词给开放式多方案 + DeepThink 长链验证。
+- **V4-Flash（便宜、快、1M 上下文）**：放开用，做批量与机械活——数据清洗、求解落盘、全部校验脚本（sanity/对账/降重/文献/图表）、降 AI 味改写、AI 报告。
+- **分流**：每环节动手前按第二节判断用哪款；**Flash 卡壳（多次试错/推理敷衍/取舍说不清）→ 该环节升级 Pro；Pro 在跑批量琐事 → 降级 Flash**。
+- **成本锚点**：Pro 输入 ¥3/M 输出 ¥6/M；Flash 输入 ¥1/M（缓存 ¥0.02）输出 ¥2/M（以官方定价页为准）。高频小任务、长文档全量放 Flash 最划算。
 
 ## 交稿前自检收口（交付前必过，缺项视为未完成）
 

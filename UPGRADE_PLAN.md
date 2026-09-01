@@ -1,8 +1,8 @@
-# 国一冲刺升级方案（UPGRADE_PLAN · v1.6.0）
+# 国一冲刺升级方案（UPGRADE_PLAN · v1.7.0）
 
 > 目标：把本 skill 从"强助教"推到"国一助攻"——不是承诺保送国一，而是把**可避免的失分清零**、把**亮点命中率抬到最高**、把 **72h 节奏管住**。国一 = 逻辑严密 × 计算准确 × 创新有据 × 表述清晰 × 规则零违规，本方案逐项打。
 
-## 一、已落地（v1.6.0，直接可用）
+## 一、已落地（v1.7.0，直接可用）
 
 | 增量 | 对应失分点 | 用法 |
 |---|---|---|
@@ -14,6 +14,7 @@
 | `scripts/emergency_run.py` | 时间极紧时慌到跳步/漏项/带病提交 | 紧急模式：7 阶段 checkpoint 不跳步 + 红警自动降级 + finish 一键收口（prize_gate+AI报告+提交清单） |
 | 修复（v1.4.1→1.5.0） | Windows BOM 崩溃 / 负数误报 / 6.2% 拆错 | `check_results`/`sanity_check` 等 5 脚本改 `utf-8-sig`；数字提取支持负数 + 原子组防拆 + 百分比去重 |
 | 合规依据 | 规则未核先动笔 | 按官方原文核实 2026 AI 规定（mcm.edu.cn），写入 `references/ai-usage-report.md` |
+| 模型适配（v1.7.0） | 双模型不会用：Pro/Flash 不分流、贵模型干琐事 | `references/model-adaptation.md`（Pro 想/Flash 做 + 分工表 + 成本锚点）+ `scripts/model_profile.py`（按模型出推荐配置） |
 
 ## 二、建议后续（按优先级，赛前窗口内能做的排前面）
 
