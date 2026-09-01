@@ -1,8 +1,8 @@
-# 国一冲刺升级方案（UPGRADE_PLAN · v1.7.0）
+# 国一冲刺升级方案（UPGRADE_PLAN · v1.8.0）
 
 > 目标：把本 skill 从"强助教"推到"国一助攻"——不是承诺保送国一，而是把**可避免的失分清零**、把**亮点命中率抬到最高**、把 **72h 节奏管住**。国一 = 逻辑严密 × 计算准确 × 创新有据 × 表述清晰 × 规则零违规，本方案逐项打。
 
-## 一、已落地（v1.7.0，直接可用）
+## 一、已落地（v1.8.0，直接可用）
 
 | 增量 | 对应失分点 | 用法 |
 |---|---|---|
@@ -14,7 +14,8 @@
 | `scripts/emergency_run.py` | 时间极紧时慌到跳步/漏项/带病提交 | 紧急模式：7 阶段 checkpoint 不跳步 + 红警自动降级 + finish 一键收口（prize_gate+AI报告+提交清单） |
 | 修复（v1.4.1→1.5.0） | Windows BOM 崩溃 / 负数误报 / 6.2% 拆错 | `check_results`/`sanity_check` 等 5 脚本改 `utf-8-sig`；数字提取支持负数 + 原子组防拆 + 百分比去重 |
 | 合规依据 | 规则未核先动笔 | 按官方原文核实 2026 AI 规定（mcm.edu.cn），写入 `references/ai-usage-report.md` |
-| 模型适配（v1.7.0） | 双模型不会用：Pro/Flash 不分流、贵模型干琐事 | `references/model-adaptation.md`（Pro 想/Flash 做 + 分工表 + 成本锚点）+ `scripts/model_profile.py`（按模型出推荐配置） |
+| 模型适配（v1.8.0 收敛） | 型号细分过度、维护负担 | 收敛为 `references/model-adaptation.md`（DeepSeek 系通用：不区分型号、脚本与型号无关、卡壳换更强型号），删除细分工具 `model_profile.py` |
+| 亮点预埋（v1.8.0） | 赛中才现想创新、没证据链 | `references/lightning-skeletons.md`（A/B/C 三题型各 3 可移植骨架：模型组合 + 证据链 + 论文落点模板 + 预写清单，命中即套） |
 
 ## 二、建议后续（按优先级，赛前窗口内能做的排前面）
 
@@ -27,7 +28,7 @@
 - [x] **决策日志**：`decision_log.py` 已落地，`export --for design` 直出论文「设计意图」素材；`export --for aireport` 喂给 AI 报告。
 - [x] **紧急模式**：`emergency_run.py` 已落地——时间极紧时一条命令管到底（7 阶段不跳步 + 红警 + 一键收口），见 `references/emergency-mode.md`。
 - [x] **AI 使用报告（2026 合规）**：`gen_ai_report.py` + `references/ai-usage-report.md` 已落地（声明 + 详情四要素 + 匿名 + 红线）。
-- [ ] **亮点预埋**：赛前按 `innovation-playbook.md` 给 A/B/C 三题型各预写 2–3 个**可移植亮点骨架**（多模型对照择优、理论点证明、蒙特卡洛证据链），赛中直接套——创新是设计出来的，不是赛后找的。
+- [x] **亮点预埋**：`lightning-skeletons.md` 已落地（v1.8.0）——A/B/C 三题型各 3 可移植亮点骨架（模型组合 + 证据链 + 论文落点模板 + 预写清单），赛前按"预写清单"备齐代码与图模板，赛中命中即套。
 - [ ] **红警看板**：`timeline.md` 的红警线（D2 晚未跑通全部模型=砍复杂度）做成可勾选进度表，每问过 `sanity_check.py` 自动拦量级错。
 
 ### P2 · 交稿前 6h

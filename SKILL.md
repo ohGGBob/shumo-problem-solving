@@ -1,8 +1,8 @@
 ---
 name: shumo-problem-solving
-description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）、2026 国赛 AI 使用声明与使用详情合规生成，支持时间极紧时的紧急全自动模式（emergency_run 不跳步走完 7 阶段 + 一键收口），并按 DeepSeek V4 Pro / V4 Flash 单模型预设适配（选 Pro=推理优先，选 Flash=执行优先）。当用户给出数模题目、要求建立模型或求解、撰写数模论文或 AI 使用报告、要求紧急全流程产出、或询问 V4 Pro/Flash 任务分工时使用。
-whenToUse: 用户给出数模竞赛题、要求建模/求解/检验、撰写数模论文与摘要、生成 AI 使用声明/详情（2026 合规）、时间紧急要求全自动走完全流程，或询问 DeepSeek V4 Pro/Flash 单模型预设与适配时。
-version: 1.7.1
+description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）、2026 国赛 AI 使用声明与使用详情合规生成，支持时间极紧时的紧急全自动模式（emergency_run 不跳步走完 7 阶段 + 一键收口），并通用适配 DeepSeek 系模型（V3/R1/V4 全系列，一次会话绑定一个型号即可）。当用户给出数模题目、要求建立模型或求解、撰写数模论文或 AI 使用报告、要求紧急全流程产出、或询问 DeepSeek 系模型适配时使用。
+whenToUse: 用户给出数模竞赛题、要求建模/求解/检验、撰写数模论文与摘要、生成 AI 使用声明/详情（2026 合规）、时间紧急要求全自动走完全流程，或询问 DeepSeek 系模型适配时。
+version: 1.8.0
 updated: 2026-09-02
 ---
 
@@ -102,6 +102,7 @@ updated: 2026-09-02
 | **避坑自查** | `pitfalls-cookbook.md`（20 条真实翻车实录，对照质量三支柱 / 铁律逐条自查） |
 | **逻辑严密性** | `logic-rigor.md` ← 支柱一 |
 | **创新设计** | `innovation-playbook.md` ← 支柱二 |
+| **亮点预埋（三题型弹药库）** | `lightning-skeletons.md`（A/B/C 各 3 可移植骨架：模型组合 + 证据链 + 论文落点模板 + 预写清单；赛前预写、赛中命中即套） |
 | **论文成文** | `paper-skeleton.md` → `bao-paper-writing.md` → `figures-and-abstract.md` → `figure-polish.md`（图更好看）→ `paper-quality-gate.md` ← 支柱三；**中文稿精打磨加 `chinese-writing-advanced.md`** |
 | **降 AI 味 / 降重** | `writing-deai-dedup.md` → `deai-rewrite-bank.md`（脚本命中后照它逐条改）；美赛英文加 `english-writing-mcm.md` §八；交稿跑 `dedup_scan.py` |
 | **美赛专册** | `mcm-icm-guide.md`（**全文 25 页硬上限 + 页面预算表 + 英文 QA**）、`cases-2026-mcm.md`（六题解析）、**`english-writing-mcm.md`（Summary Sheet 句式库 / Policy Letter / 术语表）**、**`worked-example-2026-mcmA.md`（A 题机理范式串链范本）**、**`worked-example-2026-mcmC.md`（C 题统计逆问题范式范本）** |
@@ -110,7 +111,7 @@ updated: 2026-09-02
 | **交稿收口** | `reproducibility.md` + 跑 `scripts/prize_gate.py`（一键计分板，聚合全部校验） |
 | **紧急模式** | `emergency-mode.md` + 跑 `scripts/emergency_run.py`（7 阶段不跳步 + 红警 + 一键收口） |
 | **AI 使用报告（2026 合规）** | `ai-usage-report.md` + 跑 `scripts/gen_ai_report.py`（声明 + 使用详情四要素 + 匿名） |
-| **模型适配（V4 双引擎）** | `model-adaptation.md` + 跑 `scripts/model_profile.py`（Pro 想 / Flash 做：分工 + token 预算 + 升级降级） |
+| **模型适配（DeepSeek 系通用）** | `model-adaptation.md`（不区分型号：长上下文 / 成本意识 / 卡壳换更强型号） |
 
 脚本（位于本 SKILL.md 同级 `scripts/` 目录；除 `plot_style.py` 需 matplotlib 外，其余零第三方依赖，PIL 可选降级）：
 
@@ -130,9 +131,8 @@ updated: 2026-09-02
 | `decision_log.py` | **决策日志**：每次拍板留痕（环节/决策/理由/取舍/风险/AI参与），可导出论文「设计意图」素材与 AI 使用详情素材；紧急模式与 AI 报告的共同数据源 |
 | `gen_ai_report.py` | **2026 国赛 AI 使用报告**：按官方规定生成参考文献前的「AI工具使用声明」+ 支撑材料「AI工具使用详情」（四要素+匿名，自动汇总决策日志；有 pandoc 可转 PDF） |
 | `emergency_run.py` | **紧急全流程编排器**：7 阶段 checkpoint 不跳步 + 红警（时间vs进度自动给"砍什么保什么"）+ finish 一键收口（prize_gate+AI报告+提交清单） |
-| `model_profile.py` | **V4 双引擎画像**：按模型输出推荐配置（token 预算/加载策略/分工/升级降级信号），`model_profile.py v4-pro|v4-flash [--json]` |
 
-> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；唯一例外 `plot_style.py` 需 matplotlib（画图本来就要，见 `code-templates.md`）。
+> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；唯一例外 `plot_style.py` 需 matplotlib（画图本来就要，见 `code-templates.md`）。**脚本全部与模型型号无关，任何 DeepSeek 系会话下直接调用。**
 >
 > **脚本不可运行（如无 Python 环境）时，按下面手工清单逐条替代**：① 数值对账——把论文数字逐个在 `out/results.json` 里检索，找不到即"野数字"，要么补进 json 要么删；② 量纲/量级/边界——人肉过 `validation-checklist.md` 的量级三连（权重和=1、概率∈[0,1]、单位一致）；③ 参考文献——逐条在期刊/DOI 联网核，正文引用键与文末表一一对应，孤儿/悬空都删；④ 图表——逐张看标题/单位/图例/≥300dpi/图注三件套，配色与右上 spine 照 `figure-polish.md` §5、§6；⑤ 降重——摘要/重述/结论扫"首先其次最后"套娃与零信息句；⑥ 复现——固定 seed 重跑一遍再逐位比对。
 
@@ -150,15 +150,9 @@ updated: 2026-09-02
 
 赛程节奏（详见 `references/timeline.md`）：国赛 3 天、美赛 4 天。**第 2 天晚还没跑通全部模型 = 红警，立即砍复杂度保可交付**。**开赛前 10 分钟先跑 `check_env.py` 体检环境（在真正建模用的那个 Python 环境里），缺库/过旧立刻修，别等赛中才发现。**
 
-## 模型适配（DeepSeek V4 Pro / V4 Flash 单模型预设）
+## 模型适配（DeepSeek 系通用）
 
-一次会话只能绑一个模型。适配 = **选定模型后按对应预设执行**（详见 `references/model-adaptation.md`，画像见 `scripts/model_profile.py`）。
-
-- **V4-Pro 预设（贵、慢、强）**：推理优先——多方案推导、DeepThink 长链验证、精准加载上下文（只喂当前环节关键 references，省 token）。选型/创新/假设/论文论证等强推理环节发挥最好。
-- **V4-Flash 预设（便宜、快、1M 上下文）**：执行优先——全量读长文档、模板化快速出稿、放开跑批量。机械环节（清洗/改写/报告）照样高效，强推理环节质量可能略降。
-- **切换模型 = 开新会话**：Flash 主会话卡壳（多次试错/推理敷衍/取舍说不清）→ 新开会话选 Pro 补该环节；Pro 在跑批量琐事 → 那些活直接交给本地脚本（与模型无关）。
-- **成本锚点**：Pro 输入 ¥3/M 输出 ¥6/M；Flash 输入 ¥1/M（缓存 ¥0.02）输出 ¥2/M（以官方定价页为准）。
-- **与脚本的关系**：15 个校验脚本（sanity/对账/降重/文献/图表/AI 报告）全是本地 Python 工具，**不占用模型 token**，任何模型会话下都直接调用。
+本 skill 对 **DeepSeek 系模型通用**（V3 / R1 / V4 全系列，一次会话绑定一个型号即可）：全流程、15 个本地校验脚本、紧急模式与 AI 报告均与型号无关，任何型号都能完整跑通。四条通用要点：① 1M 长上下文可用，贵型号省着用、便宜型号放开用；② 强推理型号在选型 / 创新 / 论证环节质量更高，轻量型号卡壳就换更强型号**开新会话**补；③ 校验脚本是本地工具，不占模型 token；④ 机械活交给便宜型号 / 本地脚本，高价值推理留给强推理型号。详见 `references/model-adaptation.md`。
 
 ## 交稿前自检收口（交付前必过，缺项视为未完成）
 
