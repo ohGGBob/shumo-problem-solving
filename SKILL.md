@@ -1,10 +1,12 @@
 ---
 name: shumo-problem-solving
-description: 数学建模竞赛（国赛 CUMCM 与美赛 MCM/ICM 及电工杯、华为杯、APMCM 等）全流程解题——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写。当用户给出数模题目、要求建立模型或求解、或撰写数模论文时使用。
+description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）。当用户给出数模题目、要求建立模型或求解、或撰写数模论文时使用。
 whenToUse: 用户给出数模竞赛题、要求建模/求解/检验，或撰写数模论文与摘要时。
+version: 1.4.0
+updated: 2026-09-01
 ---
 
-# 数学建模竞赛解题（CUMCM / MCM·ICM / 其他赛种）
+# 数学建模竞赛解题（国赛 CUMCM 为主 · MCM/ICM 及其他赛种）
 
 把一道赛题从"读不懂"推进到"可提交的论文"。**默认逐环节推进：模型选型、数据处理、论文初稿都必须先给多个方案让用户选择，拍板后才执行，绝不一键生成全部成果**；用户指定某一环（如"只写摘要"）时只做那一环，但仍要说明它与整体的关系。
 
@@ -38,7 +40,7 @@ whenToUse: 用户给出数模竞赛题、要求建模/求解/检验，或撰写�
 
 论文里的每一个数字、每一个置信区间、每一次"显著/敏感"的判断，都必须能回溯到一段可复现的代码输出。
 
-1. **数值单一来源**：论文（含摘要、表格、图注）只准引用"代码自动落盘"的结果——用 `export_results.py` 把关键数字落成 `results.json`，文档由它生成或逐位对照，禁止手抄。
+1. **数值单一来源**：论文（含摘要、表格、图注）只准引用"代码自动落盘"的结果——用 `init_project.py` 生成的 `export_results.py` 把关键数字落成 `results.json`，文档由它生成或逐位对照，禁止手抄。
 2. **canonical 验证脚本 + 干净环境复跑**：交付前固定 seed 重算一遍逐位核对；在新 venv + 锁版本 `requirements.txt`（精确到 `==`）里全链重跑。树模型/交叉验证显式 `n_jobs=1`。
 3. **改数字必全目录 grep 旧值**：一个数字改动后 grep 整个 `paper/ report/ src/`，零残留才算改完。
 4. **统计量必须有代码支撑**：代码里没有的置信区间/Bootstrap/"检出率"，要么删、要么补代码，禁止"口嗨区间"。
@@ -87,7 +89,7 @@ whenToUse: 用户给出数模竞赛题、要求建模/求解/检验，或撰写�
 | 阶段 | 读这些 |
 |---|---|
 | **开题·定题** | `topic-selection.md`、`timeline.md`、`rules-and-deadlines.md` |
-| **真题定位** | 国赛：`cumcm-years.md` → 对应年份 `cases-<年>.md`；**上手先照 `worked-example-2023c.md`（端到端范本，含代码/检验/摘要）走一遍**。美赛：`cases-2026-mcm.md`（六题解析）+ `mcm-icm-guide.md` |
+| **真题定位** | 国赛：`cumcm-years.md` → 对应年份 `cases-<年>.md`；**上手先照 `worked-example-2023c.md`（C 数据）、`worked-example-2018a.md`（A 机理）、`worked-example-2020b.md`（B 优化）走一遍，A/B/C 三题型全覆盖**。美赛：`cases-2026-mcm.md`（六题解析）+ `mcm-icm-guide.md` |
 | **其他赛种**（电工杯/华为杯/MathorCup/APMCM/深圳杯等） | `contests-catalog.md` |
 | **数据清洗** | `preprocessing-pipeline.md`、`data-science-playbook.md` |
 | **假设** | `assumptions-justification.md` |
@@ -98,14 +100,14 @@ whenToUse: 用户给出数模竞赛题、要求建模/求解/检验，或撰写�
 | **避坑自查** | `pitfalls-cookbook.md`（20 条真实翻车实录，对照质量三支柱 / 铁律逐条自查） |
 | **逻辑严密性** | `logic-rigor.md` ← 支柱一 |
 | **创新设计** | `innovation-playbook.md` ← 支柱二 |
-| **论文成文** | `paper-skeleton.md` → `bao-paper-writing.md` → `figures-and-abstract.md` → `paper-quality-gate.md` ← 支柱三；**中文稿精打磨加 `chinese-writing-advanced.md`** |
+| **论文成文** | `paper-skeleton.md` → `bao-paper-writing.md` → `figures-and-abstract.md` → `figure-polish.md`（图更好看）→ `paper-quality-gate.md` ← 支柱三；**中文稿精打磨加 `chinese-writing-advanced.md`** |
 | **降 AI 味 / 降重** | `writing-deai-dedup.md` |
 | **美赛专册** | `mcm-icm-guide.md`（**全文 25 页硬上限 + 页面预算表 + 英文 QA**）、`cases-2026-mcm.md`（六题解析）、**`english-writing-mcm.md`（Summary Sheet 句式库 / Policy Letter / 术语表）**、**`worked-example-2026-mcmA.md`（A 题机理范式串链范本）**、**`worked-example-2026-mcmC.md`（C 题统计逆问题范式范本）** |
 | **答辩 / 展示** | `defense-and-presentation.md`（晋级答辩 / PPT / 问答） |
 | **赛后复盘** | `post-contest-review.md` + 跑 `scripts/review_survey.py`（四维复盘 + 资产回流） |
 | **交稿收口** | `reproducibility.md` + 跑 `scripts/` 下脚本 |
 
-脚本（位于本 SKILL.md 同级 `scripts/` 目录，零第三方依赖，PIL 可选降级）：
+脚本（位于本 SKILL.md 同级 `scripts/` 目录；除 `plot_style.py` 需 matplotlib 外，其余零第三方依赖，PIL 可选降级）：
 
 | 脚本 | 作用 |
 |---|---|
@@ -113,11 +115,14 @@ whenToUse: 用户给出数模竞赛题、要求建模/求解/检验，或撰写�
 | `check_results.py` | 扫论文数字，找出不在 `results.json` 里的"野数字" |
 | `verify_refs.py` | 解析参考文献表，输出待核验清单 + 孤儿条目检测 |
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位检查 |
+| `plot_style.py` | 科研绘图一键美化：rcParams + 配色 + 中文字体探测 + 300dpi 统一导出（需 matplotlib） |
 | `sanity_check.py` | 量纲 / 量级 / 边界自动校验（数值须在合理范围、权重和=1、概率∈[0,1] 等；可库用或对 `results.json` 批量） |
 | `dedup_scan.py` | 降 AI 味与降重自查（套娃词、零信息句、疑似抄题面） |
 | `review_survey.py` | 赛后四维复盘问题清单 + 生成 `review_<日期>.md` 草稿（数据/模型/写作/协作） |
 
-> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）。**脚本不可运行（如无 Python 环境）时退回手工清单**：数值对账手查 `results.json` 逐位比对、参考文献逐条联网核、图逐张看标题/单位/DPI、降重手动扫四块套话。
+> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；唯一例外 `plot_style.py` 需 matplotlib（画图本来就要，见 `code-templates.md`）。
+>
+> **脚本不可运行（如无 Python 环境）时，按下面手工清单逐条替代**：① 数值对账——把论文数字逐个在 `out/results.json` 里检索，找不到即"野数字"，要么补进 json 要么删；② 量纲/量级/边界——人肉过 `validation-checklist.md` 的量级三连（权重和=1、概率∈[0,1]、单位一致）；③ 参考文献——逐条在期刊/DOI 联网核，正文引用键与文末表一一对应，孤儿/悬空都删；④ 图表——逐张看标题/单位/图例/≥300dpi/图注三件套，配色与右上 spine 照 `figure-polish.md` §5、§6；⑤ 降重——摘要/重述/结论扫"首先其次最后"套娃与零信息句；⑥ 复现——固定 seed 重跑一遍再逐位比对。
 
 ## 标准流程（不要跳步）
 

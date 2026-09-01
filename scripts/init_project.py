@@ -68,7 +68,8 @@ README_TEMPLATE = """# {name}
 3. 改一个数字必 grep 全目录旧值。
 """
 
-REQUIREMENTS = """# 锁版本，精确到 == ，干净环境 pip install -r 可复跑
+REQUIREMENTS = """# 占位版本（并非常年最优）：交付前在本项目 venv 里 `pip freeze` 后精修为真实锁定版，见 references/reproducibility.md 铁律二。
+# 锁版本，精确到 == ，干净环境 pip install -r 可复跑
 numpy==1.26.4
 scipy==1.13.1
 pandas==2.2.2

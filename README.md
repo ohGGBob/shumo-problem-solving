@@ -11,8 +11,8 @@
 ```
 shumo-problem-solving/
 ├── SKILL.md          # 技能入口：门禁 / 铁律 / 质量三支柱 / 路由表 / 标准流程 / 收口
-├── references/       # 39 个专题文档（按需加载路由）
-└── scripts/          # 7 个零第三方依赖的校验脚本
+├── references/       # 41 个专题文档（按需加载路由）
+└── scripts/          # 8 个脚本（7 个零依赖校验 + plot_style 依赖 matplotlib）
 ```
 
 ## 核心特性
@@ -21,7 +21,8 @@ shumo-problem-solving/
 - **三条铁律**：参考文献严禁编造、先验证后引用 · 数值单一来源、可复现 · 赛种规则先核当年官方。
 - **质量三支柱**：① 逻辑严密性（假设—模型双向自洽）② 解题创新性（有用 + 可检验 + 有贡献）③ 论文撰写质量（BAO 对标 + 逐节技法 + 改前改后对照）。每问初稿过 mini-gate、交稿过 full gate。
 - **BAO 论文撰写对标**：从真实 O 奖/国奖范文（Baseline→Advanced→Outstanding）反推逐节写作动作与句式，含美赛 A/B/C 题型写法差异。
-- **可复用脚本**：`init_project` / `check_results` / `verify_refs` / `figcheck` / `sanity_check` / `dedup_scan` / `review_survey`，交稿收口全自动化。
+- **国赛 A/B/C 三题型端到端范本**：`worked-example-2023c.md`（数据）、`worked-example-2018a.md`（机理/热传导）、`worked-example-2020b.md`（优化/DP）——照着做＝出一份完整论文。
+- **可复用脚本**：`init_project` / `check_results` / `verify_refs` / `figcheck` / `sanity_check` / `dedup_scan` / `review_survey`（交稿收口全自动化）+ `plot_style`（科研绘图一键美化）。
 
 ## 快速上手
 
@@ -40,6 +41,8 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | `logic-rigor.md` | 逻辑严密性硬检查（支柱一） |
 | `innovation-playbook.md` | 创新亮点打法（支柱二） |
 | `bao-paper-writing.md`、`paper-quality-gate.md` | 论文撰写对标 + 交稿关卡（支柱三） |
+| `figure-polish.md`、`figures-and-abstract.md` | 科研图表美化手册 + 图表/摘要规范 |
+| `worked-example-2023c.md`、`worked-example-2018a.md`、`worked-example-2020b.md` | 国赛 A/B/C 三题型端到端范本 |
 | `model-recipes.md`、`code-templates.md` | 模型配方速查 + 代码模板 |
 | `validation-checklist.md`、`sanity_check.py` | 检验硬清单 + 量级/量纲自动校验 |
 | `rules-and-deadlines.md` | 赛程、规则与红线（动笔前核当年官方） |
@@ -54,11 +57,12 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | `check_results.py` | 论文数字 vs `results.json` 对账（抓野数字） |
 | `verify_refs.py` | 参考文献核验清单 + 孤儿/悬空引用检测 |
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位 |
+| `plot_style.py` | 科研绘图一键美化（配色 / 字号 / 中文字体 / 300dpi 导出，需 matplotlib） |
 | `sanity_check.py` | 量纲 / 量级 / 边界自动校验 |
 | `dedup_scan.py` | 降 AI 味 + 降重自查 |
 | `review_survey.py` | 赛后四维复盘（数据/模型/写作/协作） |
 
-> 脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。
+> 除 `plot_style.py` 需 matplotlib 外，脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。
 
 ## 数据来源与致谢
 

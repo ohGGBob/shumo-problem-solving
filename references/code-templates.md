@@ -227,5 +227,7 @@ fig.tight_layout(); fig.savefig('facets.png', dpi=300, bbox_inches='tight')
 print('已输出 heatmap.png / facets.png (dpi=300)')
 ```
 > 凡画图一律 `dpi=300` + `bbox_inches='tight'` 过 `scripts/figcheck.py`；图注独立可读、正文必须引用（见 `bao-paper-writing.md` 图表三件套）。
+>
+> **图要更好看 / 全项目统一风格**：文件头 `import plot_style as ps; ps.apply_style()`（`scripts/plot_style.py`，含配色/中文字体探测/300dpi 导出），完整美化规范见 `figure-polish.md`（配色/字号/图类型决策/出彩细节/难看反模式）。
 
 > 抄完先确认「数值对得上、种子固定、结果可复现」，这是评审硬标准；每段代码的检验步骤（灵敏度/误差/交叉验证）不要省。**数值进论文前先过 `scripts/sanity_check.py` 做量纲/量级/边界校验**（权重和=1、概率∈[0,1] 等），高级统计/因果/优化题型再接 `advanced-methods-templates.md`（DiD、Sobol、MCMC、CVaR、MILP、GAMM 纵向建模、pvlib）。
