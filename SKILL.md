@@ -2,7 +2,7 @@
 name: shumo-problem-solving
 description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）。当用户给出数模题目、要求建立模型或求解、或撰写数模论文时使用。
 whenToUse: 用户给出数模竞赛题、要求建模/求解/检验，或撰写数模论文与摘要时。
-version: 1.4.1
+version: 1.5.0
 updated: 2026-09-02
 ---
 
@@ -105,7 +105,7 @@ updated: 2026-09-02
 | **美赛专册** | `mcm-icm-guide.md`（**全文 25 页硬上限 + 页面预算表 + 英文 QA**）、`cases-2026-mcm.md`（六题解析）、**`english-writing-mcm.md`（Summary Sheet 句式库 / Policy Letter / 术语表）**、**`worked-example-2026-mcmA.md`（A 题机理范式串链范本）**、**`worked-example-2026-mcmC.md`（C 题统计逆问题范式范本）** |
 | **答辩 / 展示** | `defense-and-presentation.md`（晋级答辩 / PPT / 问答） |
 | **赛后复盘** | `post-contest-review.md` + 跑 `scripts/review_survey.py`（四维复盘 + 资产回流） |
-| **交稿收口** | `reproducibility.md` + 跑 `scripts/` 下脚本 |
+| **交稿收口** | `reproducibility.md` + 跑 `scripts/prize_gate.py`（一键计分板，聚合全部校验） |
 
 脚本（位于本 SKILL.md 同级 `scripts/` 目录；除 `plot_style.py` 需 matplotlib 外，其余零第三方依赖，PIL 可选降级）：
 
@@ -119,6 +119,9 @@ updated: 2026-09-02
 | `sanity_check.py` | 量纲 / 量级 / 边界自动校验（数值须在合理范围、权重和=1、概率∈[0,1] 等；可库用或对 `results.json` 批量） |
 | `dedup_scan.py` | 降 AI 味与降重自查 v2（中/英分层词库 + 每千字密度 + 段首词/被动/排比 + 题干 n-gram 比对；`dedup_scan.py 论文.md 题干.txt`） |
 | `review_survey.py` | 赛后四维复盘问题清单 + 生成 `review_<日期>.md` 草稿（数据/模型/写作/协作） |
+| `check_env.py` | **赛前环境体检**：开赛前 10 分钟跑一遍——Python 版本 / 关键科学库+版本 / matplotlib 中文字体 / PIL / 磁盘空间 / 目录可写 / seed 可复现，把环境翻车风险清零（`check_env.py --strict`） |
+| `crosscheck.py` | **跨文件数字一致性**：摘要/正文/结论/图注里同一个数字各写各的（19.43 vs 19.5）→ 一次找出；含摘要孤立数字、近似矛盾取值、摘要四要素检测 |
+| `prize_gate.py` | **国一冲刺计分板**：交稿前一条命令聚合全部校验（环境/对账/量纲/文献/图表/降重/一致性），输出 PASS/FAIL 表，`prize_gate.py <项目目录> --source 题干.txt` |
 
 > 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；唯一例外 `plot_style.py` 需 matplotlib（画图本来就要，见 `code-templates.md`）。
 >
@@ -136,7 +139,7 @@ updated: 2026-09-02
 6. **模型检验**：先 sanity check，再按模型类型必做检验 + 灵敏度 + 逻辑链自查（支柱一）。
 7. **论文与摘要**：按国赛或美赛规范成文，摘要覆盖四要素，过 `paper-quality-gate.md`（支柱三）。
 
-赛程节奏（详见 `references/timeline.md`）：国赛 3 天、美赛 4 天。**第 2 天晚还没跑通全部模型 = 红警，立即砍复杂度保可交付**。
+赛程节奏（详见 `references/timeline.md`）：国赛 3 天、美赛 4 天。**第 2 天晚还没跑通全部模型 = 红警，立即砍复杂度保可交付**。**开赛前 10 分钟先跑 `check_env.py` 体检环境（在真正建模用的那个 Python 环境里），缺库/过旧立刻修，别等赛中才发现。**
 
 ## 交稿前自检收口（交付前必过，缺项视为未完成）
 
@@ -144,7 +147,7 @@ updated: 2026-09-02
 2. **检验硬清单**：sanity check 过了吗？按模型类型的必做检验做全了吗？灵敏度做了吗？
 3. **质量三支柱**：逻辑链无跳步？每问有 2–3 个扎实亮点且都有证据？论文三件套与摘要四要素齐了？
 4. **参考文献核查**：逐条联网核实 + 引用键一一对应（`verify_refs.py`）。
-5. **数值对账 + 复现**：canonical 脚本逐位核对 + 干净环境复跑（`check_results.py`）。
+5. **数值对账 + 复现**：canonical 脚本逐位核对 + 干净环境复跑（`check_results.py` + `crosscheck.py` 跨文件一致性）。
 6. **降 AI 味 / 降重**：过 `writing-deai-dedup.md` + `dedup_scan.py`。
 
 ## 常见坑与红线
