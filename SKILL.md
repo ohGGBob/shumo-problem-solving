@@ -87,20 +87,20 @@ whenToUse: 用户给出数模竞赛题、要求建模/求解/检验，或撰写�
 | 阶段 | 读这些 |
 |---|---|
 | **开题·定题** | `topic-selection.md`、`timeline.md`、`rules-and-deadlines.md` |
-| **真题定位** | 国赛：`cumcm-years.md` → 对应年份 `cases-<年>.md`；**美赛：`cases-2026-mcm.md`（六题深度解析 + O 奖率）+ `mcm-icm-guide.md`** |
+| **真题定位** | 国赛：`cumcm-years.md` → 对应年份 `cases-<年>.md`；**上手先照 `worked-example-2023c.md`（端到端范本，含代码/检验/摘要）走一遍**。美赛：`cases-2026-mcm.md`（六题解析）+ `mcm-icm-guide.md` |
 | **其他赛种**（电工杯/华为杯/MathorCup/APMCM/深圳杯等） | `contests-catalog.md` |
 | **数据清洗** | `preprocessing-pipeline.md`、`data-science-playbook.md` |
 | **假设** | `assumptions-justification.md` |
 | **模型选型** | `model-recipes.md`；纵向/阈值题型加 `longitudinal-threshold.md`；**美赛 C 类/大数据赛/自找数据题加 `bigdata-playbook.md`（统计逆问题 + 可解释 + 业务闭环）** |
-| **求解实现** | `code-templates.md`（基础）；**高级统计/因果/优化/敏感性用 `advanced-methods-templates.md`**（KiBaM、DiD、Sobol、MCMC、CVaR、MILP、pvlib） |
+| **求解实现** | `code-templates.md`（基础）；**高级统计/因果/优化/敏感性用 `advanced-methods-templates.md`**（DiD、Sobol、MCMC、CVaR、MILP、pvlib） |
 | **检验** | `validation-checklist.md`；数值先过 `scripts/sanity_check.py`（量纲/量级/边界） |
 | **赛中预警** | `mid-contest-warning.md`（红警信号 / 纠偏决策树 / 砍复杂度）← 配合 `timeline.md` 红线 |
-| **避坑自查** | `pitfalls-cookbook.md`（21 条真实翻车实录，对照质量三支柱 / 铁律逐条自查） |
+| **避坑自查** | `pitfalls-cookbook.md`（20 条真实翻车实录，对照质量三支柱 / 铁律逐条自查） |
 | **逻辑严密性** | `logic-rigor.md` ← 支柱一 |
 | **创新设计** | `innovation-playbook.md` ← 支柱二 |
 | **论文成文** | `paper-skeleton.md` → `bao-paper-writing.md` → `figures-and-abstract.md` → `paper-quality-gate.md` ← 支柱三；**中文稿精打磨加 `chinese-writing-advanced.md`** |
 | **降 AI 味 / 降重** | `writing-deai-dedup.md` |
-| **美赛专册** | `mcm-icm-guide.md`（**含 2027 新规：全文 25 页硬上限 + 页面预算表**）、`cases-2026-mcm.md`、**`english-writing-mcm.md`（Summary Sheet 句式库 / Policy Letter / 术语表）**、**`worked-example-2026-mcmA.md`（A 题机理范式完整串链范本）**、**`worked-example-2026-mcmC.md`（C 题统计逆问题范式范本，与 A 互补）** |
+| **美赛专册** | `mcm-icm-guide.md`（**全文 25 页硬上限 + 页面预算表 + 英文 QA**）、`cases-2026-mcm.md`（六题解析）、**`english-writing-mcm.md`（Summary Sheet 句式库 / Policy Letter / 术语表）**、**`worked-example-2026-mcmA.md`（A 题机理范式串链范本）**、**`worked-example-2026-mcmC.md`（C 题统计逆问题范式范本）** |
 | **答辩 / 展示** | `defense-and-presentation.md`（晋级答辩 / PPT / 问答） |
 | **赛后复盘** | `post-contest-review.md` + 跑 `scripts/review_survey.py`（四维复盘 + 资产回流） |
 | **交稿收口** | `reproducibility.md` + 跑 `scripts/` 下脚本 |
@@ -131,7 +131,7 @@ whenToUse: 用户给出数模竞赛题、要求建模/求解/检验，或撰写�
 6. **模型检验**：先 sanity check，再按模型类型必做检验 + 灵敏度 + 逻辑链自查（支柱一）。
 7. **论文与摘要**：按国赛或美赛规范成文，摘要覆盖四要素，过 `paper-quality-gate.md`（支柱三）。
 
-赛程节奏（详见 `references/timeline.md`）：国赛 72h、美赛 96h。**第 2 天晚还没跑通全部模型 = 红警，立即砍复杂度保可交付**。
+赛程节奏（详见 `references/timeline.md`）：国赛 3 天、美赛 4 天。**第 2 天晚还没跑通全部模型 = 红警，立即砍复杂度保可交付**。
 
 ## 交稿前自检收口（交付前必过，缺项视为未完成）
 

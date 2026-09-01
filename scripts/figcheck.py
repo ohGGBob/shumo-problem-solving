@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""图表规范检查：DPI、命名、引用、标题单位。
+"""图表规范检查：DPI、命名、引用。
 
 用法:
     python figcheck.py <report_dir> [--dpi 300] [--paper 论文.md|论文.tex]
@@ -9,7 +9,7 @@
     1. 图片文件 DPI >= --dpi（需 Pillow；无 Pillow 时跳过 DPI 检查并提示）。
     2. 图片命名是否含图序(fig1 / figure_2)或语义名，禁止 IMG_/截图/微信等。
     3. 论文中每个 \\includegraphics{/![...](...)} 引用都有对应文件。
-    4. 图标题(figure caption)是否含单位与可独立传达结论（弱检查：标题非空）。
+    4. 注：标题/单位/图注的"自足性"需人工核对，本脚本不检查（见 `bao-paper-writing.md` 图表三件套）。
 
 输出问题清单，供交稿前清理。
 """

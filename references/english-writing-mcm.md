@@ -35,6 +35,12 @@ bullet 节奏：一个 bullet = 一个 sub-problem 的「方法 → 结果 → �
 > `Our strengths are <CONCRETE> (e.g., physically grounded, reproducible).`
 > `A limitation is <SPECIFIC> (e.g., we ignore <FACTOR>; extrapolation beyond <RANGE> is uncertain).`
 
+### 4. 完整成稿示例（把骨架填成一段可抄的成品）
+
+> **A 题（电池）Summary 大意**：
+> `We develop a two-state ODE battery model to predict smartphone time-to-empty. We treat app usage as time-varying power draw, calibrate against NASA battery data (fit R²=0.97), and predict time-to-empty within a median error of 8% over 200 scenarios. A ±10% perturbation of screen brightness shifts estimates by <5 minutes, confirming robustness. We recommend OS-level background-task throttling, projected to extend battery life by 18%.`
+> （要点：一句方法 + 一句模型/数据 + 一个量化结果 + 一句灵敏度 + 一句落地建议——**每句都带数字**。）
+
 ## 二、Policy Letter（给决策者的信，F/D 类题高频收尾）
 
 面向非技术决策者（政府 / 管理层 / 利益相关方）。措辞去技术化，每条建议 = **对象 + 做什么 + 预期效果 + 证据/文献**。
@@ -43,6 +49,24 @@ bullet 节奏：一个 bullet = 一个 sub-problem 的「方法 → 结果 → �
 - 句式：`We recommend <ACTION> for <GROUP>, which we project to <OUTCOME> (<EVIDENCE>).`
 - 例：`We recommend funding a solar-shading retrofit for the low-latitude school first, which we project to cut summer cooling load by 31% (Section 4.2).`
 - 别写成技术报告：不堆公式，用「把数学结果翻译成行动」。
+
+### 补充：Memo / Letter-to-Agency（ICM D/B 类题要求给 owner/agency 时）
+
+Memo 是**独立文体**、有固定抬头，别和 Policy Letter 混用。结构：
+
+```text
+MEMORANDUM
+TO:      <Owner / League Commissioner / MCM Agency>
+FROM:    <Team #2410xxx>
+DATE:    <Feb 3, 20xx>
+SUBJECT: <一句话点题：给谁解决什么>
+
+1. PURPOSE（1 段）：本 memo 回答什么决策问题。
+2. FINDINGS（3–5 条 bullet）：每条 = 量化结论 + 出处（见正文 §X）。
+3. RECOMMENDATION（1–2 段）：明确建议 + 预期收益 + 关键假设/风险。
+```
+
+- 语气比 Policy Letter 更**公文化、更强调决策时效**；每条结论都要能被正文一个表/图编号回溯。
 
 ## 三、建模方法英汉术语表（写正文 / 图表不卡壳）
 
@@ -108,3 +132,18 @@ bullet 节奏：一个 bullet = 一个 sub-problem 的「方法 → 结果 → �
 - [ ] 无「中式英语」表中的典型错误
 - [ ] Policy Letter（若题需要）面向非技术读者、每条 = 对象+行动+效果+证据
 - [ ] 全文 ≤25 页硬上限、AI Use Report 不计页数（`mcm-icm-guide.md`）
+
+## 七、AI Use Report 模板（用了生成式 AI 必附，不计页数）
+
+美赛要求：若队伍使用生成式 AI / 翻译 / 代码辅助工具，须在 PDF 末尾附一段如实说明。按此结构写，别写成免责声明：
+
+```text
+AI Use Report
+1. Tools used: <工具名 + 用途，如 ChatGPT-4o（brainstorming）、DeepL（translation）、Copilot（code completion）>
+2. How used: <在哪个阶段怎么用，例如：生成备选模型清单、润色英文措辞；未用其直接产出整篇论文>
+3. Verification: <如何核验 AI 输出，例如：公式人工推导核对、数值用自有脚本重算、文献逐条人工查证>
+4. Team statement: 本文核心建模、求解、结论由队员独立完成；AI 仅作工具，其输出均经队员校验。
+```
+
+- 用没用都如实写：**用了却不写属违规**；没用则不写也不打勾。
+- 把「如何校验」写具体（呼应 `reproducibility.md` 与铁律二）——这是评委最看重的半句。

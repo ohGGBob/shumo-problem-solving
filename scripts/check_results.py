@@ -106,7 +106,7 @@ def matches(value, ref_list, tol):
 def main():
     ap = argparse.ArgumentParser(description="论文数字 vs results.json 对账")
     ap.add_argument("paper", help="论文 .md/.tex/.docx")
-    ap.add_argument("--json", default=None, help="results.json 路径，默认在论文同级 out/results.json")
+    ap.add_argument("--json", default=None, help="results.json 路径；默认依次查 上级 out/、同级 out/（init_project 骨架）")
     ap.add_argument("--tol", type=float, default=0.01, help="相对误差容忍，默认 0.01")
     args = ap.parse_args()
 
@@ -130,8 +130,13 @@ def main():
     if args.json:
         jpath = args.json
     else:
-        cand = os.path.join(os.path.dirname(args.paper), "out", "results.json")
-        jpath = cand if os.path.exists(cand) else None
+        # init_project.py 骨架：<项目>/report/main.tex 配 <项目>/out/results.json（上级 out/）
+        base = os.path.abspath(args.paper)
+        cands = [
+            os.path.join(os.path.dirname(os.path.dirname(base)), "out", "results.json"),
+            os.path.join(os.path.dirname(base), "out", "results.json"),
+        ]
+        jpath = next((c for c in cands if os.path.exists(c)), None)
 
     ref = load_json_numbers(jpath) if jpath else None
     if ref is None:

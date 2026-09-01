@@ -88,7 +88,7 @@
 
 ## 十、美赛特有（别拿国赛模板硬套）
 
-- 25/26 页硬约束内设 **Contents**（目录）。
+- 25 页硬上限（含 Summary Sheet / 目录 / 正文 / 参考文献 / 附录 / 代码）内设 **Contents**（目录）。
 - **Assumptions 每条带小标题**：`4.1 As a disease`、`4.2 The Markovian assumption`，评委扫标题即懂。
 - 引言用**醒目统计 + 引用**开头：`In 2015, 33,091 people died… more than 60%… [1]`。
 - 收尾可以是 **Policy Letter / 给利益相关方的信**（按题要求），措辞面向非技术决策者。

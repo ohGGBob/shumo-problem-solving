@@ -1,7 +1,7 @@
 # 常用模型 Python 代码模板（复制即用）
 
 > 说明：以下是最高频模型的「最小可用」实现。**赛前 / 赛后先在本机跑通一遍，实战直接改参数**，别到赛场上再调试。依赖：`numpy` `scipy` `pandas` `scikit-learn` `statsmodels`；画图另加 `matplotlib`、图论另加 `networkx`、Excel 数据另加 `openpyxl`。凡涉及随机的一律固定 `seed=0`。
-> 验证：下面 10 段代码均已在 **Python 3.14**（numpy 2.5 / scipy 1.18 / pandas 3.0 / scikit-learn 1.9 / statsmodels 0.14.6）下逐段跑通。§10 用随机占位数据时 R² 为负属正常，换成真实数据即可；§2 ARIMA 每次 fit 的预测值随数据不同而不同。
+> 验证：下列模板在 **Python 3.10–3.12**（numpy 1.26 / scipy 1.11 / pandas 2.x / scikit-learn 1.3 / statsmodels 0.14）代表性环境可跑，**以 `init_project.py` 锁定的 requirements 为准**；凡随机一律 `seed=0`。用随机占位数据时 R² 为负属正常，换成真实数据即可；ARIMA 每次 fit 的预测值随数据不同而不同。
 
 ## 0. 通用预处理
 
@@ -228,4 +228,4 @@ print('已输出 heatmap.png / facets.png (dpi=300)')
 ```
 > 凡画图一律 `dpi=300` + `bbox_inches='tight'` 过 `scripts/figcheck.py`；图注独立可读、正文必须引用（见 `bao-paper-writing.md` 图表三件套）。
 
-> 抄完先确认「数值对得上、种子固定、结果可复现」，这是评审硬标准；每段代码的检验步骤（灵敏度/误差/交叉验证）不要省。**数值进论文前先过 `scripts/sanity_check.py` 做量纲/量级/边界校验**（权重和=1、概率∈[0,1] 等），高级统计/因果/优化题型再接 `advanced-methods-templates.md`（KiBaM、DiD、Sobol、MCMC、CVaR、MILP、GAMM 纵向建模、pvlib）。
+> 抄完先确认「数值对得上、种子固定、结果可复现」，这是评审硬标准；每段代码的检验步骤（灵敏度/误差/交叉验证）不要省。**数值进论文前先过 `scripts/sanity_check.py` 做量纲/量级/边界校验**（权重和=1、概率∈[0,1] 等），高级统计/因果/优化题型再接 `advanced-methods-templates.md`（DiD、Sobol、MCMC、CVaR、MILP、GAMM 纵向建模、pvlib）。

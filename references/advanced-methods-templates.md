@@ -72,7 +72,7 @@ did = model.params['treat:post']
 p = model.pvalues['treat:post']
 print(f'DiD 效应 = {did:.3f}, p = {p:.3f}')   # 应≈1.5 且显著
 ```
-> 要点：`treat:post` 交互项系数 = DiD 效应。真实使用中要加时间/个体固定效应（`y ~ C(id) + C(time) + treat:post`），并做**平行趋势检验**（对比 pre 期两组走势）。F 类题把它用在"2022-11 生成式 AI 发布前后 × 任务类型"上。
+> 要点：`treat:post` 交互项系数 = DiD 效应（2×2 无面板）。若是**面板数据**（同一个体前后两期），再加个体/时间固定效应 `y ~ C(id) + C(period) + treat:post`——`period` 是时期列、`id` 是面板个体；本玩具是重复截面、`id` 仅行号，**别直接套 `C(id)`（会与 treat 共线）**，并做**平行趋势检验**（对比 pre 期两组走势）。F 类题可用在"2022-11 生成式 AI 发布前后 × 任务类型"上。
 
 ## 4. Sobol 全局敏感性分析（识别主导参数，A/C/E 类亮点）
 
@@ -131,9 +131,10 @@ print('latent posterior mean =', samples.mean(), '95%CI =', np.percentile(sample
 import numpy as np
 from pulp import LpProblem, LpMaximize, LpMinimize, LpVariable, LpStatus, value
 
-# 例：3 种资产，最大化 CVaR 调整后收益。标准 LP 分位点法：
+# 例：3 种资产，最大化 CVaR 调整后收益。标准 LP 分位点法（Rockafellar–Uryasev）：
 #   max  mean(w) - kappa*CVaR,  CVaR = VaR + 1/((1-α)·S)·Σ loss[s]
-#   s.t. loss[s] >= VaR - R_s·w ;  w ≥ 0, Σw=1 ;  VaR 需给一个下界（否则目标无界）
+#   损失 loss_s = -R_s·w ；超额损失 loss[s] >= -R_s·w - VaR 且 loss[s] >= 0
+#   w ≥ 0, Σw=1 ；VaR 需给一个下界（否则目标含 -kappa*VaR 会无界）
 assets = 3; S = 1000
 rng = np.random.default_rng(0)
 R = rng.normal(0.05, 0.15, (S, assets))     # 每行一个场景收益
@@ -148,7 +149,7 @@ prob += sum(np.mean(R,0)[i]*w[i] for i in range(assets)) \
         - kappa*(vaR + 1/((1-alpha)*S)*sum(loss))        # 目标：mean - kappa*CVaR
 prob += sum(w) == 1
 for s in range(S):
-    prob += loss[s] >= vaR - sum(R[s,i]*w[i] for i in range(assets))  # 超额损失
+    prob += loss[s] >= - sum(R[s,i]*w[i] for i in range(assets)) - vaR  # 超额损失 (loss=-R·w)
 prob.solve()
 print('status:', LpStatus[prob.status], 'weights:', [round(value(w[i]),3) for i in range(assets)])
 ```
