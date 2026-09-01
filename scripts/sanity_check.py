@@ -128,7 +128,7 @@ def main():
         rules.append((key.strip(), lo, hi, close_sum))
 
     if args.results_json and os.path.exists(args.results_json):
-        with open(args.results_json, encoding="utf-8") as f:
+        with open(args.results_json, encoding="utf-8-sig") as f:
             data = json.load(f)
         validate_results(data, rules)
     elif args.results_json:

@@ -33,21 +33,31 @@ def read_text(path):
         except Exception as e:  # noqa
             print(f"[warn] 无法读 docx(需 python-docx 或手动导出文本): {e}", file=sys.stderr)
             return ""
-    with open(path, encoding="utf-8", errors="ignore") as f:
+    with open(path, encoding="utf-8-sig", errors="ignore") as f:
         return f.read()
 
 
 def extract_numbers(text):
-    """提取文本里的"实义数字"：整数/小数/科学计数/百分比/带千分位/区间端点。"""
+    """提取文本里的"实义数字"：整数/小数/科学计数/百分比/带千分位/区间端点（含负数）。
+
+    修复说明（v1.4.1）：
+    - 支持负数（-1.599 不再被提取成 1.599 导致对账误报）；
+    - 百分比先单独提取并原位替换为空格，杜绝 "6.2%" 被普通数正则回退拆成 6 的重复/误报；
+    - 普通数用原子组 (?>...) 锁定小数整体，避免小数后跟 % 时被拆出整数部分。
+    """
     nums = []
-    # 百分比
-    for m in re.finditer(r"(\d+(?:\.\d+)?)\s*%", text):
+
+    def eat_percent(m):
         nums.append(float(m.group(1)) / 100.0)
+        return " " * len(m.group(0))
+
+    # 百分比（先处理并原位占位，普通数正则不再重复提取）
+    text = re.sub(r"(-?\d+(?:\.\d+)?)\s*%", eat_percent, text)
     # 科学计数
-    for m in re.finditer(r"(\d+(?:\.\d+)?)(?:[eE][+-]?\d+)", text):
+    for m in re.finditer(r"(-?\d+(?:\.\d+)?)(?:[eE][+-]?\d+)", text):
         nums.append(float(m.group(1) + m.group(0)[len(m.group(1)):]))
-    # 普通数（带千分位 / 小数 / 整数），排除纯序号如 [1] 引用与年份疑似
-    for m in re.finditer(r"(?<![\w.])(\d{1,3}(?:,\d{3})+|\d+\.\d+|\d+)(?![\w%])", text):
+    # 普通数（带千分位 / 小数 / 整数，负号跟随数字），排除纯序号如 [1] 引用与年份疑似
+    for m in re.finditer(r"(?<![\w.])(-?(?>(?:\d{1,3}(?:,\d{3})+|\d+\.\d+|\d+)))(?![\w%])", text):
         raw = m.group(1).replace(",", "")
         try:
             v = float(raw)
@@ -63,7 +73,7 @@ def extract_numbers(text):
 def load_json_numbers(path):
     if not os.path.exists(path):
         return None
-    with open(path, encoding="utf-8") as f:
+    with open(path, encoding="utf-8-sig") as f:
         data = json.load(f)
     out = []
     flat = []

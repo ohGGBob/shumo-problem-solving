@@ -2,8 +2,8 @@
 name: shumo-problem-solving
 description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）。当用户给出数模题目、要求建立模型或求解、或撰写数模论文时使用。
 whenToUse: 用户给出数模竞赛题、要求建模/求解/检验，或撰写数模论文与摘要时。
-version: 1.4.0
-updated: 2026-09-01
+version: 1.4.1
+updated: 2026-09-02
 ---
 
 # 数学建模竞赛解题（国赛 CUMCM 为主 · MCM/ICM 及其他赛种）

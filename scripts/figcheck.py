@@ -87,7 +87,7 @@ def main():
 
     # 论文引用核对
     if args.paper and os.path.exists(args.paper):
-        with open(args.paper, encoding="utf-8", errors="ignore") as f:
+        with open(args.paper, encoding="utf-8-sig", errors="ignore") as f:
             txt = f.read()
         refs = set()
         for m in re.finditer(r"!\[[^\]]*\]\(([^)]+)\)", txt):

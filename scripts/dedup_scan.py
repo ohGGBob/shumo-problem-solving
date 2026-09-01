@@ -70,7 +70,7 @@ def read_text(path):
         except Exception as e:  # noqa
             print(f"[warn] docx 读取失败: {e}", file=sys.stderr)
             return ""
-    with open(path, encoding="utf-8", errors="ignore") as f:
+    with open(path, encoding="utf-8-sig", errors="ignore") as f:
         return f.read()
 
 
