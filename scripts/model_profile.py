@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""模型画像工具（DeepSeek V4 Pro / V4 Flash 适配）。
+"""模型画像工具（DeepSeek V4 Pro / V4 Flash 单模型预设适配）。
 
-本 skill 默认由 V4-Pro / V4-Flash 双引擎驱动。本工具按模型输出推荐执行配置：
-token 预算、加载策略、任务分工、价格提示、升级/降级信号——帮执行者"想交给 Pro、做交给 Flash"。
+一次会话只能绑定一个模型。本工具按"本会话选定的模型"输出推荐运行预设：
+token 预算、加载策略、提示词策略、卡壳时如何处理——选 Pro 就按推理优先预设跑，
+选 Flash 就按执行优先预设跑。
 
 用法:
-    python model_profile.py              # 双模型对比总览
-    python model_profile.py v4-pro       # V4-Pro 推荐配置
-    python model_profile.py v4-flash     # V4-Flash 推荐配置
+    python model_profile.py              # 两套预设对比总览
+    python model_profile.py v4-pro       # 本会话选 V4-Pro 的推荐配置
+    python model_profile.py v4-flash     # 本会话选 V4-Flash 的推荐配置
     python model_profile.py --json       # JSON 输出（供程序消费）
 
 规格与价格为公开可核实信息，价格以官方定价页为准。
@@ -27,12 +28,12 @@ PROFILES = {
         "position": "高端推理 + Agentic Coding，复杂长链论证",
         "latency": "~800ms+ / 并发 ~500",
         "price": "输入 ¥3/M（缓存 ¥0.025）/ 输出 ¥6/M",
-        "role": "主力干'想'——选型、创新设计、假设自洽、论文论证、复杂求解",
-        "token_budget": "省着用：只喂当前环节关键 references（按 SKILL 路由表），长文档分页/摘要，别整库全读",
+        "role": "本会话预设：推理优先——选型/创新/假设自洽/论文论证/复杂求解等强推理环节发挥最好",
+        "token_budget": "省着用：只喂当前环节关键 references（按 SKILL 路由表），长文档先压缩成要点再喂",
         "prompt": "开放式多方案推导；让 DeepThink 长链验证；给反例与取舍；输出论证链",
-        "upgrade_signal": "（本档为最高推理档，无升级目标）",
-        "downgrade_signal": "在跑机械校验/格式整理/批量改写 → 降级 v4-flash 省钱提速",
-        "use_in_skill": "模型选型 / 创新点 / 假设自洽 / 论文成文 / 紧急模式推理环节（默认）",
+        "upgrade_signal": "（Pro 为最强推理档；无更高升级目标）",
+        "downgrade_signal": "若一直在跑机械校验/格式整理/批量改写 → 这些活直接交本地脚本（与模型无关），不必占模型",
+        "use_in_skill": "本会话选 Pro 时：选型/创新/假设/论文论证由它承担；机械校验仍走本地脚本",
     },
     "v4-flash": {
         "name": "DeepSeek-V4-Flash",
@@ -41,12 +42,12 @@ PROFILES = {
         "position": "高并发、低成本、轻量任务，长文档全量消化",
         "latency": "~200-300ms / 并发 ~2500",
         "price": "输入 ¥1/M（缓存 ¥0.02）/ 输出 ¥2/M",
-        "role": "主力干'做'——数据清洗、脚本批量、校验脚本、降重改写、AI 报告、格式化",
+        "role": "本会话预设：执行优先——全量读长文档、模板化快速出稿、放开跑批量；机械环节高效",
         "token_budget": "放开用：可全量读长文档/论文/日志，批量预处理；缓存命中价低，高频小任务最划算",
         "prompt": "明确模板化指令 + 结构化输出（JSON/表格/固定字段）；短指令链逐步确认",
-        "upgrade_signal": "多次试错无进展 / 推理敷衍 / 关键取舍说不清 → 该环节升级 v4-pro",
-        "downgrade_signal": "（本档为执行档，机械任务由它消化）",
-        "use_in_skill": "读题拆解 / 真题定位 / 求解落盘 / 全部校验脚本 / 降 AI 味改写 / AI 报告 / 紧急模式执行环节（默认）",
+        "upgrade_signal": "卡壳信号（多次试错/推理敷衍/取舍说不清）→ 开新会话选 v4-pro 补该环节，结果拿回",
+        "downgrade_signal": "（本档为执行优先档，机械任务由它高效消化）",
+        "use_in_skill": "本会话选 Flash 时：全环节由它承担；选型/创新/论证等强推理环节质量可能略降，卡壳则换 Pro",
     },
 }
 
@@ -98,7 +99,7 @@ def main():
         a = PROFILES["v4-pro"][key]
         b = PROFILES["v4-flash"][key]
         print(f"{label:<8} | {a[:32]:<34} | {b}")
-    print("\n一句话：Pro 想（选型/创新/论文论证），Flash 做（批量/校验/改写/报告）。")
+    print("\n一句话：选 Pro = 推理优先预设（贵但稳）；选 Flash = 执行优先预设（快且省）。单会话二选一，卡壳就换模型开新会话补。")
     print("更多细节：references/model-adaptation.md")
     return 0
 
