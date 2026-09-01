@@ -1,15 +1,19 @@
-# 国一冲刺升级方案（UPGRADE_PLAN · v1.5.0）
+# 国一冲刺升级方案（UPGRADE_PLAN · v1.6.0）
 
 > 目标：把本 skill 从"强助教"推到"国一助攻"——不是承诺保送国一，而是把**可避免的失分清零**、把**亮点命中率抬到最高**、把 **72h 节奏管住**。国一 = 逻辑严密 × 计算准确 × 创新有据 × 表述清晰 × 规则零违规，本方案逐项打。
 
-## 一、已落地（v1.5.0，直接可用）
+## 一、已落地（v1.6.0，直接可用）
 
 | 增量 | 对应失分点 | 用法 |
 |---|---|---|
 | `scripts/check_env.py` | 环境翻车：库没装/版本不锁/图变豆腐块/磁盘满 | 开赛前 10 分钟，在**建模用的那个 Python 环境**跑 `python check_env.py --strict` |
 | `scripts/crosscheck.py` | "表述清晰"硬伤：摘要/正文/图注同一个数各写各的 | `python crosscheck.py report/main.md`——一次找出 19.43 vs 19.5 式矛盾 + 摘要孤立数字 + 四要素缺项 |
 | `scripts/prize_gate.py` | 交稿前手忙脚乱漏项 | `python prize_gate.py <项目目录> --source 题干.txt`——一条命令聚合 7 项校验出 PASS/FAIL 计分板 |
+| `scripts/decision_log.py` | 每次拍板流失（"为什么这么选"无据可依） | 拍板即 `add --phase … --decision … --why … --ai …`；`export --for design` 直出论文「设计意图」素材 |
+| `scripts/gen_ai_report.py` | 2026 国赛 AI 合规：声明缺失/详情不合规/匿名漏洞 | 自动生成参考文献前声明 + 「AI工具使用详情」四要素 + 匿名，有 pandoc 转 PDF |
+| `scripts/emergency_run.py` | 时间极紧时慌到跳步/漏项/带病提交 | 紧急模式：7 阶段 checkpoint 不跳步 + 红警自动降级 + finish 一键收口（prize_gate+AI报告+提交清单） |
 | 修复（v1.4.1→1.5.0） | Windows BOM 崩溃 / 负数误报 / 6.2% 拆错 | `check_results`/`sanity_check` 等 5 脚本改 `utf-8-sig`；数字提取支持负数 + 原子组防拆 + 百分比去重 |
+| 合规依据 | 规则未核先动笔 | 按官方原文核实 2026 AI 规定（mcm.edu.cn），写入 `references/ai-usage-report.md` |
 
 ## 二、建议后续（按优先级，赛前窗口内能做的排前面）
 
@@ -19,7 +23,9 @@
 - [ ] **规则再核验**：`rules-and-deadlines.md` 已要求开题第一动作 web_search 核官网；赛前最后一天把当年页数/AI 披露/提交渠道/查重口径打印置顶。
 
 ### P1 · 赛中 72h
-- [ ] **决策日志（建议实现）**：把「强制确认门禁」的每次拍板自动追加到 `log/decisions.md`（谁/选了啥/理由/取舍）。这是论文"设计意图"段的直接素材——评委最吃的"为什么这么选"。
+- [x] **决策日志**：`decision_log.py` 已落地，`export --for design` 直出论文「设计意图」素材；`export --for aireport` 喂给 AI 报告。
+- [x] **紧急模式**：`emergency_run.py` 已落地——时间极紧时一条命令管到底（7 阶段不跳步 + 红警 + 一键收口），见 `references/emergency-mode.md`。
+- [x] **AI 使用报告（2026 合规）**：`gen_ai_report.py` + `references/ai-usage-report.md` 已落地（声明 + 详情四要素 + 匿名 + 红线）。
 - [ ] **亮点预埋**：赛前按 `innovation-playbook.md` 给 A/B/C 三题型各预写 2–3 个**可移植亮点骨架**（多模型对照择优、理论点证明、蒙特卡洛证据链），赛中直接套——创新是设计出来的，不是赛后找的。
 - [ ] **红警看板**：`timeline.md` 的红警线（D2 晚未跑通全部模型=砍复杂度）做成可勾选进度表，每问过 `sanity_check.py` 自动拦量级错。
 

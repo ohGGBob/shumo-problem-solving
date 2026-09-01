@@ -1,8 +1,8 @@
 ---
 name: shumo-problem-solving
-description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）。当用户给出数模题目、要求建立模型或求解、或撰写数模论文时使用。
-whenToUse: 用户给出数模竞赛题、要求建模/求解/检验，或撰写数模论文与摘要时。
-version: 1.5.0
+description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）、2026 国赛 AI 使用声明与使用详情合规生成，并支持时间极紧时的紧急全自动模式（emergency_run 不跳步走完 7 阶段 + 一键收口）。当用户给出数模题目、要求建立模型或求解、撰写数模论文或 AI 使用报告、或要求紧急全流程产出时使用。
+whenToUse: 用户给出数模竞赛题、要求建模/求解/检验、撰写数模论文与摘要、生成 AI 使用声明/详情（2026 合规），或时间紧急要求全自动走完全流程时。
+version: 1.6.0
 updated: 2026-09-02
 ---
 
@@ -21,6 +21,8 @@ updated: 2026-09-02
 其余细节同样逐项过问：**关键参数**（阈值、权重 w、窗口、随机种子、切分方式）、**假设与检验清单**——先声明取值与依据，确认后才求解/成文。
 
 **用户不选或拒绝选择时**：不得代他拍板、不得默认取"推荐项"继续。立即进入「追问澄清」模式，逐项问清卡在哪：「这三个方案哪里没想明白 / 不确定 / 要不要我解释区别与后果？」——循环答疑，直到用户明确拍板选定方案，才进入下一步。
+
+**紧急模式（Emergency Mode）例外**：当用户显式触发（"紧急模式"/"全自动"/"直接完成"/时间极紧）时，门禁切换为"自主决策 + 决策留痕"——skill 自行拍板走完全流程，但每次选择必须写入 `decision_log.py`（谁/选了啥/为什么/取舍/风险），阶段产物一个不落（`emergency_run.py` checkpoint 强制），交稿前强制 `prize_gate.py` 收口。详见 `references/emergency-mode.md`。
 
 每环节完成给出「一句话验收 + 关键数字」，用户点头才进入下一环节。**用户说「直接完成 / 全自动」也绝不例外**：仍必须对上述三类决策逐项给出多方案供选择，只是拍板后可以连续执行、不再停下等每步汇报；关键中间结果仍要汇报。
 
@@ -106,6 +108,8 @@ updated: 2026-09-02
 | **答辩 / 展示** | `defense-and-presentation.md`（晋级答辩 / PPT / 问答） |
 | **赛后复盘** | `post-contest-review.md` + 跑 `scripts/review_survey.py`（四维复盘 + 资产回流） |
 | **交稿收口** | `reproducibility.md` + 跑 `scripts/prize_gate.py`（一键计分板，聚合全部校验） |
+| **紧急模式** | `emergency-mode.md` + 跑 `scripts/emergency_run.py`（7 阶段不跳步 + 红警 + 一键收口） |
+| **AI 使用报告（2026 合规）** | `ai-usage-report.md` + 跑 `scripts/gen_ai_report.py`（声明 + 使用详情四要素 + 匿名） |
 
 脚本（位于本 SKILL.md 同级 `scripts/` 目录；除 `plot_style.py` 需 matplotlib 外，其余零第三方依赖，PIL 可选降级）：
 
@@ -122,6 +126,9 @@ updated: 2026-09-02
 | `check_env.py` | **赛前环境体检**：开赛前 10 分钟跑一遍——Python 版本 / 关键科学库+版本 / matplotlib 中文字体 / PIL / 磁盘空间 / 目录可写 / seed 可复现，把环境翻车风险清零（`check_env.py --strict`） |
 | `crosscheck.py` | **跨文件数字一致性**：摘要/正文/结论/图注里同一个数字各写各的（19.43 vs 19.5）→ 一次找出；含摘要孤立数字、近似矛盾取值、摘要四要素检测 |
 | `prize_gate.py` | **国一冲刺计分板**：交稿前一条命令聚合全部校验（环境/对账/量纲/文献/图表/降重/一致性），输出 PASS/FAIL 表，`prize_gate.py <项目目录> --source 题干.txt` |
+| `decision_log.py` | **决策日志**：每次拍板留痕（环节/决策/理由/取舍/风险/AI参与），可导出论文「设计意图」素材与 AI 使用详情素材；紧急模式与 AI 报告的共同数据源 |
+| `gen_ai_report.py` | **2026 国赛 AI 使用报告**：按官方规定生成参考文献前的「AI工具使用声明」+ 支撑材料「AI工具使用详情」（四要素+匿名，自动汇总决策日志；有 pandoc 可转 PDF） |
+| `emergency_run.py` | **紧急全流程编排器**：7 阶段 checkpoint 不跳步 + 红警（时间vs进度自动给"砍什么保什么"）+ finish 一键收口（prize_gate+AI报告+提交清单） |
 
 > 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；唯一例外 `plot_style.py` 需 matplotlib（画图本来就要，见 `code-templates.md`）。
 >
@@ -149,6 +156,7 @@ updated: 2026-09-02
 4. **参考文献核查**：逐条联网核实 + 引用键一一对应（`verify_refs.py`）。
 5. **数值对账 + 复现**：canonical 脚本逐位核对 + 干净环境复跑（`check_results.py` + `crosscheck.py` 跨文件一致性）。
 6. **降 AI 味 / 降重**：过 `writing-deai-dedup.md` + `dedup_scan.py`。
+7. **AI 使用合规（2026 必做）**：参考文献之前有「AI工具使用声明」；用了 AI 则支撑材料含「AI工具使用详情.pdf」（匿名、四要素）；如实披露、不隐瞒（`gen_ai_report.py`，见 `ai-usage-report.md`）。
 
 ## 常见坑与红线
 
