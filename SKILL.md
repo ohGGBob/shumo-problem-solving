@@ -101,7 +101,7 @@ updated: 2026-09-01
 | **逻辑严密性** | `logic-rigor.md` ← 支柱一 |
 | **创新设计** | `innovation-playbook.md` ← 支柱二 |
 | **论文成文** | `paper-skeleton.md` → `bao-paper-writing.md` → `figures-and-abstract.md` → `figure-polish.md`（图更好看）→ `paper-quality-gate.md` ← 支柱三；**中文稿精打磨加 `chinese-writing-advanced.md`** |
-| **降 AI 味 / 降重** | `writing-deai-dedup.md` |
+| **降 AI 味 / 降重** | `writing-deai-dedup.md` → `deai-rewrite-bank.md`（脚本命中后照它逐条改）；美赛英文加 `english-writing-mcm.md` §八；交稿跑 `dedup_scan.py` |
 | **美赛专册** | `mcm-icm-guide.md`（**全文 25 页硬上限 + 页面预算表 + 英文 QA**）、`cases-2026-mcm.md`（六题解析）、**`english-writing-mcm.md`（Summary Sheet 句式库 / Policy Letter / 术语表）**、**`worked-example-2026-mcmA.md`（A 题机理范式串链范本）**、**`worked-example-2026-mcmC.md`（C 题统计逆问题范式范本）** |
 | **答辩 / 展示** | `defense-and-presentation.md`（晋级答辩 / PPT / 问答） |
 | **赛后复盘** | `post-contest-review.md` + 跑 `scripts/review_survey.py`（四维复盘 + 资产回流） |
@@ -117,7 +117,7 @@ updated: 2026-09-01
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位检查 |
 | `plot_style.py` | 科研绘图一键美化：rcParams + 配色 + 中文字体探测 + 300dpi 统一导出（需 matplotlib） |
 | `sanity_check.py` | 量纲 / 量级 / 边界自动校验（数值须在合理范围、权重和=1、概率∈[0,1] 等；可库用或对 `results.json` 批量） |
-| `dedup_scan.py` | 降 AI 味与降重自查（套娃词、零信息句、疑似抄题面） |
+| `dedup_scan.py` | 降 AI 味与降重自查 v2（中/英分层词库 + 每千字密度 + 段首词/被动/排比 + 题干 n-gram 比对；`dedup_scan.py 论文.md 题干.txt`） |
 | `review_survey.py` | 赛后四维复盘问题清单 + 生成 `review_<日期>.md` 草稿（数据/模型/写作/协作） |
 
 > 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；唯一例外 `plot_style.py` 需 matplotlib（画图本来就要，见 `code-templates.md`）。

@@ -11,7 +11,7 @@
 ```
 shumo-problem-solving/
 ├── SKILL.md          # 技能入口：门禁 / 铁律 / 质量三支柱 / 路由表 / 标准流程 / 收口
-├── references/       # 41 个专题文档（按需加载路由）
+├── references/       # 42 个专题文档（按需加载路由）
 └── scripts/          # 8 个脚本（7 个零依赖校验 + plot_style 依赖 matplotlib）
 ```
 
@@ -41,6 +41,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | `logic-rigor.md` | 逻辑严密性硬检查（支柱一） |
 | `innovation-playbook.md` | 创新亮点打法（支柱二） |
 | `bao-paper-writing.md`、`paper-quality-gate.md` | 论文撰写对标 + 交稿关卡（支柱三） |
+| `writing-deai-dedup.md`、`deai-rewrite-bank.md` | 降 AI 味 / 降重规范 + 改写对照库 |
 | `figure-polish.md`、`figures-and-abstract.md` | 科研图表美化手册 + 图表/摘要规范 |
 | `worked-example-2023c.md`、`worked-example-2018a.md`、`worked-example-2020b.md` | 国赛 A/B/C 三题型端到端范本 |
 | `model-recipes.md`、`code-templates.md` | 模型配方速查 + 代码模板 |
@@ -59,7 +60,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位 |
 | `plot_style.py` | 科研绘图一键美化（配色 / 字号 / 中文字体 / 300dpi 导出，需 matplotlib） |
 | `sanity_check.py` | 量纲 / 量级 / 边界自动校验 |
-| `dedup_scan.py` | 降 AI 味 + 降重自查 |
+| `dedup_scan.py` | 降 AI 味 + 降重自查（中/英词库 + 密度 + 题干 n-gram 比对） |
 | `review_survey.py` | 赛后四维复盘（数据/模型/写作/协作） |
 
 > 除 `plot_style.py` 需 matplotlib 外，脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。
