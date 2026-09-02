@@ -2,7 +2,7 @@
 name: shumo-problem-solving
 description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）、2026 国赛 AI 使用声明与使用详情合规生成，支持时间极紧时的紧急模式（须用户显式点名「紧急模式」触发；emergency_run 不跳步走完 7 阶段 + 一键收口），并通用适配 DeepSeek 系模型（V3/R1/V4 全系列，一次会话绑定一个型号即可）。当用户给出数模题目、要求建立模型或求解、撰写数模论文或 AI 使用报告、要求紧急全流程产出、或询问 DeepSeek 系模型适配时使用。
 whenToUse: 用户给出数模竞赛题、要求建模/求解/检验、撰写数模论文与摘要、生成 AI 使用声明/详情（2026 合规）、时间紧急且显式要求进入紧急模式走完全流程，或询问 DeepSeek 系模型适配时。
-version: 1.9.0
+version: 1.9.1
 updated: 2026-09-02
 ---
 
@@ -102,6 +102,7 @@ updated: 2026-09-02
 | **检验** | `validation-checklist.md`；数值先过 `scripts/sanity_check.py`（量纲/量级/边界） |
 | **赛中预警** | `mid-contest-warning.md`（红警信号 / 纠偏决策树 / 砍复杂度）← 配合 `timeline.md` 红线 |
 | **避坑自查** | `pitfalls-cookbook.md`（20 条真实翻车实录，对照质量三支柱 / 铁律逐条自查） |
+| **评委视角** | `judge-view.md`（评阅要点 8 信号 / 四得自查 / 模型对比表+应用指南模板 / 交稿前裁判预演 30min）——**开题 2h 内先查当年评阅要点** |
 | **逻辑严密性** | `logic-rigor.md` ← 支柱一 |
 | **创新设计** | `innovation-playbook.md` ← 支柱二 |
 | **亮点预埋（三题型弹药库）** | `lightning-skeletons.md`（A/B/C 各 3 可移植骨架：模型组合 + 证据链 + 论文落点模板 + 预写清单；赛前预写、赛中命中即套） |

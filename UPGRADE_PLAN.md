@@ -1,4 +1,4 @@
-# 国一冲刺升级方案（UPGRADE_PLAN · v1.9.0）
+# 国一冲刺升级方案（UPGRADE_PLAN · v1.9.1）
 
 > 目标：把本 skill 从"强助教"推到"国一助攻"——不是承诺保送国一，而是把**可避免的失分清零**、把**亮点命中率抬到最高**、把 **72h 节奏管住**。国一 = 逻辑严密 × 计算准确 × 创新有据 × 表述清晰 × 规则零违规，本方案逐项打。
 
@@ -18,6 +18,7 @@
 | 亮点预埋（v1.8.0） | 赛中才现想创新、没证据链 | `references/lightning-skeletons.md`（A/B/C 三题型各 3 可移植骨架：模型组合 + 证据链 + 论文落点模板 + 预写清单，命中即套） |
 | 体检器（v1.8.1） | 每次升级靠人肉回归；preset 根配置漂移没人查 | 仓库根 `tools/skill_audit.py`：A–G 七项一键体检（脚本可跑 / 路由孤儿 / README 覆盖 / 数量口径 / 死链 / 门禁一致性 / **preset 根计数**），零依赖；每次升级后 `python tools/skill_audit.py` 回归（部署在 preset 布局下时，G 项会连 `preset.yml`/`agent.cordis.yml` 的计数口径一起扫） |
 | 社区对标升级（v1.9.0） | 排版无人管、文献靠人肉、图与结论脱钩、定稿凭感觉 | 对标 GitHub 同类 skill（math-modeling-skill 系 / MathModelAgent）后补强四件套：① `references/typesetting-delivery.md`（国赛版式规范 + Word/LaTeX 双路线 + 格式自查 10 条）；② `scripts/ref_search.py`（OpenAlex 检索真实文献 + DOI 核验，铁律一自动化）；③ `figure-polish.md` §9 Figure Contract（画图前四行合同 + SVG/PNG 双导出）；④ `paper-quality-gate.md` 关卡六百分制定稿评分（摘要 30/模型 20/创新 20/写作 15/排版 15，≥85 才定稿，≤3 轮循环） |
+| 评委视角（v1.9.1） | 只知道自嗨式写作，从没站在评阅组角度自检 | 对标社区评阅要点资源（Math_Model 合集 / MathModelHub）+ 历年官方评阅要点原文，落地 `references/judge-view.md`：8 条通用评委信号（快速算法优于无脑智能算法/简化给依据/给计算时间/交叉验证/协同鼓励…）+ 四得自查 + 模型对比表与应用指南模板 + 30 分钟裁判预演；`mid-contest-warning.md` 补「论文完整>论文完美」应急心法 |
 
 ## 二、建议后续（按优先级，赛前窗口内能做的排前面）
 
@@ -34,7 +35,7 @@
 - [ ] **红警看板**：`timeline.md` 的红警线（D2 晚未跑通全部模型=砍复杂度）做成可勾选进度表，每问过 `sanity_check.py` 自动拦量级错。
 
 ### P2 · 交稿前 6h
-- [ ] **裁判预演**：按 `paper-quality-gate.md` 的 full gate 五张表跑完后，再以"评审老师挑刺"视角逐节读一遍（本问亮点是否有证据链？假设是否有裸奔项？）——可固化成 `judge_rehearsal.md`。
+- [x] **裁判预演（v1.9.1 落地）**：`references/judge-view.md`——官方评阅要点提炼的 8 条通用信号 +「看得懂/找得到/信得过/用得上」四得自查 + 模型对比表与「模型应用指南」模板 + 交稿前 30 分钟预演流程（原计划的 judge_rehearsal.md 以更完整形态落地）。
 - [ ] **图表数字对账扩展**：`figcheck.py` 增加"图注/表注里的数字 vs `results.json`"自动对账，把 crosscheck 的范围扩到图和表。
 
 ### P3 · 长期资产

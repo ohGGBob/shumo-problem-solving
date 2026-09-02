@@ -2,7 +2,7 @@
 
 把一个数模赛题从「读不懂」推进到「可提交的论文」的 **Agent Skill**（供 DeepSeek Harness / 各类 agent preset 使用）。覆盖国赛 **CUMCM**、美赛 **MCM/ICM**，以及电工杯、华为杯、MathorCup、APMCM 等赛种。
 
-> 与 `SKILL.md` 同步至 **v1.9.0**（2026-09-02）。以 `SKILL.md` 为准，本文件是给人看的导览。
+> 与 `SKILL.md` 同步至 **v1.9.1**（2026-09-03）。以 `SKILL.md` 为准，本文件是给人看的导览。
 
 ## 一句话介绍
 
@@ -13,7 +13,7 @@
 ```
 shumo-problem-solving/
 ├── SKILL.md          # 技能入口：门禁 / 铁律 / 质量三支柱 / 路由表 / 标准流程 / 收口
-├── references/       # 47 个专题文档（按需加载路由，勿一次全读）
+├── references/       # 48 个专题文档（按需加载路由，勿一次全读）
 ├── tools/            # skill_audit.py —— A–G 七项体检器，升级后一键回归
 └── scripts/          # 15 个脚本（13 个零第三方依赖 + plot_style 需 matplotlib + ref_search 需联网）
 ```
@@ -33,6 +33,7 @@ shumo-problem-solving/
 - **紧急模式**：`emergency_run.py` 7 阶段 checkpoint 不跳步 + 红警自动降级 + finish 一键收口。
 - **错题本**：`pitfalls-cookbook.md`——20 条真实翻车实录（P1–P20），对照三支柱与铁律逐条自查。
 - **排版双格式交付**：`typesetting-delivery.md`——国赛版式规范 + Word/LaTeX 双路线 + 交稿格式自查；Figure Contract 与百分制定稿评分（≥85 才定稿）。
+- **评委视角**：`judge-view.md`——历年评阅要点提炼的 8 条通用信号（快速算法/交叉验证/计算时间/协同鼓励…）+「看得懂找得到信得过用得上」四得自查 + 交稿前 30 分钟裁判预演。
 
 ## 快速上手
 
@@ -64,6 +65,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | 写作打磨 | `chinese-writing-advanced.md`（中文）、`english-writing-mcm.md`（美赛英文 / Summary Sheet / Policy Letter） |
 | 降 AI 味 / 降重 | `writing-deai-dedup.md` → `deai-rewrite-bank.md` |
 | 赛中 / 收口 | `mid-contest-warning.md`、`emergency-mode.md`、`pitfalls-cookbook.md`、`reproducibility.md` |
+| 评委视角 | `judge-view.md`（评阅要点 8 信号 + 四得自查 + 裁判预演） |
 | 合规 | `ai-usage-report.md` |
 | 赛后 | `defense-and-presentation.md`、`post-contest-review.md` |
 | 模型适配 | `model-adaptation.md`（DeepSeek 系通用） |
