@@ -103,7 +103,7 @@ def main():
         f.write(README_TEMPLATE.format(name=args.name, ts=datetime.now().isoformat(timespec="seconds")))
 
     # 占位文件，避免空目录在某些工具里被忽略
-    for rel in ["data/.gitkeep", "out/.gitkeep"]:
+    for rel in ["data/.gitkeep", "out/.gitkeep", "report/figures/.gitkeep"]:
         open(os.path.join(root, rel), "w", encoding="utf-8").close()
 
     print(f"[init] 已生成项目骨架: {root}")

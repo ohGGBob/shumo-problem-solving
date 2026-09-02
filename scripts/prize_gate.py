@@ -51,7 +51,7 @@ def _run(label, args, show_tail=3, warn_ok=False):
     保证「红项 = 必须修的真问题」这个信号不被稀释。
     """
     try:
-        r = subprocess.run(args, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        r = subprocess.run(args, capture_output=True, text=True, encoding="utf-8", errors="replace", env={**os.environ, "PYTHONUTF8": "1"})
         out = (r.stdout or "") + (r.stderr or "")
     except Exception as e:  # noqa
         print(f"  [ERR ] {label}: 无法执行 ({e})")

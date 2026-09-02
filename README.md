@@ -2,7 +2,7 @@
 
 把一个数模赛题从「读不懂」推进到「可提交的论文」的 **Agent Skill**（供 DeepSeek Harness / 各类 agent preset 使用）。覆盖国赛 **CUMCM**、美赛 **MCM/ICM**，以及电工杯、华为杯、MathorCup、APMCM 等赛种。
 
-> 与 `SKILL.md` 同步至 **v1.8.0**（2026-09-02）。以 `SKILL.md` 为准，本文件是给人看的导览。
+> 与 `SKILL.md` 同步至 **v1.8.1**（2026-09-02）。以 `SKILL.md` 为准，本文件是给人看的导览。
 
 ## 一句话介绍
 
@@ -14,6 +14,7 @@
 shumo-problem-solving/
 ├── SKILL.md          # 技能入口：门禁 / 铁律 / 质量三支柱 / 路由表 / 标准流程 / 收口
 ├── references/       # 46 个专题文档（按需加载路由，勿一次全读）
+├── tools/            # skill_audit.py —— A–G 七项体检器，升级后一键回归
 └── scripts/          # 14 个脚本（13 个零第三方依赖 + plot_style 需 matplotlib）
 ```
 

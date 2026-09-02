@@ -90,8 +90,9 @@ def cmd_init(project, args):
     name = os.path.basename(project.rstrip("/\\"))
     parent = os.path.dirname(os.path.abspath(project))
     r = subprocess.run([sys.executable, os.path.join(_sd(), "init_project.py"), name, "--dir", parent],
-                       capture_output=True, text=True, encoding="utf-8", errors="replace")
-    print(r.stdout or r.stderr or "[emergency_run] 骨架已生成")
+                       capture_output=True, text=True, encoding="utf-8", errors="replace", env={**os.environ, "PYTHONUTF8": "1"})
+    _skel = (r.stdout or r.stderr or "").strip()
+    print(f"[emergency_run] 骨架步骤: {_skel}" if _skel else "[emergency_run] 骨架已生成")
     if not os.path.isdir(project):
         print(f"[err] 骨架生成失败: {project}", file=sys.stderr)
         return 2
@@ -199,12 +200,12 @@ def cmd_finish(project, args):
     print("== 1/3 全链路校验（prize_gate）==")
     r = subprocess.run([sys.executable, os.path.join(_sd(), "prize_gate.py"), project] +
                        (["--source", args.source] if args.source else []),
-                       capture_output=True, text=True, encoding="utf-8", errors="replace")
+                       capture_output=True, text=True, encoding="utf-8", errors="replace", env={**os.environ, "PYTHONUTF8": "1"})
     print((r.stdout or r.stderr or "")[-1500:])
     # 2. AI 使用报告
     print("\n== 2/3 AI 使用报告 ==")
     r = subprocess.run([sys.executable, os.path.join(_sd(), "gen_ai_report.py"), project, "--pdf", "auto"],
-                       capture_output=True, text=True, encoding="utf-8", errors="replace")
+                       capture_output=True, text=True, encoding="utf-8", errors="replace", env={**os.environ, "PYTHONUTF8": "1"})
     print((r.stdout or r.stderr or "")[-1200:])
     # 3. 提交清单
     print("\n== 3/3 提交清单（按 2026 国赛通知核对）==")

@@ -94,6 +94,11 @@ def field_completeness(entry_text):
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):
+        try:
+            _s.reconfigure(errors="replace")
+        except Exception:
+            pass
     ap = argparse.ArgumentParser(description="参考文献核验清单与孤儿条目检测")
     ap.add_argument("paper")
     ap.add_argument("--out", default=None, help="输出核验清单 md，默认打印到终端")

@@ -25,7 +25,7 @@ sol = solve_ivp(dSOC, [0, 3600*10], [1.0], method='RK45',
                 events=hit_empty, max_step=60, dense_output=True)
 print('time-to-empty (s):', sol.t_events[0][0] if sol.t_events[0].size else 'not reached')
 ```
-> 要点：把每个分项写成独立函数参数，便于逐项做灵敏度（±X% 摄动看 time-to-empty 变化）。**官方明确禁止纯 ML/离散拟合**，必须保留连续时间方程。
+> 要点：把每个分项写成独立函数参数，便于逐项做灵敏度（±X% 摄动看 time-to-empty 变化）。**官方要求必须有显式连续时间方程**——只做纯 ML/离散拟合、没有连续时间模型的，不满足本题要求。
 
 ## 2. ODE 参数辨识（最小二乘反演，A/B/E 类机理题通用）
 

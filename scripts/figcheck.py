@@ -45,6 +45,11 @@ def dpi_of(path):
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):
+        try:
+            _s.reconfigure(errors="replace")
+        except Exception:
+            pass
     ap = argparse.ArgumentParser(description="图表规范检查")
     ap.add_argument("report_dir", help="论文/report 目录")
     ap.add_argument("--dpi", type=int, default=300)
@@ -75,13 +80,13 @@ def main():
             d = dpi_of(p)
             if d is not None and d < args.dpi:
                 flags.append(f"DPI={d}<{args.dpi}")
-        else:
-            flags.append("DPI未检(无Pillow)")
         if re.search(r"(IMG_|微信|截图|screenshot|capture|未命名|image)", name, re.I):
             flags.append("命名不规范(含 IMG_/截图/微信 等)")
         if flags:
             issues += 1
             print(f"  ! {name}: {'; '.join(flags)}")
+        elif not have_pil:
+            print(f"  ~ {name}: DPI未检(无Pillow)")
         else:
             print(f"  ok {name}")
 
@@ -102,7 +107,7 @@ def main():
     print(f"\n[figcheck] 完成，发现 {issues} 处需清理项。" if issues else "\n[figcheck] ✓ 全部通过。")
     if not have_pil:
         print("提示: 安装 Pillow 可做 DPI 硬检查: pip install Pillow")
-    return 0
+    return 1 if issues else 0
 
 
 if __name__ == "__main__":

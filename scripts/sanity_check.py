@@ -106,6 +106,11 @@ def validate_results(data, rules):
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):
+        try:
+            _s.reconfigure(errors="replace")
+        except Exception:
+            pass
     ap = argparse.ArgumentParser(description="量纲/量级/边界 sanity check")
     ap.add_argument("results_json", nargs="?", help="results.json（可选；省略则仅库用法）")
     ap.add_argument("--rule", action="append", default=[], help="key=min,max")

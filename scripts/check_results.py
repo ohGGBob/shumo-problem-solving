@@ -114,6 +114,11 @@ def matches(value, ref_list, tol):
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):
+        try:
+            _s.reconfigure(errors="replace")
+        except Exception:
+            pass
     ap = argparse.ArgumentParser(description="论文数字 vs results.json 对账")
     ap.add_argument("paper", help="论文 .md/.tex/.docx")
     ap.add_argument("--json", default=None, help="results.json 路径；默认依次查 上级 out/、同级 out/（init_project 骨架）")
@@ -173,7 +178,7 @@ def main():
         if len(wild) > 60:
             print(f"   ... 其余 {len(wild)-60} 个略")
         print("\n处理建议: 这些数字要么补进 export_results.py 重新落盘，要么确认来自题面/文献（在文内标注来源）。")
-    return 0
+    return 1 if wild else 0
 
 
 if __name__ == "__main__":
