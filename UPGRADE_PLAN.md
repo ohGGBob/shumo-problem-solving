@@ -21,7 +21,7 @@
 
 ### P0 · 赛前 8 天（9/10 开赛前）
 - [x] **环境体检**：在建模环境跑 `check_env.py`，缺库立刻装、版本锁进 `requirements.txt`。
-- [x] **一键 smoke**：用 `init_project.py` 建个空项目跑 `prize_gate.py`，确认 11 个脚本在新机器全链通。
+- [x] **一键 smoke**：用 `init_project.py` 建个空项目跑 `prize_gate.py`，确认 14 个脚本在新机器全链通。
 - [ ] **规则再核验**：`rules-and-deadlines.md` 已要求开题第一动作 web_search 核官网；赛前最后一天把当年页数/AI 披露/提交渠道/查重口径打印置顶。
 
 ### P1 · 赛中 72h

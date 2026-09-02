@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """国一冲刺计分板（国一冲刺包 #3）。交稿前一条命令，把全部校验串成一张表：
-哪些过了、哪些红、还差什么。按 SKILL「交稿前自检收口」六道关组织，跑完直接看到
+哪些过了、哪些红、还差什么。按 SKILL「交稿前自检收口」七道关组织，跑完直接看到
 "这稿能不能冲国一"的客观状态，避免手忙脚乱漏项。
 
 用法:
@@ -42,8 +42,14 @@ def _script_dir():
     return os.path.dirname(os.path.abspath(__file__))
 
 
-def _run(label, args, show_tail=3):
-    """跑一个子校验，返回 (name, pass:bool|None)。None=跳过/无法判定。"""
+def _run(label, args, show_tail=3, warn_ok=False):
+    """跑一个子校验，返回 (name, ok:bool|None)。None=跳过/无法判定。
+
+    warn_ok=True 用于 check_env 这类「分级退出码」脚本（0=全过 / 1=有警告 /
+    2=有阻断项）：退出码 1 判为 WARN——通过但提示，**不计红项**。
+    避免「sympy/torch 等可选库未装」这类无害警告污染计分板，
+    保证「红项 = 必须修的真问题」这个信号不被稀释。
+    """
     try:
         r = subprocess.run(args, capture_output=True, text=True, encoding="utf-8", errors="replace")
         out = (r.stdout or "") + (r.stderr or "")
@@ -52,9 +58,14 @@ def _run(label, args, show_tail=3):
         return label, False
     tail = [ln for ln in out.splitlines() if ln.strip()][-show_tail:]
     tail_txt = " | ".join(t.strip() for t in tail)
-    # 以退出码为主，若子脚本意外 0 但输出明显失败则兜底
-    ok = r.returncode == 0
-    print(f"  [{'PASS' if ok else 'FAIL'}] {label}")
+    rc = r.returncode
+    if rc == 0:
+        tag, ok = "PASS", True
+    elif warn_ok and rc == 1:
+        tag, ok = "WARN", True          # 警告：通过但提示，不计红项
+    else:
+        tag, ok = "FAIL", False
+    print(f"  [{tag}] {label}")
     if tail_txt:
         print(f"         {tail_txt[:160]}")
     return label, ok
@@ -86,11 +97,13 @@ def main():
 
     rows = []
 
-    # 1. 环境体检
+    # 1. 环境体检（check_env 退出码：0=全过 / 1=有警告 / 2=有阻断项）
+    #    默认：警告不计红项——sympy/torch 等可选库未装属正常，不该挡交稿。
+    #    --strict：警告也计红，供想彻底清警告的场景使用。
     env_args = [sys.executable, os.path.join(sd, "check_env.py")]
     if args.strict:
         env_args.append("--strict")
-    rows.append(_run("环境体检 check_env", env_args))
+    rows.append(_run("环境体检 check_env", env_args, warn_ok=not args.strict))
 
     # 2. 数值对账
     if os.path.exists(paper) and os.path.exists(jpath):
@@ -152,7 +165,7 @@ def main():
     if skips:
         print("[prize_gate] 有跳过项——补全输入（题干/规则/文件）后再确认。")
         return 1
-    print("[prize_gate] ✓ 六道收口全绿，可以提交。")
+    print("[prize_gate] ✓ 七道收口全绿，可以提交。")
     return 0
 
 
