@@ -2,7 +2,7 @@
 
 把一个数模赛题从「读不懂」推进到「可提交的论文」的 **Agent Skill**（供 DeepSeek Harness / 各类 agent preset 使用）。覆盖国赛 **CUMCM**、美赛 **MCM/ICM**，以及电工杯、华为杯、MathorCup、APMCM 等赛种。
 
-> 与 `SKILL.md` 同步至 **v1.8.1**（2026-09-02）。以 `SKILL.md` 为准，本文件是给人看的导览。
+> 与 `SKILL.md` 同步至 **v1.9.0**（2026-09-02）。以 `SKILL.md` 为准，本文件是给人看的导览。
 
 ## 一句话介绍
 
@@ -13,9 +13,9 @@
 ```
 shumo-problem-solving/
 ├── SKILL.md          # 技能入口：门禁 / 铁律 / 质量三支柱 / 路由表 / 标准流程 / 收口
-├── references/       # 46 个专题文档（按需加载路由，勿一次全读）
+├── references/       # 47 个专题文档（按需加载路由，勿一次全读）
 ├── tools/            # skill_audit.py —— A–G 七项体检器，升级后一键回归
-└── scripts/          # 14 个脚本（13 个零第三方依赖 + plot_style 需 matplotlib）
+└── scripts/          # 15 个脚本（13 个零第三方依赖 + plot_style 需 matplotlib + ref_search 需联网）
 ```
 
 ## 核心特性
@@ -32,6 +32,7 @@ shumo-problem-solving/
 - **2026 AI 合规**：`gen_ai_report.py` 自动生成「AI工具使用声明」+ 支撑材料「AI工具使用详情」（四要素 + 匿名），见 `references/ai-usage-report.md`。
 - **紧急模式**：`emergency_run.py` 7 阶段 checkpoint 不跳步 + 红警自动降级 + finish 一键收口。
 - **错题本**：`pitfalls-cookbook.md`——20 条真实翻车实录（P1–P20），对照三支柱与铁律逐条自查。
+- **排版双格式交付**：`typesetting-delivery.md`——国赛版式规范 + Word/LaTeX 双路线 + 交稿格式自查；Figure Contract 与百分制定稿评分（≥85 才定稿）。
 
 ## 快速上手
 
@@ -59,6 +60,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | 检验 | `validation-checklist.md` + `scripts/sanity_check.py` |
 | 逻辑 / 创新（支柱一二） | `logic-rigor.md`、`innovation-playbook.md`、`lightning-skeletons.md` |
 | 论文（支柱三） | `paper-skeleton.md` → `bao-paper-writing.md` → `figures-and-abstract.md` → `figure-polish.md` → `paper-quality-gate.md` |
+| 排版 / 交付 | `typesetting-delivery.md`（国赛版式规范 + Word/LaTeX 双路线 + 格式自查） |
 | 写作打磨 | `chinese-writing-advanced.md`（中文）、`english-writing-mcm.md`（美赛英文 / Summary Sheet / Policy Letter） |
 | 降 AI 味 / 降重 | `writing-deai-dedup.md` → `deai-rewrite-bank.md` |
 | 赛中 / 收口 | `mid-contest-warning.md`、`emergency-mode.md`、`pitfalls-cookbook.md`、`reproducibility.md` |
@@ -66,7 +68,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | 赛后 | `defense-and-presentation.md`、`post-contest-review.md` |
 | 模型适配 | `model-adaptation.md`（DeepSeek 系通用） |
 
-## scripts/ 一览（14 个）
+## scripts/ 一览（15 个）
 
 > 除 `plot_style.py` 需 matplotlib 外，脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。**脚本与模型型号无关。**
 
@@ -78,6 +80,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | `crosscheck.py` | **跨文件数字一致性**：摘要/正文/图注同一数字各写各的（19.43 vs 19.5）一次找出 |
 | `sanity_check.py` | 量纲 / 量级 / 边界自动校验（权重和=1、概率∈[0,1] 等） |
 | `verify_refs.py` | 参考文献核验清单 + 孤儿/悬空引用检测 |
+| `ref_search.py` | **文献真实检索与核验**（需联网，OpenAlex API）：搜真实文献直出 GB/T 7714 草稿，`--verify DOI` 确认存在性 |
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位 |
 | `plot_style.py` | 科研绘图一键美化（配色 / 字号 / 中文字体 / 300dpi 导出，需 matplotlib） |
 | `dedup_scan.py` | 降 AI 味 + 降重自查 v2（中英分层词库 + 密度 + 题干 n-gram 比对） |

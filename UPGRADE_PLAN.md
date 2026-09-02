@@ -1,8 +1,8 @@
-# 国一冲刺升级方案（UPGRADE_PLAN · v1.8.1）
+# 国一冲刺升级方案（UPGRADE_PLAN · v1.9.0）
 
 > 目标：把本 skill 从"强助教"推到"国一助攻"——不是承诺保送国一，而是把**可避免的失分清零**、把**亮点命中率抬到最高**、把 **72h 节奏管住**。国一 = 逻辑严密 × 计算准确 × 创新有据 × 表述清晰 × 规则零违规，本方案逐项打。
 
-## 一、已落地（v1.8.0 → v1.8.1，直接可用）
+## 一、已落地（v1.8.0 → v1.9.0，直接可用）
 
 | 增量 | 对应失分点 | 用法 |
 |---|---|---|
@@ -17,12 +17,13 @@
 | 模型适配（v1.8.0 收敛） | 型号细分过度、维护负担 | 收敛为 `references/model-adaptation.md`（DeepSeek 系通用：不区分型号、脚本与型号无关、卡壳换更强型号），删除细分工具 `model_profile.py` |
 | 亮点预埋（v1.8.0） | 赛中才现想创新、没证据链 | `references/lightning-skeletons.md`（A/B/C 三题型各 3 可移植骨架：模型组合 + 证据链 + 论文落点模板 + 预写清单，命中即套） |
 | 体检器（v1.8.1） | 每次升级靠人肉回归；preset 根配置漂移没人查 | 仓库根 `tools/skill_audit.py`：A–G 七项一键体检（脚本可跑 / 路由孤儿 / README 覆盖 / 数量口径 / 死链 / 门禁一致性 / **preset 根计数**），零依赖；每次升级后 `python tools/skill_audit.py` 回归（部署在 preset 布局下时，G 项会连 `preset.yml`/`agent.cordis.yml` 的计数口径一起扫） |
+| 社区对标升级（v1.9.0） | 排版无人管、文献靠人肉、图与结论脱钩、定稿凭感觉 | 对标 GitHub 同类 skill（math-modeling-skill 系 / MathModelAgent）后补强四件套：① `references/typesetting-delivery.md`（国赛版式规范 + Word/LaTeX 双路线 + 格式自查 10 条）；② `scripts/ref_search.py`（OpenAlex 检索真实文献 + DOI 核验，铁律一自动化）；③ `figure-polish.md` §9 Figure Contract（画图前四行合同 + SVG/PNG 双导出）；④ `paper-quality-gate.md` 关卡六百分制定稿评分（摘要 30/模型 20/创新 20/写作 15/排版 15，≥85 才定稿，≤3 轮循环） |
 
 ## 二、建议后续（按优先级，赛前窗口内能做的排前面）
 
 ### P0 · 赛前 8 天（9/10 开赛前）
 - [x] **环境体检**：在建模环境跑 `check_env.py`，缺库立刻装、版本锁进 `requirements.txt`。
-- [x] **一键 smoke**：用 `init_project.py` 建个空项目跑 `prize_gate.py`，确认 14 个脚本在新机器全链通。
+- [x] **一键 smoke**：用 `init_project.py` 建个空项目跑 `prize_gate.py`，确认 15 个脚本在新机器全链通。
 - [ ] **规则再核验**：`rules-and-deadlines.md` 已要求开题第一动作 web_search 核官网；赛前最后一天把当年页数/AI 披露/提交渠道/查重口径打印置顶。
 
 ### P1 · 赛中 72h
