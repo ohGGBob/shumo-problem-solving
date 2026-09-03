@@ -2,7 +2,7 @@
 
 > 目标：把本 skill 从"强助教"推到"国一助攻"——不是承诺保送国一，而是把**可避免的失分清零**、把**亮点命中率抬到最高**、把 **72h 节奏管住**。国一 = 逻辑严密 × 计算准确 × 创新有据 × 表述清晰 × 规则零违规，本方案逐项打。
 
-## 一、已落地（v1.8.0 → v1.9.4，直接可用）
+## 一、已落地（v1.8.0 → v1.9.5，直接可用）
 
 | 增量 | 对应失分点 | 用法 |
 |---|---|---|
@@ -22,12 +22,13 @@
 | 社区对标第三轮（v1.9.2） | 模型空转没护栏、门禁汇报太随意、图表数量无纪律 | 对标 zhnnky329/MathModeling-skills（risk-probe/frozen-numbers/figure-table-planner）+ Fynn-jx/MathModeling-skill（H0–H5 门禁）+ cumcm-step-review（数据图硬规范）：① `sanity_check.py` 新增 `--distinct` 输出退化/集中度检查（预测全同值=模型空转当场抓住）；② `validation-checklist.md` 新增四章「输出退化 + 决策保持性」（简化模型最终决策须与完整模型复核一致）；③ SKILL.md 门禁新增「汇报五要素」（状态/动作/文件影响/备选/风险，不许只问"是否继续"）；④ `figure-polish.md` 新增 §10 图表用途四分类（诊断图不入正文）+ 数量纪律（同类型≤3 张、每图必配解读） |
 | 收官审视修复（v1.9.3） | v1.9.x 收尾漏的运行时假绿 + 内容口径漂移 | 脚本：sanity_check 缺文件退 1 / verify_refs 孤儿引用退 1（消灭假绿）；emergency_run finish 查 prize_gate+AI 报告退出码（防带病收口）；ref_search 补 GBK reconfigure；skill_audit 透传 PYTHONUTF8 + 导览裸计数正则。内容：judge-view 虚化无源评阅要点原文与硬数值、§五两把尺澄清；typesetting 美赛 AI 报告改「附正文后同 PDF（不计 25 页）」对齐 2026 COMAP、参考文献 3–5 条；README 计数 46→48、零依赖 13→14；figure-polish/paper-quality-gate 修交叉引用与「五张表」层级；合规依据域名改 cmathc.org.cn（官方，挂 2026 AI 规定） |
 | 评估修复三连（v1.9.4） | plot_style 缺库连 --help 都崩 / judge-view 残留无源"国奖线"硬数值 / ref_search 中文核验提醒不足 | `plot_style.py` 改 matplotlib 惰性加载（缺库时 `--help`/import 正常，体检器 A 项 15/15 全绿）；`judge-view.md` §五彻底移除无官方依据的分值硬数字，仅留相对权重提示；`ref_search.py` verify 补中文文献人工核验常驻提醒（[存在]/[不存在] 分支） |
+| 教练式交互升级（v1.9.5，用户实测反馈） | 一次抛多道选择题让用户懵 / AI 跳问推进失控 / 读题全靠人肉或遗漏 / 用户到后面不知道 AI 在干嘛 | 依据真实使用反馈改造交互：① **决策卡片制**（`references/decision-cards.md`）：一次只抛一张卡、候选 3–4 个讲清优劣、选定确认才走下一步，杜绝"一批选择题"；② **按小问推进**：第 N 问闭环确认后才进第 N+1 问，绝不提前抛后面小问决策（写进门禁铁律 + 标准流程节奏）；③ **先讲方法再求解**：每问先 3–4 个候选方法卡、确认明白再求解；④ **边做边教**：每卡附"为什么这么推荐"，进度永远可预期；⑤ **PDF 全文提取** `scripts/pdf_extract.py`（多后端 PyMuPDF→pypdf→pdftotext，逐页全文+页标记+元数据+空页/扫描件检测，防读题遗漏；本机已装 PyMuPDF） |
 
 ## 二、建议后续（按优先级，赛前窗口内能做的排前面）
 
 ### P0 · 赛前 8 天（9/10 开赛前）
 - [x] **环境体检**：在建模环境跑 `check_env.py`，缺库立刻装、版本锁进 `requirements.txt`。
-- [x] **一键 smoke**：用 `init_project.py` 建个空项目跑 `prize_gate.py`，确认 15 个脚本在新机器全链通。
+- [x] **一键 smoke**：用 `init_project.py` 建个空项目跑 `prize_gate.py`，确认 16 个脚本在新机器全链通。
 - [ ] **规则再核验**：`rules-and-deadlines.md` 已要求开题第一动作 web_search 核官网；赛前最后一天把当年页数/AI 披露/提交渠道/查重口径打印置顶。
 
 ### P1 · 赛中 72h

@@ -2,7 +2,7 @@
 
 把一个数模赛题从「读不懂」推进到「可提交的论文」的 **Agent Skill**（供 DeepSeek Harness / 各类 agent preset 使用）。覆盖国赛 **CUMCM**、美赛 **MCM/ICM**，以及电工杯、华为杯、MathorCup、APMCM 等赛种。
 
-> 与 `SKILL.md` 同步至 **v1.9.4**（2026-09-03）。以 `SKILL.md` 为准，本文件是给人看的导览。
+> 与 `SKILL.md` 同步至 **v1.9.5**（2026-09-03）。以 `SKILL.md` 为准，本文件是给人看的导览。
 
 ## 一句话介绍
 
@@ -13,14 +13,14 @@
 ```
 shumo-problem-solving/
 ├── SKILL.md          # 技能入口：门禁 / 铁律 / 质量三支柱 / 路由表 / 标准流程 / 收口
-├── references/       # 48 个专题文档（按需加载路由，勿一次全读）
+├── references/       # 49 个专题文档（按需加载路由，勿一次全读）
 ├── tools/            # skill_audit.py —— A–G 七项体检器，升级后一键回归
-└── scripts/          # 15 个脚本（14 个零第三方依赖 + plot_style 需 matplotlib + ref_search 需联网）
+└── scripts/          # 16 个脚本（14 个零第三方依赖 + plot_style 需 matplotlib + pdf_extract 需 PyMuPDF + ref_search 需联网）
 ```
 
 ## 核心特性
 
-- **强制确认门禁**：数据处理 / 模型选型 / 论文，都必须先给 2–3 个方案让用户选择，禁止一键生成全部成果；到达门禁须按「状态/动作/文件影响/备选/风险」五要素汇报，不许只问「是否继续」。
+- **强制确认门禁 · 决策卡片制**：数据处理 / 模型选型 / 论文，都走**一次一张决策卡片**（候选 3–4 个、各自讲清优劣、我的建议），禁止一键生成全部成果；**按小问推进、边做边教**——第 N 问闭环确认后才进第 N+1 问，绝不提前抛后面小问的决策；到达门禁按「状态/动作/文件影响/备选/风险」五要素汇报，不许只问「是否继续」。详见 `references/decision-cards.md`。
   - **「全自动」/「直接完成」只解锁连续执行，不解锁自主决策**——三类决策仍须给多方案。
   - 只有**显式点名「紧急模式」**（客观时间极紧）才切换为"自主决策 + 决策留痕"，详见 `references/emergency-mode.md`。
 - **三条铁律**：参考文献严禁编造、先验证后引用 · 数值单一来源、可复现 · 赛种规则先核当年官方。
@@ -34,6 +34,7 @@ shumo-problem-solving/
 - **错题本**：`pitfalls-cookbook.md`——20 条真实翻车实录（P1–P20），对照三支柱与铁律逐条自查。
 - **排版双格式交付**：`typesetting-delivery.md`——国赛版式规范 + Word/LaTeX 双路线 + 交稿格式自查（对应百分制"排版 15 分"）；Figure Contract 见 `figure-polish.md` §9、百分制定稿评分见 `paper-quality-gate.md` 关卡六（≥85 才定稿）。
 - **评委视角**：`judge-view.md`——历年评阅要点提炼的 8 条通用信号（快速算法/交叉验证/计算时间/协同鼓励…）+「看得懂找得到信得过用得上」四得自查 + 交稿前 30 分钟裁判预演。
+- **PDF 全文提取**：`pdf_extract.py` 逐页提取 PDF 题面/附件全文（页标记 + 元数据 + 空页/扫描件检测），防读题遗漏；多后端降级（PyMuPDF→pypdf→pdftotext）。
 - **防模型空转**：`sanity_check.py --distinct` 输出退化检查（预测全同值/解全一样当场抓住）+ `validation-checklist.md` 决策保持性检查（简化模型与完整模型最终决策必须一致）+ 图表用途四分类纪律（诊断图不入正文、每图必配解读）。
 
 ## 快速上手
@@ -46,7 +47,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 
 保持 `SKILL.md` + `references/` + `scripts/` 结构即可，skill 加载器以 `SKILL.md` 为入口、按阶段路由读取 `references/`。之后在对话里直接发一道数模题（或「只写摘要」「只做灵敏度」），skill 即生效。
 
-## references/ 导览（48 个，按阶段分组）
+## references/ 导览（49 个，按阶段分组）
 
 > 完整路由表见 `SKILL.md`「按需加载路由表」——**动手前先查那里，别一次全读**。
 
@@ -71,10 +72,11 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | 合规 | `ai-usage-report.md` |
 | 赛后 | `defense-and-presentation.md`、`post-contest-review.md` |
 | 模型适配 | `model-adaptation.md`（DeepSeek 系通用） |
+| 决策交互 | `decision-cards.md`（一次一张卡 / 按小问推进 / 边做边教） |
 
-## scripts/ 一览（15 个）
+## scripts/ 一览（16 个）
 
-> 除 `plot_style.py` 需 matplotlib 外，脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。**脚本与模型型号无关。**
+> 除 `plot_style.py` 需 matplotlib、`pdf_extract.py` 需 PyMuPDF（可降级 pypdf/pdftotext）外，脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。**脚本与模型型号无关。**
 
 | 脚本 | 作用 |
 |---|---|
