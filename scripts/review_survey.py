@@ -103,12 +103,17 @@ def print_survey():
     print("详见 references/post-contest-review.md")
 
 
-def write_draft(out_dir):
+def write_draft(out_dir, name=None):
     os.makedirs(out_dir, exist_ok=True)
     date = datetime.now().strftime("%Y-%m-%d")
     path = os.path.join(out_dir, f"review_{date}.md")
-    contest = input("本次比赛名称(如 cumcm2026A / mcm2027C，回车可跳过): ").strip() or "数模比赛"
-    content = REVIEW_TEMPLATE.format(contest=contest, date=date)
+    contest = name
+    if contest is None:
+        try:
+            contest = input("本次比赛名称(如 cumcm2026A / mcm2027C，回车可跳过): ").strip() if sys.stdin.isatty() else ""
+        except (EOFError, KeyboardInterrupt):
+            contest = ""
+    content = REVIEW_TEMPLATE.format(contest=contest or "数模比赛", date=date)
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
     print(f"[review] 已生成复盘草稿: {path}")
@@ -118,11 +123,12 @@ def write_draft(out_dir):
 def main():
     ap = argparse.ArgumentParser(description="生成数模赛后四维复盘问题清单与草稿")
     ap.add_argument("--out", default=None, help="生成复盘草稿的目录；不传则只打印问题清单")
+    ap.add_argument("--name", default=None, help="比赛名称（供草稿标题）；非交互环境请显式传入，避免 input() 阻塞")
     args = ap.parse_args()
 
     print_survey()
     if args.out:
-        write_draft(args.out)
+        write_draft(args.out, args.name)
     return 0
 
 

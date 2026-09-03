@@ -433,7 +433,7 @@ if __name__ == "__main__":
     except ImportError:
         print("[err] 需安装 python-docx: pip install python-docx", file=sys.stderr)
         sys.exit(1)
-    main(sys.argv[1])
+    main(sys.argv[1)
 '''
 
 def write_file(path, content):
@@ -479,8 +479,8 @@ def main():
         print(f"[init] 已生成 DOCX 生成脚本: {os.path.join(root, 'src', 'gen_docx_template.py')}")
         print(f"       运行: python src/gen_docx_template.py report/main.docx")
 
-    # 占位文件
-    for rel in ["data/.gitkeep", "out/.gitkeep"]:
+    # 占位文件，避免空目录在某些工具里被忽略
+    for rel in ["data/.gitkeep", "out/.gitkeep", "report/figures/.gitkeep"]:
         write_file(os.path.join(root, rel), "")
 
     print(f"[init] 已生成项目骨架: {root}")

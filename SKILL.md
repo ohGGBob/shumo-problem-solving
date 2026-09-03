@@ -2,8 +2,8 @@
 name: shumo-problem-solving
 description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）。当用户给出数模题目、要求建立模型或求解、或撰写数模论文时使用。
 whenToUse: 用户给出数模竞赛题、要求建模/求解/检验，或撰写数模论文与摘要时。
-version: 1.4.0
-updated: 2026-09-01
+version: 1.5.0
+updated: 2026-09-03
 ---
 
 # 数学建模竞赛解题（国赛 CUMCM 为主 · MCM/ICM 及其他赛种）
@@ -66,7 +66,7 @@ updated: 2026-09-01
 
 ### 支柱二 · 解题创新性 → `references/innovation-playbook.md`
 
-**亮点 = 有用 + 可检验 + 对结果有实际贡献**，三者缺一即"假创新"，反而扣分。宁可 2–3 个扎实的，不要堆 10 个浮于表面的。
+**亮点 = 有用 + 可检验 + 对结果有实际贡献**，三者缺一即"假创新"，评委一眼看穿，反而扣分。宁可 2–3 个扎实的，不要堆 10 个浮于表面的。
 
 最高杠杆的三条：**① 多模型对照 + 择优/融合**（最稳）；**② 一个扎实的理论点**（证明唯一解/凸性/单调性/误差界，或对标准模型做一处针对性改进）；**③ 把检验做成证据链**（蒙特卡洛扰动 + 最坏情形 + 基准对比，并解释"为什么"）。
 
@@ -95,21 +95,26 @@ updated: 2026-09-01
 | **假设** | `assumptions-justification.md` |
 | **模型选型** | `model-recipes.md`；纵向/阈值题型加 `longitudinal-threshold.md`；**美赛 C 类/大数据赛/自找数据题加 `bigdata-playbook.md`（统计逆问题 + 可解释 + 业务闭环）** |
 | **求解实现** | `code-templates.md`（基础）；**高级统计/因果/优化/敏感性用 `advanced-methods-templates.md`**（DiD、Sobol、MCMC、CVaR、MILP、pvlib） |
-| **检验** | `validation-checklist.md`；数值先过 `scripts/sanity_check.py`（量纲/量级/边界） |
+| **检验** | `validation-checklist.md`；数值先过 `scripts/sanity_check.py`（量纲/量级/边界/输出退化） |
 | **赛中预警** | `mid-contest-warning.md`（红警信号 / 纠偏决策树 / 砍复杂度）← 配合 `timeline.md` 红线 |
 | **避坑自查** | `pitfalls-cookbook.md`（20 条真实翻车实录，对照质量三支柱 / 铁律逐条自查） |
+| **评委视角** | `judge-view.md`（评阅要点 8 信号 / 四得自查 / 模型对比表+应用指南模板 / 交稿前裁判预演 30min）——**开题 2h 内先查当年评阅要点** |
 | **逻辑严密性** | `logic-rigor.md` ← 支柱一 |
 | **创新设计** | `innovation-playbook.md` ← 支柱二 |
-| **论文成文** | `paper-skeleton.md` → `bao-paper-writing.md` → `figures-and-abstract.md` → `figure-polish.md`（图更好看）→ `paper-quality-gate.md` ← 支柱三；**中文稿精打磨加 `chinese-writing-advanced.md`** |
-| **降 AI 味 / 降重** | `writing-deai-dedup.md` |
+| **亮点预埋（三题型弹药库）** | `lightning-skeletons.md`（A/B/C 各 3 可移植骨架：模型组合 + 证据链 + 论文落点模板 + 预写清单；赛前预写、赛中命中即套） |
+| **论文成文** | `paper-skeleton.md` → `bao-paper-writing.md` → `figures-and-abstract.md` → `figure-polish.md`（图更好看，含 **Figure Contract** 画图前四行合同）→ `paper-quality-gate.md` ← 支柱三（含 **百分制定稿评分 ≥85**）；**中文稿精打磨加 `chinese-writing-advanced.md`**；**双格式排版交付加 `typesetting-delivery.md`（国赛版式规范 + Word/LaTeX 路线）** |
+| **降 AI 味 / 降重** | `writing-deai-dedup.md` → `deai-rewrite-bank.md`（脚本命中后照它逐条改）；美赛英文加 `english-writing-mcm.md` §八；交稿跑 `dedup_scan.py` |
 | **美赛专册** | `mcm-icm-guide.md`（**全文 25 页硬上限 + 页面预算表 + 英文 QA**）、`cases-2026-mcm.md`（六题解析）、**`english-writing-mcm.md`（Summary Sheet 句式库 / Policy Letter / 术语表）**、**`worked-example-2026-mcmA.md`（A 题机理范式串链范本）**、**`worked-example-2026-mcmC.md`（C 题统计逆问题范式范本）** |
 | **答辩 / 展示** | `defense-and-presentation.md`（晋级答辩 / PPT / 问答） + 跑 `scripts/gen_defense.py --format revealjs` 生成 12 页骨架 |
 | **赛后复盘** | `post-contest-review.md` + 跑 `scripts/review_survey.py`（四维复盘 + 资产回流） + `scripts/log_run.py export` 导出模型演进图 |
-| **交稿收口** | `reproducibility.md` + 跑 `scripts/` 下脚本 |
+| **交稿收口** | `reproducibility.md` + 跑 `scripts/prize_gate.py`（一键计分板，聚合全部校验） |
+| **紧急模式** | `emergency-mode.md` + 跑 `scripts/emergency_run.py`（7 阶段不跳步 + 红警 + 一键收口） |
+| **AI 使用报告（2026 合规）** | `ai-usage-report.md` + 跑 `scripts/gen_ai_report.py`（声明 + 使用详情四要素 + 匿名） |
+| **模型适配（DeepSeek 系通用）** | `model-adaptation.md`（不区分型号：长上下文 / 成本意识 / 卡壳换更强型号） |
 | **项目初始化** | 跑 `scripts/init_project.py <题名> [--template cumcm/mcm/both]` 一键生成骨架 + 论文模板 |
 | **实验追踪** | 求解时 `from log_run import log_run` 记录每次跑的参数/指标/耗时/git commit；赛中 `log_run.py best q1 --metric mape` 秒找最优版本 |
 
-脚本（位于本 SKILL.md 同级 `scripts/` 目录；除 `plot_style.py` 需 matplotlib 外，其余零第三方依赖，PIL 可选降级；`gen_defense.py` 的 pptx 格式需 `python-pptx`，revealjs 无依赖）：
+脚本（位于本 SKILL.md 同级 `scripts/` 目录；除 `plot_style.py` 需 matplotlib 外，其余零第三方依赖，PIL 可选降级；`gen_defense.py` 的 pptx 格式需 `python-pptx`，revealjs 无依赖；`ref_search.py` 需联网 OpenAlex API）：
 
 | 脚本 | 作用 |
 |---|---|
@@ -119,14 +124,21 @@ updated: 2026-09-01
 | `gen_defense.py` | 答辩 PPT 半自动生成（`--format revealjs/pptx`，从 `results.json`/`runs.csv`/论文抽取，12 页骨架含创新/局限/落点/Q&A 预判） |
 | `check_results.py` | 扫论文数字，找出不在 `results.json` 里的"野数字" |
 | `verify_refs.py` | 解析参考文献表，输出待核验清单 + 孤儿条目检测 |
+| `ref_search.py` | **文献真实检索与核验**（需联网，OpenAlex API）：按关键词搜真实文献直出 GB/T 7714 草稿；`--verify DOI` 确认存在性——铁律一「先验证后引用」的自动化 |
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位检查 |
 | `plot_style.py` | 科研绘图一键美化：rcParams + 配色 + 中文字体探测 + 300dpi 统一导出（需 matplotlib） |
-| `sanity_check.py` | 量纲 / 量级 / 边界自动校验（数值须在合理范围、权重和=1、概率∈[0,1] 等；可库用或对 `results.json` 批量） |
-| `dedup_scan.py` | 降 AI 味与降重自查（套娃词、零信息句、疑似抄题面） |
+| `sanity_check.py` | 量纲 / 量级 / 边界 / 输出退化自动校验（数值须在合理范围、权重和=1、概率∈[0,1]、`--distinct` 抓"预测全为同一类/解全部相同"的模型空转；可库用或对 `results.json` 批量） |
+| `dedup_scan.py` | 降 AI 味与降重自查 v2（中/英分层词库 + 每千字密度 + 段首词/被动/排比 + 题干 n-gram 比对；`dedup_scan.py 论文.md 题干.txt`） |
 | `review_survey.py` | 赛后四维复盘问题清单 + 生成 `review_<日期>.md` 草稿（数据/模型/写作/协作） |
+| `check_env.py` | **赛前环境体检**：开赛前 10 分钟跑一遍——Python 版本 / 关键科学库+版本 / matplotlib 中文字体 / PIL / 磁盘空间 / 目录可写 / seed 可复现，把环境翻车风险清零（`check_env.py --strict`） |
+| `crosscheck.py` | **跨文件数字一致性**：摘要/正文/结论/图注里同一个数字各写各的（19.43 vs 19.5）→ 一次找出；含摘要孤立数字、近似矛盾取值、摘要四要素检测 |
+| `prize_gate.py` | **国一冲刺计分板**：交稿前一条命令聚合全部校验（环境/对账/量纲/文献/图表/降重/一致性），输出 PASS/FAIL 表，`prize_gate.py <项目目录> --source 题干.txt` |
+| `decision_log.py` | **决策日志**：每次拍板留痕（环节/决策/理由/取舍/风险/AI参与），可导出论文「设计意图」素材与 AI 使用详情素材；紧急模式与 AI 报告的共同数据源 |
+| `gen_ai_report.py` | **2026 国赛 AI 使用报告**：按官方规定生成参考文献前的「AI工具使用声明」+ 支撑材料「AI工具使用详情」（四要素+匿名，自动汇总决策日志；有 pandoc 可转 PDF） |
+| `emergency_run.py` | **紧急全流程编排器**：7 阶段 checkpoint 不跳步 + 红警（时间vs进度自动给"砍什么保什么"）+ finish 一键收口（prize_gate+AI报告+提交清单） |
 
-> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；唯一例外 `plot_style.py` 需 matplotlib（画图本来就要，见 `code-templates.md`）；`gen_defense.py --format pptx` 需 `pip install python-pptx`。
->
+> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；例外：`plot_style.py` 需 matplotlib（画图本来就要，见 `code-templates.md`），`ref_search.py` 需联网（OpenAlex API，离线时按手工清单人工核文献）。**脚本全部与模型型号无关，任何 DeepSeek 系会话下直接调用。**
+
 > **脚本不可运行（如无 Python 环境）时，按下面手工清单逐条替代**：① 数值对账——把论文数字逐个在 `out/results.json` 里检索，找不到即"野数字"，要么补进 json 要么删；② 量纲/量级/边界——人肉过 `validation-checklist.md` 的量级三连（权重和=1、概率∈[0,1]、单位一致）；③ 参考文献——逐条在期刊/DOI 联网核，正文引用键与文末表一一对应，孤儿/悬空都删；④ 图表——逐张看标题/单位/图例/≥300dpi/图注三件套，配色与右上 spine 照 `figure-polish.md` §5、§6；⑤ 降重——摘要/重述/结论扫"首先其次最后"套娃与零信息句；⑥ 复现——固定 seed 重跑一遍再逐位比对。
 
 ## 标准流程（不要跳步）
@@ -141,16 +153,21 @@ updated: 2026-09-01
 6. **模型检验**：先 sanity check，再按模型类型必做检验 + 灵敏度 + 逻辑链自查（支柱一）。
 7. **论文与摘要**：按国赛或美赛规范成文，摘要覆盖四要素，过 `paper-quality-gate.md`（支柱三）。
 
-赛程节奏（详见 `references/timeline.md`）：国赛 3 天、美赛 4 天。**第 2 天晚还没跑通全部模型 = 红警，立即砍复杂度保可交付**。
+赛程节奏（详见 `references/timeline.md`）：国赛 3 天、美赛 4 天。**第 2 天晚还没跑通全部模型 = 红警，立即砍复杂度保可交付**。**开赛前 10 分钟先跑 `check_env.py` 体检环境（在真正建模用的那个 Python 环境里），缺库/过旧立刻修，别等赛中才发现。**
+
+## 模型适配（DeepSeek 系通用）
+
+本 skill 对 **DeepSeek 系模型通用**（V3 / R1 / V4 全系列，一次会话绑定一个型号即可）：全流程、15 个本地校验脚本、紧急模式与 AI 报告均与型号无关，任何型号都能完整跑通。四条通用要点：① 1M 长上下文可用，贵型号省着用、便宜型号放开用；② 强推理型号在选型 / 创新 / 论证环节质量更高，轻量型号卡壳就换更强型号**开新会话**补；③ 校验脚本是本地工具，不占模型 token；④ 机械活交给便宜型号 / 本地脚本，高价值推理留给强推理型号。详见 `references/model-adaptation.md`。
 
 ## 交稿前自检收口（交付前必过，缺项视为未完成）
 
 1. **假设自查**：每条假设有理由？有后果？有验证？与模型双向自洽？
 2. **检验硬清单**：sanity check 过了吗？按模型类型的必做检验做全了吗？灵敏度做了吗？
 3. **质量三支柱**：逻辑链无跳步？每问有 2–3 个扎实亮点且都有证据？论文三件套与摘要四要素齐了？
-4. **参考文献核查**：逐条联网核实 + 引用键一一对应（`verify_refs.py`）。
-5. **数值对账 + 复现**：canonical 脚本逐位核对 + 干净环境复跑（`check_results.py`）。
+4. **参考文献核查**：逐条联网核实（`ref_search.py` 检索/核 DOI）+ 引用键一一对应（`verify_refs.py`）。
+5. **数值对账 + 复现**：canonical 脚本逐位核对 + 干净环境复跑（`check_results.py` + `crosscheck.py` 跨文件一致性）。
 6. **降 AI 味 / 降重**：过 `writing-deai-dedup.md` + `dedup_scan.py`。
+7. **AI 使用合规（2026 必做）**：参考文献之前有「AI工具使用声明」；用了 AI 则支撑材料含「AI工具使用详情.pdf」（匿名、四要素）；如实披露、不隐瞒（`gen_ai_report.py`，见 `ai-usage-report.md`）。
 
 ## 常见坑与红线
 
@@ -164,4 +181,4 @@ updated: 2026-09-01
 
 ## 交付默认
 
-完成一道题时给出：问题重述与拆解、假设清单、符号表、每题模型 + 求解代码 + 结果、灵敏度 / 误差分析、可提交的论文骨架（含摘要）。**所有交付都走「强制确认门禁」：多方案先行、用户拍板，未拍板不批量产出。** 交付前过「交稿前自检收口」六道关。
+完成一道题时给出：问题重述与拆解、假设清单、符号表、每题模型 + 求解代码 + 结果、灵敏度 / 误差分析、可提交的论文骨架（含摘要）。**所有交付都走「强制确认门禁」：多方案先行、用户拍板，未拍板不批量产出。** 交付前过「交稿前自检收口」七道关。

@@ -38,7 +38,7 @@ bullet 节奏：一个 bullet = 一个 sub-problem 的「方法 → 结果 → �
 ### 4. 完整成稿示例（把骨架填成一段可抄的成品）
 
 > **A 题（电池）Summary 大意**：
-> `We develop a two-state ODE battery model to predict smartphone time-to-empty. We treat app usage as time-varying power draw, calibrate against NASA battery data (fit R²=0.97), and predict time-to-empty within a median error of 8% over 200 scenarios. A ±10% perturbation of screen brightness shifts estimates by <5 minutes, confirming robustness. We recommend OS-level background-task throttling, projected to extend battery life by 18%.`
+> `We develop a two-state ODE battery model to predict smartphone time-to-empty. We treat app usage as time-varying power draw, calibrate against NASA battery data (fit R²=0.97), and predict time-to-empty within a median error of 8% over 200 scenarios. A ±10% perturbation of screen brightness shifts estimates by under 5 minutes, confirming robustness. We recommend OS-level background-task throttling, projected to extend battery life by 18%.`
 > （要点：一句方法 + 一句模型/数据 + 一个量化结果 + 一句灵敏度 + 一句落地建议——**每句都带数字**。）
 
 ## 二、Policy Letter（给决策者的信，F/D 类题高频收尾）
@@ -147,3 +147,28 @@ AI Use Report
 
 - 用没用都如实写：**用了却不写属违规**；没用则不写也不打勾。
 - 把「如何校验」写具体（呼应 `reproducibility.md` 与铁律二）——这是评委最看重的半句。
+
+## 八、英文降 AI 味黑名单（Summary 高频模板词，命中=提醒）
+
+美赛英文同样过 AI 味扫描。下面这些词本身没错，但**密度一高就露馅**——每千词出现 2 次以上就要回头重写。配套 `writing-deai-dedup.md`、`deai-rewrite-bank.md`；交稿前跑 `dedup_scan.py`（现已含英文词库）。
+
+| ❌ 高频 AI 味词 / 短语 | 说明 / 替代 |
+|---|---|
+| delve (into) | 近年 AI 重灾区，几乎一律换：`analyze / examine / study` |
+| Furthermore / Moreover | 连用成段是模板感；留一个表真递进，其余删 |
+| It is worth noting / notably | 删；直接给结论 |
+| In summary / In conclusion | 收尾用 `We conclude / Overall`，少用套语 |
+| plays a crucial / pivotal role | 换具体机制：`X modulates the cost by 18%` |
+| crucial / pivotal / paramount / vital | 判定性形容词别空用、别堆砌，跟上数字 |
+| robust / comprehensive / holistic | 别空用，跟上数据：`robust to ±10%` |
+| utilize / leverage / facilitate | 换短动词：`use / use / enable` |
+| showcase / highlight / underscore | 少用；直接把结果写出来 |
+| a wide range of / diverse array | 换具体量：`34 seasons`、`402 suppliers` |
+| state-of-the-art / cutting-edge | 除非真有对比，否则删（伪创新腔） |
+| in today's world / in recent years / in the realm of | 空泛开场，换成具体时间 + 数据 |
+
+改前 / 改后：
+
+> ❌ `In today's world, data plays a crucial role. This paper delves into a comprehensive framework that leverages a wide range of factors to showcase robust results. Furthermore, it is worth noting that our model highlights a pivotal insight.`
+
+> ✅ `Our model uses delivery records from 402 suppliers. It cuts forecast error from 40.6% to 6.2% and stays stable under ±10% perturbation. Two factors drive the result: price elasticity −0.83 and the buyer-density interaction (p<0.05).`

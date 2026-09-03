@@ -143,4 +143,11 @@ def demo():
 
 
 if __name__ == '__main__':
-    demo()
+    import argparse
+    _ap = argparse.ArgumentParser(description="论文图规范样式: 默认输出默认品配色/字号/DPI 常量; 加 --demo 生成示例图")
+    _ap.add_argument("--demo", action="store_true", help="在当前目录生成 3 张示例图(demo_fit/tornado/compare)")
+    _a = _ap.parse_args()
+    if _a.demo:
+        demo()
+    else:
+        print("本脚本是 matplotlib 样式库, 供 import 使用。加 `--demo` 生成示例图; `--help` 查看说明。")

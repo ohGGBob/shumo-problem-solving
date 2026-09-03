@@ -30,7 +30,7 @@ def read_text(path):
         except Exception as e:  # noqa
             print(f"[warn] docx 读取失败: {e}", file=sys.stderr)
             return ""
-    with open(path, encoding="utf-8", errors="ignore") as f:
+    with open(path, encoding="utf-8-sig", errors="ignore") as f:
         return f.read()
 
 
@@ -94,6 +94,11 @@ def field_completeness(entry_text):
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):
+        try:
+            _s.reconfigure(errors="replace")
+        except Exception:
+            pass
     ap = argparse.ArgumentParser(description="参考文献核验清单与孤儿条目检测")
     ap.add_argument("paper")
     ap.add_argument("--out", default=None, help="输出核验清单 md，默认打印到终端")
@@ -146,7 +151,7 @@ def main():
         print(f"[verify_refs] 清单已写出: {args.out}")
     else:
         print(out)
-    return 0
+    return 1 if (orphans or dangling) else 0
 
 
 if __name__ == "__main__":
