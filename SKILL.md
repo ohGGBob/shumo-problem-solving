@@ -88,7 +88,7 @@ updated: 2026-09-01
 
 | 阶段 | 读这些 |
 |---|---|
-| **开题·定题** | `topic-selection.md`、`timeline.md`、`rules-and-deadlines.md` |
+| **开题·定题** | `topic-selection.md`、`timeline.md`、`rules-and-deadlines.md`；**跑 `scripts/time_budget.py --contest cumcm --watch` 盯着红线** |
 | **真题定位** | 国赛：`cumcm-years.md` → 对应年份 `cases-<年>.md`；**上手先照 `worked-example-2023c.md`（C 数据）、`worked-example-2018a.md`（A 机理）、`worked-example-2020b.md`（B 优化）走一遍，A/B/C 三题型全覆盖**。美赛：`cases-2026-mcm.md`（六题解析）+ `mcm-icm-guide.md` |
 | **其他赛种**（电工杯/华为杯/MathorCup/APMCM/深圳杯等） | `contests-catalog.md` |
 | **数据清洗** | `preprocessing-pipeline.md`、`data-science-playbook.md` |
@@ -103,15 +103,20 @@ updated: 2026-09-01
 | **论文成文** | `paper-skeleton.md` → `bao-paper-writing.md` → `figures-and-abstract.md` → `figure-polish.md`（图更好看）→ `paper-quality-gate.md` ← 支柱三；**中文稿精打磨加 `chinese-writing-advanced.md`** |
 | **降 AI 味 / 降重** | `writing-deai-dedup.md` |
 | **美赛专册** | `mcm-icm-guide.md`（**全文 25 页硬上限 + 页面预算表 + 英文 QA**）、`cases-2026-mcm.md`（六题解析）、**`english-writing-mcm.md`（Summary Sheet 句式库 / Policy Letter / 术语表）**、**`worked-example-2026-mcmA.md`（A 题机理范式串链范本）**、**`worked-example-2026-mcmC.md`（C 题统计逆问题范式范本）** |
-| **答辩 / 展示** | `defense-and-presentation.md`（晋级答辩 / PPT / 问答） |
-| **赛后复盘** | `post-contest-review.md` + 跑 `scripts/review_survey.py`（四维复盘 + 资产回流） |
+| **答辩 / 展示** | `defense-and-presentation.md`（晋级答辩 / PPT / 问答） + 跑 `scripts/gen_defense.py --format revealjs` 生成 12 页骨架 |
+| **赛后复盘** | `post-contest-review.md` + 跑 `scripts/review_survey.py`（四维复盘 + 资产回流） + `scripts/log_run.py export` 导出模型演进图 |
 | **交稿收口** | `reproducibility.md` + 跑 `scripts/` 下脚本 |
+| **项目初始化** | 跑 `scripts/init_project.py <题名> [--template cumcm/mcm/both]` 一键生成骨架 + 论文模板 |
+| **实验追踪** | 求解时 `from log_run import log_run` 记录每次跑的参数/指标/耗时/git commit；赛中 `log_run.py best q1 --metric mape` 秒找最优版本 |
 
-脚本（位于本 SKILL.md 同级 `scripts/` 目录；除 `plot_style.py` 需 matplotlib 外，其余零第三方依赖，PIL 可选降级）：
+脚本（位于本 SKILL.md 同级 `scripts/` 目录；除 `plot_style.py` 需 matplotlib 外，其余零第三方依赖，PIL 可选降级；`gen_defense.py` 的 pptx 格式需 `python-pptx`，revealjs 无依赖）：
 
 | 脚本 | 作用 |
 |---|---|
-| `init_project.py` | 生成标准目录骨架 + 锁版本 requirements + `export_results.py` 模板 |
+| `init_project.py` | 生成标准目录骨架 + 锁版本 requirements + `export_results.py` 模板 + 论文模板（LaTeX/DOCX，`--template cumcm/mcm/both`） |
+| `time_budget.py` | 赛程时间预算看板（`--contest cumcm/mcm --watch` 终端实时显示阶段/红线/剩余时间，红线报警） |
+| `log_run.py` | 极简实验追踪器（`log_run()` 库用法 + CLI `list/show/best/export`，记录参数/指标/git commit，出 `out/runs.jsonl` 与 `out/runs.csv`） |
+| `gen_defense.py` | 答辩 PPT 半自动生成（`--format revealjs/pptx`，从 `results.json`/`runs.csv`/论文抽取，12 页骨架含创新/局限/落点/Q&A 预判） |
 | `check_results.py` | 扫论文数字，找出不在 `results.json` 里的"野数字" |
 | `verify_refs.py` | 解析参考文献表，输出待核验清单 + 孤儿条目检测 |
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位检查 |
@@ -120,7 +125,7 @@ updated: 2026-09-01
 | `dedup_scan.py` | 降 AI 味与降重自查（套娃词、零信息句、疑似抄题面） |
 | `review_survey.py` | 赛后四维复盘问题清单 + 生成 `review_<日期>.md` 草稿（数据/模型/写作/协作） |
 
-> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；唯一例外 `plot_style.py` 需 matplotlib（画图本来就要，见 `code-templates.md`）。
+> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；唯一例外 `plot_style.py` 需 matplotlib（画图本来就要，见 `code-templates.md`）；`gen_defense.py --format pptx` 需 `pip install python-pptx`。
 >
 > **脚本不可运行（如无 Python 环境）时，按下面手工清单逐条替代**：① 数值对账——把论文数字逐个在 `out/results.json` 里检索，找不到即"野数字"，要么补进 json 要么删；② 量纲/量级/边界——人肉过 `validation-checklist.md` 的量级三连（权重和=1、概率∈[0,1]、单位一致）；③ 参考文献——逐条在期刊/DOI 联网核，正文引用键与文末表一一对应，孤儿/悬空都删；④ 图表——逐张看标题/单位/图例/≥300dpi/图注三件套，配色与右上 spine 照 `figure-polish.md` §5、§6；⑤ 降重——摘要/重述/结论扫"首先其次最后"套娃与零信息句；⑥ 复现——固定 seed 重跑一遍再逐位比对。
 
