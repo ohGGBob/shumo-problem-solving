@@ -130,6 +130,7 @@ def verify(key, as_json=False):
     except urllib.error.HTTPError as e:
         if e.code == 404:
             print(f"[不存在] OpenAlex 无此 DOI（404）→ 按铁律一：核实失败即视为不存在，禁止引用。")
+            print(f"  ⚠️ 若为中文文献：OpenAlex 覆盖有限，请到知网 / 期刊官网人工确认后再定论，勿仅据此判不存在。")
             return 1
         print(f"[网络失败] HTTP {e.code}: {str(e.reason)[:100]}")
         print("→ 核验失败按「核实失败即视为不存在」处理：不得写入论文，或换网络后重试。")
@@ -140,6 +141,7 @@ def verify(key, as_json=False):
         return 2
     if not w or not w.get("id"):
         print(f"[不存在] 未检索到「{key}」→ 按铁律一：核实失败即视为不存在，禁止引用。")
+        print(f"  ⚠️ 若为中文文献：OpenAlex 覆盖有限，请到知网 / 期刊官网人工确认后再定论，勿仅据此判不存在。")
         return 1
     if as_json:
         print(json.dumps({"title": w.get("display_name"), "year": w.get("publication_year"),
@@ -149,6 +151,7 @@ def verify(key, as_json=False):
     else:
         print(f"[存在 ✓] 核验通过，可用（著录仍须对照原文）:\n")
         print(_fmt_hit(w, 1))
+        print(f"  ⚠️ 中文/标题检索可能命中相似文献：请人工比对标题、作者、年份与目标文献一致后再引用。")
     return 0
 
 

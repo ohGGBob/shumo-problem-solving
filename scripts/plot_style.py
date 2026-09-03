@@ -16,12 +16,21 @@
 """
 from __future__ import annotations
 
-try:
-    import matplotlib as mpl
-    import matplotlib.pyplot as plt
-    from matplotlib import font_manager
-except ImportError as e:  # pragma: no cover
-    raise ImportError("plot_style 需要 matplotlib：pip install matplotlib") from e
+_MPL = None  # matplotlib 惰性加载：让 --help / import 在缺库时仍可用
+
+
+def _mpl():
+    """惰性导入 matplotlib；仅在真正画图/设样式时触发，缺库给明确报错。"""
+    global _MPL
+    if _MPL is None:
+        try:
+            import matplotlib as mpl
+            import matplotlib.pyplot as plt
+            from matplotlib import font_manager
+            _MPL = (mpl, plt, font_manager)
+        except ImportError as e:  # pragma: no cover
+            raise ImportError("plot_style 需要 matplotlib：pip install matplotlib") from e
+    return _MPL
 
 # ── 配色（Okabe-Ito 色盲安全 8 色 + 强调色 + 灰）──────────────────────────
 COLORS = ["#E69F00", "#56B4E9", "#009E73", "#F0E442",
@@ -47,6 +56,7 @@ _CJK_CANDIDATES = [
 
 def find_cjk_font():
     """返回本机可用的第一个中文字体名；找不到返回 None（图用英文标签即可）。"""
+    _, _, font_manager = _mpl()
     installed = {f.name for f in font_manager.fontManager.ttflist}
     for name in _CJK_CANDIDATES:
         if name in installed:
@@ -60,6 +70,7 @@ def apply_style(font_scale: float = 1.0):
     返回命中的中文字体名（或 None）。字号统一 8–10pt，配合图 1:1 嵌入，
     评委在 PDF 里看到的字号就是这里设的字号——不要用 14pt 再缩放成蚂蚁字。
     """
+    mpl, _, _ = _mpl()
     mpl.rcParams.update({
         'font.sans-serif': _CJK_CANDIDATES + ['DejaVu Sans'],
         'axes.unicode_minus': False,          # 负号不显示成豆腐块 □
@@ -104,6 +115,7 @@ def demo():
     标题留给论文题注（三件套，见 figures-and-abstract.md §3）。
     """
     import numpy as np
+    _, plt, _ = _mpl()
     apply_style()
     rng = np.random.default_rng(0)
 

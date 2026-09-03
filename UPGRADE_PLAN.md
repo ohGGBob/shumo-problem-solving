@@ -2,7 +2,7 @@
 
 > 目标：把本 skill 从"强助教"推到"国一助攻"——不是承诺保送国一，而是把**可避免的失分清零**、把**亮点命中率抬到最高**、把 **72h 节奏管住**。国一 = 逻辑严密 × 计算准确 × 创新有据 × 表述清晰 × 规则零违规，本方案逐项打。
 
-## 一、已落地（v1.8.0 → v1.9.3，直接可用）
+## 一、已落地（v1.8.0 → v1.9.4，直接可用）
 
 | 增量 | 对应失分点 | 用法 |
 |---|---|---|
@@ -21,6 +21,7 @@
 | 评委视角（v1.9.1） | 只知道自嗨式写作，从没站在评阅组角度自检 | 对标社区评阅要点资源（Math_Model 合集 / MathModelHub）+ 历年官方评阅要点原文，落地 `references/judge-view.md`：8 条通用评委信号（快速算法优于无脑智能算法/简化给依据/给计算时间/交叉验证/协同鼓励…）+ 四得自查 + 模型对比表与应用指南模板 + 30 分钟裁判预演；`mid-contest-warning.md` 补「论文完整>论文完美」应急心法 |
 | 社区对标第三轮（v1.9.2） | 模型空转没护栏、门禁汇报太随意、图表数量无纪律 | 对标 zhnnky329/MathModeling-skills（risk-probe/frozen-numbers/figure-table-planner）+ Fynn-jx/MathModeling-skill（H0–H5 门禁）+ cumcm-step-review（数据图硬规范）：① `sanity_check.py` 新增 `--distinct` 输出退化/集中度检查（预测全同值=模型空转当场抓住）；② `validation-checklist.md` 新增四章「输出退化 + 决策保持性」（简化模型最终决策须与完整模型复核一致）；③ SKILL.md 门禁新增「汇报五要素」（状态/动作/文件影响/备选/风险，不许只问"是否继续"）；④ `figure-polish.md` 新增 §10 图表用途四分类（诊断图不入正文）+ 数量纪律（同类型≤3 张、每图必配解读） |
 | 收官审视修复（v1.9.3） | v1.9.x 收尾漏的运行时假绿 + 内容口径漂移 | 脚本：sanity_check 缺文件退 1 / verify_refs 孤儿引用退 1（消灭假绿）；emergency_run finish 查 prize_gate+AI 报告退出码（防带病收口）；ref_search 补 GBK reconfigure；skill_audit 透传 PYTHONUTF8 + 导览裸计数正则。内容：judge-view 虚化无源评阅要点原文与硬数值、§五两把尺澄清；typesetting 美赛 AI 报告改「附正文后同 PDF（不计 25 页）」对齐 2026 COMAP、参考文献 3–5 条；README 计数 46→48、零依赖 13→14；figure-polish/paper-quality-gate 修交叉引用与「五张表」层级；合规依据域名改 cmathc.org.cn（官方，挂 2026 AI 规定） |
+| 评估修复三连（v1.9.4） | plot_style 缺库连 --help 都崩 / judge-view 残留无源"国奖线"硬数值 / ref_search 中文核验提醒不足 | `plot_style.py` 改 matplotlib 惰性加载（缺库时 `--help`/import 正常，体检器 A 项 15/15 全绿）；`judge-view.md` §五彻底移除无官方依据的分值硬数字，仅留相对权重提示；`ref_search.py` verify 补中文文献人工核验常驻提醒（[存在]/[不存在] 分支） |
 
 ## 二、建议后续（按优先级，赛前窗口内能做的排前面）
 
