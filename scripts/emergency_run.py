@@ -125,7 +125,7 @@ def cmd_status(project, args):
         mark = "✓" if ok else "·"
         note = (" — " + p.get("note", "")) if p.get("note") else ""
         missing = [a for a in artifacts if not os.path.exists(os.path.join(project, a))]
-        miss_txt = f"  [缺产物: {', '.join(missing)}]" if missing else ""
+        miss_txt = f"  [缺产物: {', '.join(missing)}]" if (missing and not ok) else ""
         print(f"  [{mark}] {label}{note}{miss_txt}")
         if not ok:
             print(f"       参考: {res}")
@@ -202,11 +202,17 @@ def cmd_finish(project, args):
                        (["--source", args.source] if args.source else []),
                        capture_output=True, text=True, encoding="utf-8", errors="replace", env={**os.environ, "PYTHONUTF8": "1"})
     print((r.stdout or r.stderr or "")[-1500:])
+    if r.returncode != 0:
+        print(f"\n[emergency_run] prize_gate 检出红项/跳过项（exit={r.returncode}），先处理后再 finish。", file=sys.stderr)
+        return 1
     # 2. AI 使用报告
     print("\n== 2/3 AI 使用报告 ==")
     r = subprocess.run([sys.executable, os.path.join(_sd(), "gen_ai_report.py"), project, "--pdf", "auto"],
                        capture_output=True, text=True, encoding="utf-8", errors="replace", env={**os.environ, "PYTHONUTF8": "1"})
     print((r.stdout or r.stderr or "")[-1200:])
+    if r.returncode != 0:
+        print(f"\n[emergency_run] AI 使用报告生成失败（exit={r.returncode}），先处理后再 finish。", file=sys.stderr)
+        return 1
     # 3. 提交清单
     print("\n== 3/3 提交清单（按 2026 国赛通知核对）==")
     print("""- [ ] 参赛论文：PDF 或 Word，不含承诺书/编号页，源程序作为附录放正文之后

@@ -181,6 +181,7 @@ def main():
         validate_distinct(data, distinct_rules)
     elif args.results_json:
         print(f"[err] 找不到 results.json: {args.results_json}", file=sys.stderr)
+        return 1
 
     return _report()
 

@@ -59,7 +59,8 @@ ALLOW_RE = [
 # 计数声明正则（D/G 共用）
 COUNT_PATS = [re.compile(r"(\d+)\s*个(?:本地)?(?:工程化)?(?:校验)?脚本"),
               re.compile(r"(\d+)\s*个专题文档"),
-              re.compile(r"(\d+)\s*个\s*references")]
+              re.compile(r"(\d+)\s*个\s*references"),
+              re.compile(r"导览[（(](\d+)\s*个")]
 
 
 def audit(base):
@@ -85,7 +86,8 @@ def audit(base):
         n = os.path.basename(s)
         try:
             r = subprocess.run([sys.executable, s, "--help"], capture_output=True,
-                               text=True, encoding="utf-8", errors="replace", timeout=40)
+                               text=True, encoding="utf-8", errors="replace", timeout=40,
+                               env={**os.environ, "PYTHONUTF8": "1"})
             if r.returncode != 0:
                 bad.append((n, f"exit={r.returncode}"))
         except Exception as e:

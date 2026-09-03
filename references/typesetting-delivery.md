@@ -25,8 +25,8 @@ pandoc --version     # Word 路线需要（md→docx，公式转 OMML）
 | 行距 | 1.5 倍或固定 20–22 磅 |
 | 公式 | 核心公式独立成行、右侧编号 (1)(2)…，正文用「式(1)」回指；行内符号用 $...$ 风格统一斜体 |
 | 表 | **三线表**（只留顶线/栏目线/底线），表题在表上方居中「表 1 …」 |
-| 图 | 图题在图下方居中「图 1 …」，≥300dpi，正文先引出后见图（见 `figures-and-abstract.md` 三件套） |
-| 参考文献 | GB/T 7714，**5–8 条为宜，≥2 条近 5 年，≥1 条英文**（英文文献用 `ref_search.py` 检索核验） |
+| 图 | 图题在图下方居中「图 1 …」，≥300dpi，正文先引出后见图（见 `paper-quality-gate.md` 关卡二） |
+| 参考文献 | GB/T 7714，**3–5 条为宜，充裕再扩到 5–8 条，≥2 条近 5 年，≥1 条英文**（英文文献用 `ref_search.py` 检索核验） |
 | 承诺书/编号页 | 按官方模板单独放，**不得出现姓名/学校等身份信息**（匿名红线） |
 
 ## 3. Word 路线（最稳，评委端兼容性最好）
@@ -57,7 +57,7 @@ xelatex main.tex && xelatex main.tex
 - **整份 PDF ≤25 页硬上限**（含 Summary Sheet/目录/正文/参考文献/附录/代码），页数预算见 `mcm-icm-guide.md`；
 - 通版 Times New Roman 12pt、单倍或 1.15 倍行距（以当年 instructions 为准）；
 - Summary Sheet 独立首页，页眉带**控制号（Control Number）**；
-- AI Use Report 单独成文件、不计入 25 页（`ai-usage-report.md`）；
+- AI Use Report 附在正文后、同一份 PDF（页数预算见 `mcm-icm-guide.md`；国赛 2026 的 AI 声明/详情另见 `ai-usage-report.md`）；
 - 全英文，句式库见 `english-writing-mcm.md`。
 
 ## 6. 交稿格式自查清单（10 条，5 分钟过完）

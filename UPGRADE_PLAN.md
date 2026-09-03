@@ -13,7 +13,7 @@
 | `scripts/gen_ai_report.py` | 2026 国赛 AI 合规：声明缺失/详情不合规/匿名漏洞 | 自动生成参考文献前声明 + 「AI工具使用详情」四要素 + 匿名，有 pandoc 转 PDF |
 | `scripts/emergency_run.py` | 时间极紧时慌到跳步/漏项/带病提交 | 紧急模式：7 阶段 checkpoint 不跳步 + 红警自动降级 + finish 一键收口（prize_gate+AI报告+提交清单） |
 | 修复（v1.4.1→1.5.0） | Windows BOM 崩溃 / 负数误报 / 6.2% 拆错 | `check_results`/`sanity_check` 等 5 脚本改 `utf-8-sig`；数字提取支持负数 + 原子组防拆 + 百分比去重 |
-| 合规依据 | 规则未核先动笔 | 按官方原文核实 2026 AI 规定（mcm.edu.cn），写入 `references/ai-usage-report.md` |
+| 合规依据 | 规则未核先动笔 | 按官方原文核实 2026 AI 规定（cmathc.org.cn/mcm/tz/602.html），写入 `references/ai-usage-report.md` |
 | 模型适配（v1.8.0 收敛） | 型号细分过度、维护负担 | 收敛为 `references/model-adaptation.md`（DeepSeek 系通用：不区分型号、脚本与型号无关、卡壳换更强型号），删除细分工具 `model_profile.py` |
 | 亮点预埋（v1.8.0） | 赛中才现想创新、没证据链 | `references/lightning-skeletons.md`（A/B/C 三题型各 3 可移植骨架：模型组合 + 证据链 + 论文落点模板 + 预写清单，命中即套） |
 | 体检器（v1.8.1） | 每次升级靠人肉回归；preset 根配置漂移没人查 | 仓库根 `tools/skill_audit.py`：A–G 七项一键体检（脚本可跑 / 路由孤儿 / README 覆盖 / 数量口径 / 死链 / 门禁一致性 / **preset 根计数**），零依赖；每次升级后 `python tools/skill_audit.py` 回归（部署在 preset 布局下时，G 项会连 `preset.yml`/`agent.cordis.yml` 的计数口径一起扫） |

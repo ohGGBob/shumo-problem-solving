@@ -153,6 +153,11 @@ def verify(key, as_json=False):
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):
+        try:
+            _s.reconfigure(errors="replace")
+        except Exception:
+            pass
     ap = argparse.ArgumentParser(description="参考文献真实检索与核验（OpenAlex；铁律一自动化）")
     ap.add_argument("query", nargs="*", help="搜索词，或 --verify 后接 DOI/标题")
     ap.add_argument("--limit", type=int, default=8, help="搜索返回条数（默认 8）")

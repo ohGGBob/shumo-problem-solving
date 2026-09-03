@@ -151,7 +151,7 @@ def main():
         print(f"[verify_refs] 清单已写出: {args.out}")
     else:
         print(out)
-    return 0
+    return 1 if (orphans or dangling) else 0
 
 
 if __name__ == "__main__":
