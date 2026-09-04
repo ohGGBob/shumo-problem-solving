@@ -2,7 +2,7 @@
 
 > 目标：把本 skill 从"强助教"推到"国一助攻"——不是承诺保送国一，而是把**可避免的失分清零**、把**亮点命中率抬到最高**、把 **72h 节奏管住**。国一 = 逻辑严密 × 计算准确 × 创新有据 × 表述清晰 × 规则零违规，本方案逐项打。
 
-## 一、已落地（v1.8.0 → v1.9.7，直接可用）
+## 一、已落地（v1.8.0 → v1.9.8，直接可用）
 
 | 增量 | 对应失分点 | 用法 |
 |---|---|---|
@@ -25,12 +25,13 @@
 | 教练式交互升级（v1.9.5，用户实测反馈） | 一次抛多道选择题让用户懵 / AI 跳问推进失控 / 读题全靠人肉或遗漏 / 用户到后面不知道 AI 在干嘛 | 依据真实使用反馈改造交互：① **决策卡片制**（`references/decision-cards.md`）：一次只抛一张卡、候选 3–4 个讲清优劣、选定确认才走下一步，杜绝"一批选择题"；② **按小问推进**：第 N 问闭环确认后才进第 N+1 问，绝不提前抛后面小问决策（写进门禁铁律 + 标准流程节奏）；③ **先讲方法再求解**：每问先 3–4 个候选方法卡、确认明白再求解；④ **边做边教**：每卡附"为什么这么推荐"，进度永远可预期；⑤ **PDF 全文提取** `scripts/pdf_extract.py`（多后端 PyMuPDF→pypdf→pdftotext，逐页全文+页标记+元数据+空页/扫描件检测，防读题遗漏；本机已装 PyMuPDF） |
 | 读数据/读图工具配齐（v1.9.6，用户反馈） | C 题读数据靠手写探索代码 / 赛中临时装库 / 图片靠肉眼或漏读 | ① `scripts/data_profiler.py`：xlsx/csv 快速概览（形状/列类型/缺失率/唯一值/数值统计/常量列/疑似 ID/高缺失/多表关联键），一条命令读懂数据结构；② `scripts/img_tools.py`：图片信息/放大看小字/裁剪局部/从 PDF 提取内图/扫描件整页渲染/批量，配合模型视觉模态读题；③ 依赖提前配好（pandas/openpyxl/pillow 已装），`check_env.py` 体检一键装齐，避免赛中临时装；④ 数量口径 16→18 脚本全量同步 |
 | 数据完整性铁律（v1.9.7，用户反馈 AI 幻觉） | AI 没读完全部数据甚至漏数据就开始判断，凭印象报数、幻觉严重 | 新增**铁律四 · 数据完整性**（SKILL 四条铁律 + `references/data-reading-discipline.md`）：① 数据清单先行——`data_profiler.py --inventory` 生成 `report/data_inventory.md`，与 data/ 逐项对照，有文件没登记=还没读禁止建模；② 数字必有出处——论文每个数据数字能回溯到"哪文件/哪表哪列/什么口径"，说不出来=幻觉删除；③ 漏读自查——每问建模前过三条；④ 禁凭印象——"大概/我记得"一律回文件确认。配套：`init_project.py` 骨架生成 `report/data_inventory.md` 模板 + README 铁律4；`data_profiler.py` 增 `--inventory/--out`；收口清单加"数据完整性"一道（3→4 项铁律、7→8 道收口）；refs 49→50 |
+| 远端仓库合并（v1.9.8，用户反馈"提交仓库"） | GitHub origin 分叉：远端独有 3 脚本 + init_project 模板增强（基于老版本，缺本地 v1.9.x 全部升级） | 以本地 v1.9.7 为权威 merge 远端历史（`-s ours` 保内容），再手动吸收远端 4 项资产：① `scripts/time_budget.py`（赛程时间预算看板，72h 红警 + --watch）；② `scripts/log_run.py`（极简实验追踪器，多版本对比留痕）；③ `scripts/gen_defense.py`（答辩 PPT 生成器，revealjs 零依赖 / pptx）；④ `init_project.py` 合并论文模板能力（`--template cumcm/mcm/both`：国赛 LaTeX / 美赛 DOCX 生成脚本 + 模板说明），并修复远端两处 bug（`\py{}` 占位改普通文本、`main(sys.argv[1)` 缺右括号）。SKILL/README/model-adaptation/preset 数量 18→21，路由表加"赛中实验追踪/答辩/时间红线"三行；version bump v1.9.8 |
 
 ## 二、建议后续（按优先级，赛前窗口内能做的排前面）
 
 ### P0 · 赛前 8 天（9/10 开赛前）
 - [x] **环境体检**：在建模环境跑 `check_env.py`，缺库立刻装、版本锁进 `requirements.txt`。
-- [x] **一键 smoke**：用 `init_project.py` 建个空项目跑 `prize_gate.py`，确认 18 个脚本在新机器全链通。
+- [x] **一键 smoke**：用 `init_project.py` 建个空项目跑 `prize_gate.py`，确认 21 个脚本在新机器全链通。
 - [ ] **规则再核验**：`rules-and-deadlines.md` 已要求开题第一动作 web_search 核官网；赛前最后一天把当年页数/AI 披露/提交渠道/查重口径打印置顶。
 
 ### P1 · 赛中 72h

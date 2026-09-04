@@ -2,7 +2,7 @@
 
 把一个数模赛题从「读不懂」推进到「可提交的论文」的 **Agent Skill**（供 DeepSeek Harness / 各类 agent preset 使用）。覆盖国赛 **CUMCM**、美赛 **MCM/ICM**，以及电工杯、华为杯、MathorCup、APMCM 等赛种。
 
-> 与 `SKILL.md` 同步至 **v1.9.7**（2026-09-04）。以 `SKILL.md` 为准，本文件是给人看的导览。
+> 与 `SKILL.md` 同步至 **v1.9.8**（2026-09-04）。以 `SKILL.md` 为准，本文件是给人看的导览。
 
 ## 一句话介绍
 
@@ -15,7 +15,7 @@ shumo-problem-solving/
 ├── SKILL.md          # 技能入口：门禁 / 铁律 / 质量三支柱 / 路由表 / 标准流程 / 收口
 ├── references/       # 50 个专题文档（按需加载路由，勿一次全读）
 ├── tools/            # skill_audit.py —— A–G 七项体检器，升级后一键回归
-└── scripts/          # 18 个脚本（13 个零第三方依赖 + data_profiler 需 pandas/openpyxl + img_tools 需 pillow/pymupdf + plot_style 需 matplotlib + pdf_extract 需 PyMuPDF + ref_search 需联网）
+└── scripts/          # 21 个脚本（13 个零第三方依赖 + data_profiler 需 pandas/openpyxl + img_tools 需 pillow/pymupdf + plot_style 需 matplotlib + pdf_extract 需 PyMuPDF + ref_search 需联网 + gen_defense pptx 需 python-pptx）
 ```
 
 ## 核心特性
@@ -79,13 +79,13 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | 模型适配 | `model-adaptation.md`（DeepSeek 系通用） |
 | 决策交互 | `decision-cards.md`（一次一张卡 / 按小问推进 / 边做边教） |
 
-## scripts/ 一览（18 个）
+## scripts/ 一览（21 个）
 
-> 除 `plot_style.py` 需 matplotlib、`pdf_extract.py` 需 PyMuPDF、`img_tools.py` 需 pillow/pymupdf、`data_profiler.py` 需 pandas/openpyxl 外，脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。**脚本与模型型号无关。**
+> 除 `plot_style.py` 需 matplotlib、`pdf_extract.py` 需 PyMuPDF、`img_tools.py` 需 pillow/pymupdf、`data_profiler.py` 需 pandas/openpyxl、`gen_defense.py --format pptx` 需 python-pptx 外，脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。**脚本与模型型号无关。**
 
 | 脚本 | 作用 |
 |---|---|
-| `init_project.py` | 生成目录骨架 + 锁版本 `requirements.txt` + `export_results.py` 模板 |
+| `init_project.py` | 生成目录骨架 + 锁版本 `requirements.txt` + `export_results.py` + **论文模板**（`--template cumcm/mcm/both`）+ **数据清单模板**（铁律四） |
 | `check_env.py` | **赛前环境体检**：Python/库版本/中文字体/磁盘/可写/seed 可复现（`--strict` 警告也计失败） |
 | `check_results.py` | 论文数字 vs `results.json` 对账（抓"野数字"） |
 | `crosscheck.py` | **跨文件数字一致性**：摘要/正文/图注同一数字各写各的（19.43 vs 19.5）一次找出 |
@@ -100,6 +100,12 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | `prize_gate.py` | **国一冲刺计分板**：交稿前一条命令聚合 7 项校验出 PASS/FAIL 表 |
 | `emergency_run.py` | **紧急全流程编排器**：7 阶段 checkpoint 不跳步 + 红警 + finish 一键收口 |
 | `review_survey.py` | 赛后四维复盘（数据/模型/写作/协作） |
+| `log_run.py` | **极简实验追踪器**：qN.py 里记录多版本对比（model/params/metrics），`export` 导模型演进图 |
+| `time_budget.py` | **赛程时间预算看板**：`--watch` 盯 72h 红线，超时红色+响铃报警 |
+| `gen_defense.py` | **答辩 PPT 生成器**：`--format revealjs` 12 页骨架（零依赖放映）或 `--format pptx` |
+| `data_profiler.py` | **表格快速概览**：形状/缺失/常量列/ID/关联键，`--inventory` 生成数据清单 |
+| `img_tools.py` | **图片查看/提取**：info/zoom/crop/from-pdf/page/batch（配合视觉模态读题） |
+| `pdf_extract.py` | **PDF 全文提取**：逐页全文 + 页标记 + 完整性报告，防读题遗漏 |
 
 ### 三条命令撑起一稿
 

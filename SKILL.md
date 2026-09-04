@@ -2,7 +2,7 @@
 name: shumo-problem-solving
 description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）、2026 国赛 AI 使用声明与使用详情合规生成，支持时间极紧时的紧急模式（须用户显式点名「紧急模式」触发；emergency_run 不跳步走完 7 阶段 + 一键收口），并通用适配 DeepSeek 系模型（V3/R1/V4 全系列，一次会话绑定一个型号即可）。当用户给出数模题目、要求建立模型或求解、撰写数模论文或 AI 使用报告、要求紧急全流程产出、或询问 DeepSeek 系模型适配时使用。
 whenToUse: 用户给出数模竞赛题、要求建模/求解/检验、撰写数模论文与摘要、生成 AI 使用声明/详情（2026 合规）、时间紧急且显式要求进入紧急模式走完全流程，或询问 DeepSeek 系模型适配时。
-version: 1.9.7
+version: 1.9.8
 updated: 2026-09-03
 ---
 
@@ -109,7 +109,7 @@ updated: 2026-09-03
 
 | 阶段 | 读这些 |
 |---|---|
-| **开题·定题** | `topic-selection.md`、`timeline.md`、`rules-and-deadlines.md` |
+| **开题·定题** | `topic-selection.md`、`timeline.md`、`rules-and-deadlines.md`；**跑 `scripts/time_budget.py --contest cumcm --watch` 盯着 72h 红线** |
 | **读题·PDF 提取** | 拿到 PDF 题面/附件先跑 `scripts/pdf_extract.py` 全文提取（逐页完整、防遗漏；扫描件/空页用 OCR/视觉，勿漏） |
 | **数据概览** | 拿到数据附件（xlsx/csv）先跑 `scripts/data_profiler.py` 快速概览（形状/缺失/常量列/ID/关联键，C 题读数据第一件事）；`--inventory` 生成数据清单 |
 | **数据完整性** | `data-reading-discipline.md`（铁律四：不读完不算懂，先建 data_inventory.md、数字必有出处、漏读自查、禁凭印象）← 防 AI 幻觉 |
@@ -131,8 +131,9 @@ updated: 2026-09-03
 | **论文成文** | `paper-skeleton.md` → `bao-paper-writing.md` → `figures-and-abstract.md` → `figure-polish.md`（图更好看，含 **Figure Contract** 画图前四行合同）→ `paper-quality-gate.md` ← 支柱三（含 **百分制定稿评分 ≥85**）；**中文稿精打磨加 `chinese-writing-advanced.md`**；**双格式排版交付加 `typesetting-delivery.md`（国赛版式规范 + Word/LaTeX 路线）** |
 | **降 AI 味 / 降重** | `writing-deai-dedup.md` → `deai-rewrite-bank.md`（脚本命中后照它逐条改）；美赛英文加 `english-writing-mcm.md` §八；交稿跑 `dedup_scan.py` |
 | **美赛专册** | `mcm-icm-guide.md`（**全文 25 页硬上限 + 页面预算表 + 英文 QA**）、`cases-2026-mcm.md`（六题解析）、**`english-writing-mcm.md`（Summary Sheet 句式库 / Policy Letter / 术语表）**、**`worked-example-2026-mcmA.md`（A 题机理范式串链范本）**、**`worked-example-2026-mcmC.md`（C 题统计逆问题范式范本）** |
-| **答辩 / 展示** | `defense-and-presentation.md`（晋级答辩 / PPT / 问答） |
-| **赛后复盘** | `post-contest-review.md` + 跑 `scripts/review_survey.py`（四维复盘 + 资产回流） |
+| **赛中实验追踪** | 多版本对比时在 qN.py 里 `from log_run import log_run` 记录（model/params/metrics/duration），`log_run.py` 查历史、`export` 导模型演进图 |
+| **答辩 / 展示** | `defense-and-presentation.md`（晋级答辩 / PPT / 问答）+ 跑 `scripts/gen_defense.py --format revealjs` 生成 12 页答辩骨架 |
+| **赛后复盘** | `post-contest-review.md` + 跑 `scripts/review_survey.py`（四维复盘 + 资产回流）+ `scripts/log_run.py export` 导出模型演进图 |
 | **交稿收口** | `reproducibility.md` + 跑 `scripts/prize_gate.py`（一键计分板，聚合全部校验） |
 | **紧急模式** | `emergency-mode.md` + 跑 `scripts/emergency_run.py`（7 阶段不跳步 + 红警 + 一键收口） |
 | **AI 使用报告（2026 合规）** | `ai-usage-report.md` + 跑 `scripts/gen_ai_report.py`（声明 + 使用详情四要素 + 匿名） |
@@ -142,7 +143,7 @@ updated: 2026-09-03
 
 | 脚本 | 作用 |
 |---|---|
-| `init_project.py` | 生成标准目录骨架 + 锁版本 requirements + `export_results.py` 模板 |
+| `init_project.py` | 生成标准目录骨架 + 锁版本 requirements + `export_results.py` 模板 + **论文模板**（`--template cumcm/mcm/both`：国赛 LaTeX / 美赛 DOCX 生成脚本）+ **数据清单模板** `report/data_inventory.md`（铁律四） |
 | `check_results.py` | 扫论文数字，找出不在 `results.json` 里的"野数字" |
 | `verify_refs.py` | 解析参考文献表，输出待核验清单 + 孤儿条目检测 |
 | `ref_search.py` | **文献真实检索与核验**（需联网，OpenAlex API）：按关键词搜真实文献直出 GB/T 7714 草稿；`--verify DOI` 确认存在性——铁律一「先验证后引用」的自动化 |
@@ -154,14 +155,17 @@ updated: 2026-09-03
 | `sanity_check.py` | 量纲 / 量级 / 边界 / 输出退化自动校验（数值须在合理范围、权重和=1、概率∈[0,1]、`--distinct` 抓"预测全为同一类/解全部相同"的模型空转；可库用或对 `results.json` 批量） |
 | `dedup_scan.py` | 降 AI 味与降重自查 v2（中/英分层词库 + 每千字密度 + 段首词/被动/排比 + 题干 n-gram 比对；`dedup_scan.py 论文.md 题干.txt`） |
 | `review_survey.py` | 赛后四维复盘问题清单 + 生成 `review_<日期>.md` 草稿（数据/模型/写作/协作） |
+| `log_run.py` | **极简实验追踪器**（72h 内试 10+ 版本救命）：qN.py 里 `from log_run import log_run` 记录（question/model/params/metrics/duration），`log_run.py` 查历史、`export` 导模型演进图 |
+| `time_budget.py` | **赛程时间预算看板**：`--contest cumcm/mcm --start <开赛时间> --watch` 显示当前阶段/剩余时间/硬截止红线，超时 ANSI 红色 + 响铃报警，护住 72h 节奏 |
 | `check_env.py` | **赛前环境体检**：开赛前 10 分钟跑一遍——Python 版本 / 关键科学库+版本 / matplotlib 中文字体 / PIL / 磁盘空间 / 目录可写 / seed 可复现，把环境翻车风险清零（`check_env.py --strict`） |
 | `crosscheck.py` | **跨文件数字一致性**：摘要/正文/结论/图注里同一个数字各写各的（19.43 vs 19.5）→ 一次找出；含摘要孤立数字、近似矛盾取值、摘要四要素检测 |
 | `prize_gate.py` | **国一冲刺计分板**：交稿前一条命令聚合全部校验（环境/对账/量纲/文献/图表/降重/一致性），输出 PASS/FAIL 表，`prize_gate.py <项目目录> --source 题干.txt` |
 | `decision_log.py` | **决策日志**：每次拍板留痕（环节/决策/理由/取舍/风险/AI参与），可导出论文「设计意图」素材与 AI 使用详情素材；紧急模式与 AI 报告的共同数据源 |
 | `gen_ai_report.py` | **2026 国赛 AI 使用报告**：按官方规定生成参考文献前的「AI工具使用声明」+ 支撑材料「AI工具使用详情」（四要素+匿名，自动汇总决策日志；有 pandoc 可转 PDF） |
 | `emergency_run.py` | **紧急全流程编排器**：7 阶段 checkpoint 不跳步 + 红警（时间vs进度自动给"砍什么保什么"）+ finish 一键收口（prize_gate+AI报告+提交清单） |
+| `gen_defense.py` | **答辩 PPT 半自动生成器**：`--format revealjs` 生成 12 页答辩骨架（浏览器直接放映，零依赖）或 `--format pptx`（需 python-pptx），从 results.json 拉数据 |
 
-> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；例外：`plot_style.py` 需 matplotlib、`pdf_extract.py`/`img_tools.py` 需 PyMuPDF、`img_tools.py` 另需 Pillow、`data_profiler.py` 需 pandas/openpyxl、`ref_search.py` 需联网（OpenAlex API）。**赛前用 `check_env.py` 体检并一键装齐依赖**（表格/图片/PDF 读取工具已配好，避免赛中临时装）。**脚本全部与模型型号无关，任何 DeepSeek 系会话下直接调用。**
+> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；例外：`plot_style.py` 需 matplotlib、`pdf_extract.py`/`img_tools.py` 需 PyMuPDF、`img_tools.py` 另需 Pillow、`data_profiler.py` 需 pandas/openpyxl、`gen_defense.py --format pptx` 需 python-pptx、`ref_search.py` 需联网（OpenAlex API）。**赛前用 `check_env.py` 体检并一键装齐依赖**（表格/图片/PDF 读取工具已配好，避免赛中临时装）。**脚本全部与模型型号无关，任何 DeepSeek 系会话下直接调用。**
 >
 > **脚本不可运行（如无 Python 环境）时，按下面手工清单逐条替代**：① 数值对账——把论文数字逐个在 `out/results.json` 里检索，找不到即"野数字"，要么补进 json 要么删；② 量纲/量级/边界——人肉过 `validation-checklist.md` 的量级三连（权重和=1、概率∈[0,1]、单位一致）；③ 参考文献——逐条在期刊/DOI 联网核，正文引用键与文末表一一对应，孤儿/悬空都删；④ 图表——逐张看标题/单位/图例/≥300dpi/图注三件套，配色与右上 spine 照 `figure-polish.md` §5、§6；⑤ 降重——摘要/重述/结论扫"首先其次最后"套娃与零信息句；⑥ 复现——固定 seed 重跑一遍再逐位比对。
 
@@ -182,7 +186,7 @@ updated: 2026-09-03
 
 ## 模型适配（DeepSeek 系通用）
 
-本 skill 对 **DeepSeek 系模型通用**（V3 / R1 / V4 全系列，一次会话绑定一个型号即可）：全流程、18 个本地脚本、紧急模式与 AI 报告均与型号无关，任何型号都能完整跑通。四条通用要点：① 1M 长上下文可用，贵型号省着用、便宜型号放开用；② 强推理型号在选型 / 创新 / 论证环节质量更高，轻量型号卡壳就换更强型号**开新会话**补；③ 校验脚本是本地工具，不占模型 token；④ 机械活交给便宜型号 / 本地脚本，高价值推理留给强推理型号。详见 `references/model-adaptation.md`。
+本 skill 对 **DeepSeek 系模型通用**（V3 / R1 / V4 全系列，一次会话绑定一个型号即可）：全流程、21 个本地脚本、紧急模式与 AI 报告均与型号无关，任何型号都能完整跑通。四条通用要点：① 1M 长上下文可用，贵型号省着用、便宜型号放开用；② 强推理型号在选型 / 创新 / 论证环节质量更高，轻量型号卡壳就换更强型号**开新会话**补；③ 校验脚本是本地工具，不占模型 token；④ 机械活交给便宜型号 / 本地脚本，高价值推理留给强推理型号。详见 `references/model-adaptation.md`。
 
 ## 交稿前自检收口（交付前必过，缺项视为未完成）
 
