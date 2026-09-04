@@ -47,6 +47,8 @@ ALLOW_EXACT = {
     "heatmap.png", "facets.png", "init_project.py", "LICENSE",
     # 数据清洗流水线的输出产物（由 preprocess.py 生成，非仓库内文件）
     "missing_report.csv", "outlier_scan.csv",
+    # 数据清单（铁律四）：由 data_profiler --inventory 在项目里生成，非仓库内文件
+    "data_inventory.md",
 }
 ALLOW_RE = [
     re.compile(r"review_\d{4}-\d{2}-\d{2}\.md$"), re.compile(r"\bpaper/"),
