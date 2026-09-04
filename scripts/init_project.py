@@ -14,7 +14,7 @@
       data/           原始数据
       src/            q1.py q2.py ... + export_results.py
       out/            results.json(空模板) + 图表(png/svg,>=300dpi)
-      report/         main.tex / main.docx + figures/
+      report/         main.tex / main.docx + figures/ + data_inventory.md(数据清单模板)
       requirements.txt  锁版本(==)
       README.md
 """
@@ -66,6 +66,30 @@ README_TEMPLATE = """# {name}
 1. 论文每个数字必须来自 `out/results.json`（数值单一来源）。
 2. 固定随机种子，交付前 canonical 脚本复跑逐位核对。
 3. 改一个数字必 grep 全目录旧值。
+4. 数据完整性：先建 `report/data_inventory.md`（读全所有数据再判断，铁律四），
+   数字必有出处——数据文件 → data_inventory → 代码 → results.json → 论文，环环可回溯。
+"""
+
+DATA_INVENTORY_TEMPLATE = """# 数据清单（data_inventory）
+
+> 铁律四 · 不读完不算懂，读全再判断：拿到全部数据附件后，先把每张表登记到这里，
+> 与 `data/` 目录逐项对照、确认无遗漏，再进建模。生成命令：
+>
+> ```bash
+> python scripts/data_profiler.py data/ --inventory --out report/data_inventory.md
+> ```
+>
+> 清单上没登记的附件/表 = 还没读，禁止进入建模；每个数字必须能在清单里找到出处。
+
+## 附件清单（`data/` 下每个文件都要登记，缺一即没读完）
+
+| # | 文件 | 表/sheet | 行 | 列 | 关键列 / 用途 |
+|---|---|---|---|---|---|
+| 1 | （示例）supplier.xlsx | Sheet1 | 402 | 8 | 供应商ID、周均供货、价格 |
+
+## 逐表要点（分布/缺失/常量列/关联键，跑 data_profiler 后摘录）
+
+- （示例）supplier.xlsx：价格列 5% 缺失待补；供应商ID 全唯一勿当特征。
 """
 
 REQUIREMENTS = """# 占位版本（并非常年最优）：交付前在本项目 venv 里 `pip freeze` 后精修为真实锁定版，见 references/reproducibility.md 铁律二。
@@ -102,12 +126,15 @@ def main():
         from datetime import datetime
         f.write(README_TEMPLATE.format(name=args.name, ts=datetime.now().isoformat(timespec="seconds")))
 
+    with open(os.path.join(root, "report", "data_inventory.md"), "w", encoding="utf-8") as f:
+        f.write(DATA_INVENTORY_TEMPLATE)
+
     # 占位文件，避免空目录在某些工具里被忽略
     for rel in ["data/.gitkeep", "out/.gitkeep", "report/figures/.gitkeep"]:
         open(os.path.join(root, rel), "w", encoding="utf-8").close()
 
     print(f"[init] 已生成项目骨架: {root}")
-    print("        data/ src/ out/ report/figures/ + requirements.txt + README.md")
+    print("        data/ src/ out/ report/(figures+data_inventory.md) + requirements.txt + README.md")
     return 0
 
 

@@ -29,6 +29,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+from datetime import datetime
 
 try:
     import pandas as pd
@@ -123,6 +124,24 @@ def _profile(name, df, src, head):
     return lines
 
 
+def _inventory(target, tables):
+    """生成数据清单（data_inventory.md）：文件/表/行列/列清单，供逐项核对无遗漏。"""
+    lines = ["# 数据清单（data_inventory）", ""]
+    lines.append(f"- 数据源: {target} | 表数: {len(tables)} | 生成: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    lines.append("")
+    lines.append("| # | 文件/表 | 行 | 列 | 列清单 |")
+    lines.append("|---|---|---|---|---|")
+    for i, (name, df, src) in enumerate(tables, 1):
+        cols = ", ".join(str(c)[:20] for c in df.columns[:12])
+        if len(df.columns) > 12:
+            cols += "…"
+        lines.append(f"| {i} | {name} | {df.shape[0]} | {df.shape[1]} | {cols} |")
+    lines.append("")
+    lines.append("> 用途：登记全部数据文件/表，与 data/ 目录逐项对照、确认无遗漏后再建模（铁律四·数据完整性纪律）。")
+    lines.append("> 数据里没登记的附件/表 = 还没读，禁止进入建模。")
+    return "\n".join(lines)
+
+
 def main():
     for _s in (sys.stdout, sys.stderr):
         try:
@@ -133,6 +152,8 @@ def main():
     ap.add_argument("target", help="xlsx/csv 文件或目录")
     ap.add_argument("--sheet", default="", help="只看指定 sheet（Excel）")
     ap.add_argument("--head", type=int, default=3, help="样例行数（默认 3）")
+    ap.add_argument("--inventory", action="store_true", help="只输出数据清单（文件/表/行列/列），供登记 data_inventory.md")
+    ap.add_argument("--out", help="把输出写入文件（配合 --inventory 生成 data_inventory.md）")
     args = ap.parse_args()
 
     paths = []
@@ -164,6 +185,17 @@ def main():
     if not all_tables:
         print("[err] 没有匹配的表格", file=sys.stderr)
         return 2
+
+    if args.inventory:
+        text = _inventory(args.target, all_tables)
+        if args.out:
+            os.makedirs(os.path.dirname(os.path.abspath(args.out)) or ".", exist_ok=True)
+            with open(args.out, "w", encoding="utf-8") as f:
+                f.write(text + "\n")
+            print(f"[data_profiler] 数据清单已写出 -> {args.out}")
+        else:
+            print(text)
+        return 0
 
     print(f"# 数据概览 · {args.target} · 共 {len(all_tables)} 张表\n")
     for i, (name, df, src) in enumerate(all_tables, 1):
