@@ -2,7 +2,7 @@
 name: shumo-problem-solving
 description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）、2026 国赛 AI 使用声明与使用详情合规生成，支持时间极紧时的紧急模式（须用户显式点名「紧急模式」触发；emergency_run 不跳步走完 7 阶段 + 一键收口），并通用适配 DeepSeek 系模型（V3/R1/V4 全系列，一次会话绑定一个型号即可）。当用户给出数模题目、要求建立模型或求解、撰写数模论文或 AI 使用报告、要求紧急全流程产出、或询问 DeepSeek 系模型适配时使用。
 whenToUse: 用户给出数模竞赛题、要求建模/求解/检验、撰写数模论文与摘要、生成 AI 使用声明/详情（2026 合规）、时间紧急且显式要求进入紧急模式走完全流程，或询问 DeepSeek 系模型适配时。
-version: 1.9.5
+version: 1.9.6
 updated: 2026-09-03
 ---
 
@@ -102,6 +102,8 @@ updated: 2026-09-03
 |---|---|
 | **开题·定题** | `topic-selection.md`、`timeline.md`、`rules-and-deadlines.md` |
 | **读题·PDF 提取** | 拿到 PDF 题面/附件先跑 `scripts/pdf_extract.py` 全文提取（逐页完整、防遗漏；扫描件/空页用 OCR/视觉，勿漏） |
+| **数据概览** | 拿到数据附件（xlsx/csv）先跑 `scripts/data_profiler.py` 快速概览（形状/缺失/常量列/ID/关联键，C 题读数据第一件事） |
+| **图片查看** | 题面/图太小或 PDF 内嵌图：跑 `scripts/img_tools.py`（info/zoom 放大看小字/crop 裁剪/from-pdf 提取/扫描件 page 渲染） |
 | **决策交互** | `decision-cards.md`（一次一张卡、3–4 候选、按小问推进、边做边教）← 门禁配套 |
 | **真题定位** | 国赛：`cumcm-years.md` → 对应年份 `cases-<年>.md`；**上手先照 `worked-example-2023c.md`（C 数据）、`worked-example-2018a.md`（A 机理）、`worked-example-2020b.md`（B 优化）走一遍，A/B/C 三题型全覆盖**。美赛：`cases-2026-mcm.md`（六题解析）+ `mcm-icm-guide.md` |
 | **其他赛种**（电工杯/华为杯/MathorCup/APMCM/深圳杯等） | `contests-catalog.md` |
@@ -135,6 +137,8 @@ updated: 2026-09-03
 | `verify_refs.py` | 解析参考文献表，输出待核验清单 + 孤儿条目检测 |
 | `ref_search.py` | **文献真实检索与核验**（需联网，OpenAlex API）：按关键词搜真实文献直出 GB/T 7714 草稿；`--verify DOI` 确认存在性——铁律一「先验证后引用」的自动化 |
 | `pdf_extract.py` | **PDF 全文提取**（供 AI 读题，防遗漏）：逐页全文 + 页标记 + 元数据 + 完整性报告（空页/扫描件检测）；多后端降级（PyMuPDF→pypdf→pdftotext），`pdf_extract.py 题目.pdf --out 题目.txt` |
+| `data_profiler.py` | **表格数据快速概览**（C 题读数据第一件事）：xlsx/csv → 每表形状 / 列类型 / 缺失率 / 唯一值 / 数值统计 / 常量列 / 疑似 ID / 高缺失 / 多表关联键提示；`data_profiler.py 数据.xlsx` 或 `数据目录/` |
+| `img_tools.py` | **图片查看与提取**（配合视觉模态读题/看细节）：`info` 基本信息 / `zoom` 放大看小字 / `crop` 裁剪局部 / `from-pdf` 提取 PDF 内图 / `page` 扫描件整页渲染 / `batch` 批量 |
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位检查 |
 | `plot_style.py` | 科研绘图一键美化：rcParams + 配色 + 中文字体探测 + 300dpi 统一导出（需 matplotlib） |
 | `sanity_check.py` | 量纲 / 量级 / 边界 / 输出退化自动校验（数值须在合理范围、权重和=1、概率∈[0,1]、`--distinct` 抓"预测全为同一类/解全部相同"的模型空转；可库用或对 `results.json` 批量） |
@@ -147,7 +151,7 @@ updated: 2026-09-03
 | `gen_ai_report.py` | **2026 国赛 AI 使用报告**：按官方规定生成参考文献前的「AI工具使用声明」+ 支撑材料「AI工具使用详情」（四要素+匿名，自动汇总决策日志；有 pandoc 可转 PDF） |
 | `emergency_run.py` | **紧急全流程编排器**：7 阶段 checkpoint 不跳步 + 红警（时间vs进度自动给"砍什么保什么"）+ finish 一键收口（prize_gate+AI报告+提交清单） |
 
-> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；例外：`plot_style.py` 需 matplotlib（画图本来就要，见 `code-templates.md`）、`pdf_extract.py` 需 PyMuPDF（`pip install PyMuPDF`，无库时报错并给安装指引，多后端可降级 pypdf/pdftotext）、`ref_search.py` 需联网（OpenAlex API，离线时按手工清单人工核文献）。**脚本全部与模型型号无关，任何 DeepSeek 系会话下直接调用。**
+> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；例外：`plot_style.py` 需 matplotlib、`pdf_extract.py`/`img_tools.py` 需 PyMuPDF、`img_tools.py` 另需 Pillow、`data_profiler.py` 需 pandas/openpyxl、`ref_search.py` 需联网（OpenAlex API）。**赛前用 `check_env.py` 体检并一键装齐依赖**（表格/图片/PDF 读取工具已配好，避免赛中临时装）。**脚本全部与模型型号无关，任何 DeepSeek 系会话下直接调用。**
 >
 > **脚本不可运行（如无 Python 环境）时，按下面手工清单逐条替代**：① 数值对账——把论文数字逐个在 `out/results.json` 里检索，找不到即"野数字"，要么补进 json 要么删；② 量纲/量级/边界——人肉过 `validation-checklist.md` 的量级三连（权重和=1、概率∈[0,1]、单位一致）；③ 参考文献——逐条在期刊/DOI 联网核，正文引用键与文末表一一对应，孤儿/悬空都删；④ 图表——逐张看标题/单位/图例/≥300dpi/图注三件套，配色与右上 spine 照 `figure-polish.md` §5、§6；⑤ 降重——摘要/重述/结论扫"首先其次最后"套娃与零信息句；⑥ 复现——固定 seed 重跑一遍再逐位比对。
 
@@ -168,7 +172,7 @@ updated: 2026-09-03
 
 ## 模型适配（DeepSeek 系通用）
 
-本 skill 对 **DeepSeek 系模型通用**（V3 / R1 / V4 全系列，一次会话绑定一个型号即可）：全流程、16 个本地脚本、紧急模式与 AI 报告均与型号无关，任何型号都能完整跑通。四条通用要点：① 1M 长上下文可用，贵型号省着用、便宜型号放开用；② 强推理型号在选型 / 创新 / 论证环节质量更高，轻量型号卡壳就换更强型号**开新会话**补；③ 校验脚本是本地工具，不占模型 token；④ 机械活交给便宜型号 / 本地脚本，高价值推理留给强推理型号。详见 `references/model-adaptation.md`。
+本 skill 对 **DeepSeek 系模型通用**（V3 / R1 / V4 全系列，一次会话绑定一个型号即可）：全流程、18 个本地脚本、紧急模式与 AI 报告均与型号无关，任何型号都能完整跑通。四条通用要点：① 1M 长上下文可用，贵型号省着用、便宜型号放开用；② 强推理型号在选型 / 创新 / 论证环节质量更高，轻量型号卡壳就换更强型号**开新会话**补；③ 校验脚本是本地工具，不占模型 token；④ 机械活交给便宜型号 / 本地脚本，高价值推理留给强推理型号。详见 `references/model-adaptation.md`。
 
 ## 交稿前自检收口（交付前必过，缺项视为未完成）
 

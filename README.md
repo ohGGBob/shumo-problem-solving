@@ -2,7 +2,7 @@
 
 把一个数模赛题从「读不懂」推进到「可提交的论文」的 **Agent Skill**（供 DeepSeek Harness / 各类 agent preset 使用）。覆盖国赛 **CUMCM**、美赛 **MCM/ICM**，以及电工杯、华为杯、MathorCup、APMCM 等赛种。
 
-> 与 `SKILL.md` 同步至 **v1.9.5**（2026-09-03）。以 `SKILL.md` 为准，本文件是给人看的导览。
+> 与 `SKILL.md` 同步至 **v1.9.6**（2026-09-04）。以 `SKILL.md` 为准，本文件是给人看的导览。
 
 ## 一句话介绍
 
@@ -15,7 +15,7 @@ shumo-problem-solving/
 ├── SKILL.md          # 技能入口：门禁 / 铁律 / 质量三支柱 / 路由表 / 标准流程 / 收口
 ├── references/       # 49 个专题文档（按需加载路由，勿一次全读）
 ├── tools/            # skill_audit.py —— A–G 七项体检器，升级后一键回归
-└── scripts/          # 16 个脚本（14 个零第三方依赖 + plot_style 需 matplotlib + pdf_extract 需 PyMuPDF + ref_search 需联网）
+└── scripts/          # 18 个脚本（13 个零第三方依赖 + data_profiler 需 pandas/openpyxl + img_tools 需 pillow/pymupdf + plot_style 需 matplotlib + pdf_extract 需 PyMuPDF + ref_search 需联网）
 ```
 
 ## 核心特性
@@ -35,6 +35,8 @@ shumo-problem-solving/
 - **排版双格式交付**：`typesetting-delivery.md`——国赛版式规范 + Word/LaTeX 双路线 + 交稿格式自查（对应百分制"排版 15 分"）；Figure Contract 见 `figure-polish.md` §9、百分制定稿评分见 `paper-quality-gate.md` 关卡六（≥85 才定稿）。
 - **评委视角**：`judge-view.md`——历年评阅要点提炼的 8 条通用信号（快速算法/交叉验证/计算时间/协同鼓励…）+「看得懂找得到信得过用得上」四得自查 + 交稿前 30 分钟裁判预演。
 - **PDF 全文提取**：`pdf_extract.py` 逐页提取 PDF 题面/附件全文（页标记 + 元数据 + 空页/扫描件检测），防读题遗漏；多后端降级（PyMuPDF→pypdf→pdftotext）。
+- **表格数据概览**：`data_profiler.py` 一条命令摸清 xlsx/csv 结构（形状/缺失/常量列/疑似 ID/多表关联键），C 题读数据第一件事，避免赛中手写探索代码。
+- **图片查看与提取**：`img_tools.py` 查看图片信息 / 放大看小字 / 裁剪局部 / 从 PDF 提取内图 / 扫描件整页渲染——配合模型视觉模态读题读图。
 - **防模型空转**：`sanity_check.py --distinct` 输出退化检查（预测全同值/解全一样当场抓住）+ `validation-checklist.md` 决策保持性检查（简化模型与完整模型最终决策必须一致）+ 图表用途四分类纪律（诊断图不入正文、每图必配解读）。
 
 ## 快速上手
@@ -58,6 +60,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | 真题定位（美赛） | `cases-2026-mcm.md`（六题解析 + O 奖率）、`mcm-icm-guide.md`（25 页硬上限 + 页面预算） |
 | 其他赛种 | `contests-catalog.md`（电工杯 / 华为杯 / MathorCup / APMCM / 深圳杯…） |
 | 数据 / 清洗 | `preprocessing-pipeline.md`、`data-science-playbook.md`、`bigdata-playbook.md` |
+| 数据 / 图片读取 | `data_profiler.py`（表格概览）、`img_tools.py`（图片提取/放大/裁剪）、`pdf_extract.py`（PDF 全文） |
 | 假设 / 选型 | `assumptions-justification.md`、`model-recipes.md`、`longitudinal-threshold.md` |
 | 求解实现 | `code-templates.md`（基础）、`advanced-methods-templates.md`（DiD / Sobol / MCMC / CVaR / MILP / pvlib） |
 | 检验 | `validation-checklist.md` + `scripts/sanity_check.py` |
@@ -74,9 +77,9 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | 模型适配 | `model-adaptation.md`（DeepSeek 系通用） |
 | 决策交互 | `decision-cards.md`（一次一张卡 / 按小问推进 / 边做边教） |
 
-## scripts/ 一览（16 个）
+## scripts/ 一览（18 个）
 
-> 除 `plot_style.py` 需 matplotlib、`pdf_extract.py` 需 PyMuPDF（可降级 pypdf/pdftotext）外，脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。**脚本与模型型号无关。**
+> 除 `plot_style.py` 需 matplotlib、`pdf_extract.py` 需 PyMuPDF、`img_tools.py` 需 pillow/pymupdf、`data_profiler.py` 需 pandas/openpyxl 外，脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。**脚本与模型型号无关。**
 
 | 脚本 | 作用 |
 |---|---|
