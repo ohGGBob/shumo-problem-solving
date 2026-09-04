@@ -49,6 +49,8 @@ ALLOW_EXACT = {
     "missing_report.csv", "outlier_scan.csv",
     # 数据清单（铁律四）：由 data_profiler --inventory 在项目里生成，非仓库内文件
     "data_inventory.md",
+    # 核验问题日志（逐段核验原则）：核验时在项目里生成，非仓库内文件
+    "verification_log.md",
 }
 ALLOW_RE = [
     re.compile(r"review_\d{4}-\d{2}-\d{2}\.md$"), re.compile(r"\bpaper/"),
@@ -56,6 +58,7 @@ ALLOW_RE = [
     re.compile(r"cases-<年>"), re.compile(r"out/results\.json$"),
     re.compile(r"log/"), re.compile(r"^experiment_<"),
     re.compile(r"AI工具使用详情\.pdf$"),
+    re.compile(r"out/verification_log\.md$"),
 ]
 
 # 计数声明正则（D/G 共用）

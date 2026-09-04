@@ -2,7 +2,7 @@
 
 > 目标：把本 skill 从"强助教"推到"国一助攻"——不是承诺保送国一，而是把**可避免的失分清零**、把**亮点命中率抬到最高**、把 **72h 节奏管住**。国一 = 逻辑严密 × 计算准确 × 创新有据 × 表述清晰 × 规则零违规，本方案逐项打。
 
-## 一、已落地（v1.8.0 → v1.9.8，直接可用）
+## 一、已落地（v1.8.0 → v1.9.9，直接可用）
 
 | 增量 | 对应失分点 | 用法 |
 |---|---|---|
@@ -26,6 +26,7 @@
 | 读数据/读图工具配齐（v1.9.6，用户反馈） | C 题读数据靠手写探索代码 / 赛中临时装库 / 图片靠肉眼或漏读 | ① `scripts/data_profiler.py`：xlsx/csv 快速概览（形状/列类型/缺失率/唯一值/数值统计/常量列/疑似 ID/高缺失/多表关联键），一条命令读懂数据结构；② `scripts/img_tools.py`：图片信息/放大看小字/裁剪局部/从 PDF 提取内图/扫描件整页渲染/批量，配合模型视觉模态读题；③ 依赖提前配好（pandas/openpyxl/pillow 已装），`check_env.py` 体检一键装齐，避免赛中临时装；④ 数量口径 16→18 脚本全量同步 |
 | 数据完整性铁律（v1.9.7，用户反馈 AI 幻觉） | AI 没读完全部数据甚至漏数据就开始判断，凭印象报数、幻觉严重 | 新增**铁律四 · 数据完整性**（SKILL 四条铁律 + `references/data-reading-discipline.md`）：① 数据清单先行——`data_profiler.py --inventory` 生成 `report/data_inventory.md`，与 data/ 逐项对照，有文件没登记=还没读禁止建模；② 数字必有出处——论文每个数据数字能回溯到"哪文件/哪表哪列/什么口径"，说不出来=幻觉删除；③ 漏读自查——每问建模前过三条；④ 禁凭印象——"大概/我记得"一律回文件确认。配套：`init_project.py` 骨架生成 `report/data_inventory.md` 模板 + README 铁律4；`data_profiler.py` 增 `--inventory/--out`；收口清单加"数据完整性"一道（3→4 项铁律、7→8 道收口）；refs 49→50 |
 | 远端仓库合并（v1.9.8，用户反馈"提交仓库"） | GitHub origin 分叉：远端独有 3 脚本 + init_project 模板增强（基于老版本，缺本地 v1.9.x 全部升级） | 以本地 v1.9.7 为权威 merge 远端历史（`-s ours` 保内容），再手动吸收远端 4 项资产：① `scripts/time_budget.py`（赛程时间预算看板，72h 红警 + --watch）；② `scripts/log_run.py`（极简实验追踪器，多版本对比留痕）；③ `scripts/gen_defense.py`（答辩 PPT 生成器，revealjs 零依赖 / pptx）；④ `init_project.py` 合并论文模板能力（`--template cumcm/mcm/both`：国赛 LaTeX / 美赛 DOCX 生成脚本 + 模板说明），并修复远端两处 bug（`\py{}` 占位改普通文本、`main(sys.argv[1)` 缺右括号）。SKILL/README/model-adaptation/preset 数量 18→21，路由表加"赛中实验追踪/答辩/时间红线"三行；version bump v1.9.8 |
+| 逐段核验原则（v1.9.9，用户反馈） | 模型上下文有限，把成品整篇丢给模型核验 → 前半逐条后半应付 / token 截断漏尾 / 核验清单一长必漏 | 新增**逐段核验原则**（SKILL 独立小节 + `references/verification-chunking.md`）：① 选主线（论文正文/最终方案/数据清单/代码，一次一条）；② 先给分段清单再逐段查（论文正文 8 段模板）；③ 每段 = 固定核验清单→排查→问题落盘 `out/verification_log.md`→确认干净才进下一段；④ 一段不核=未完成（分段清单逐项对照 + 问题闭环回查）；⑤ 跨段一致性最后单独跑 `crosscheck.py`，不靠每段顺手带过。路由表加"核验分段"行、收口第 6 项挂接；refs 50→51 |
 
 ## 二、建议后续（按优先级，赛前窗口内能做的排前面）
 
