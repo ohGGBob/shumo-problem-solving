@@ -2,7 +2,7 @@
 name: shumo-problem-solving
 description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）、2026 国赛 AI 使用声明与使用详情合规生成，支持时间极紧时的紧急模式（须用户显式点名「紧急模式」触发；emergency_run 不跳步走完 7 阶段 + 一键收口），并通用适配 DeepSeek 系模型（V3/R1/V4 全系列，一次会话绑定一个型号即可）。当用户给出数模题目、要求建立模型或求解、撰写数模论文或 AI 使用报告、要求紧急全流程产出、或询问 DeepSeek 系模型适配时使用。
 whenToUse: 用户给出数模竞赛题、要求建模/求解/检验、撰写数模论文与摘要、生成 AI 使用声明/详情（2026 合规）、时间紧急且显式要求进入紧急模式走完全流程，或询问 DeepSeek 系模型适配时。
-version: 1.9.9
+version: 1.10.0
 updated: 2026-09-03
 ---
 
@@ -113,6 +113,7 @@ updated: 2026-09-03
 | **读题·PDF 提取** | 拿到 PDF 题面/附件先跑 `scripts/pdf_extract.py` 全文提取（逐页完整、防遗漏；扫描件/空页用 OCR/视觉，勿漏） |
 | **数据概览** | 拿到数据附件（xlsx/csv）先跑 `scripts/data_profiler.py` 快速概览（形状/缺失/常量列/ID/关联键，C 题读数据第一件事）；`--inventory` 生成数据清单 |
 | **数据完整性** | `data-reading-discipline.md`（铁律四：不读完不算懂，先建 data_inventory.md、数字必有出处、漏读自查、禁凭印象）← 防 AI 幻觉 |
+| **数据叙事** | C 题（数据题）国一胜负手：`insight_miner.py` 半自动挖候选发现（相关/偏态/分组差异/时间趋势/异常/缺失），`data-storytelling.md` 把候选变成"发现→证据→图→论文落点"四要素的硬发现（反直觉/可解释） |
 | **核验分段** | `verification-chunking.md`（逐段核验：选主线 → 切分段 → 逐段闭环 → 一段不核=未完成 → 跨段一致性单独过）← 防核验漏 |
 | **图片查看** | 题面/图太小或 PDF 内嵌图：跑 `scripts/img_tools.py`（info/zoom 放大看小字/crop 裁剪/from-pdf 提取/扫描件 page 渲染） |
 | **决策交互** | `decision-cards.md`（一次一张卡、3–4 候选、按小问推进、边做边教）← 门禁配套 |
@@ -129,7 +130,7 @@ updated: 2026-09-03
 | **逻辑严密性** | `logic-rigor.md` ← 支柱一 |
 | **创新设计** | `innovation-playbook.md` ← 支柱二 |
 | **亮点预埋（三题型弹药库）** | `lightning-skeletons.md`（A/B/C 各 3 可移植骨架：模型组合 + 证据链 + 论文落点模板 + 预写清单；赛前预写、赛中命中即套） |
-| **论文成文** | `paper-skeleton.md` → `bao-paper-writing.md` → `figures-and-abstract.md` → `figure-polish.md`（图更好看，含 **Figure Contract** 画图前四行合同）→ `paper-quality-gate.md` ← 支柱三（含 **百分制定稿评分 ≥85**）；**中文稿精打磨加 `chinese-writing-advanced.md`**；**双格式排版交付加 `typesetting-delivery.md`（国赛版式规范 + Word/LaTeX 路线）** |
+| **论文成文** | `paper-skeleton.md` → `bao-paper-writing.md` → `figures-and-abstract.md` → `figure-polish.md`（图更好看，含 **Figure Contract** 画图前四行合同）→ `paper-quality-gate.md` ← 支柱三（含 **百分制定稿评分 ≥85**）；**摘要国一化打磨加 `abstract-crafting.md` + 跑 `abstract_check.py`（数字密度/四要素/灵敏度/套娃词/数字对账）**；**中文稿精打磨加 `chinese-writing-advanced.md`**；**双格式排版交付加 `typesetting-delivery.md`（国赛版式规范 + Word/LaTeX 路线）** |
 | **降 AI 味 / 降重** | `writing-deai-dedup.md` → `deai-rewrite-bank.md`（脚本命中后照它逐条改）；美赛英文加 `english-writing-mcm.md` §八；交稿跑 `dedup_scan.py` |
 | **美赛专册** | `mcm-icm-guide.md`（**全文 25 页硬上限 + 页面预算表 + 英文 QA**）、`cases-2026-mcm.md`（六题解析）、**`english-writing-mcm.md`（Summary Sheet 句式库 / Policy Letter / 术语表）**、**`worked-example-2026-mcmA.md`（A 题机理范式串链范本）**、**`worked-example-2026-mcmC.md`（C 题统计逆问题范式范本）** |
 | **赛中实验追踪** | 多版本对比时在 qN.py 里 `from log_run import log_run` 记录（model/params/metrics/duration），`log_run.py` 查历史、`export` 导模型演进图 |
@@ -150,6 +151,8 @@ updated: 2026-09-03
 | `ref_search.py` | **文献真实检索与核验**（需联网，OpenAlex API）：按关键词搜真实文献直出 GB/T 7714 草稿；`--verify DOI` 确认存在性——铁律一「先验证后引用」的自动化 |
 | `pdf_extract.py` | **PDF 全文提取**（供 AI 读题，防遗漏）：逐页全文 + 页标记 + 元数据 + 完整性报告（空页/扫描件检测）；多后端降级（PyMuPDF→pypdf→pdftotext），`pdf_extract.py 题目.pdf --out 题目.txt` |
 | `data_profiler.py` | **表格数据快速概览**（C 题读数据第一件事）：xlsx/csv → 每表形状 / 列类型 / 缺失率 / 唯一值 / 数值统计 / 常量列 / 疑似 ID / 高缺失 / 多表关联键提示；`--inventory --out report/data_inventory.md` 生成数据清单（铁律四）；`data_profiler.py 数据.xlsx` 或 `数据目录/` |
+| `insight_miner.py` | **数据洞察挖掘**（C 题国一胜负手）：xlsx/csv → 候选发现清单（强相关对 / 偏态 / 分组差异 / 时间趋势 / 异常占比 / 高缺失），每条带数据来源 + 论文落点建议；`insight_miner.py 数据.xlsx --target 目标列 --top 15` |
+| `abstract_check.py` | **摘要国一化检查**：数字密度（≥6 数字/每句 1 个）/ 四要素覆盖 / 灵敏度结论 / 套娃空话词 / 数字对账（`--results out/results.json`，铁律二）；`abstract_check.py 论文.md --section 摘要 --results out/results.json` |
 | `img_tools.py` | **图片查看与提取**（配合视觉模态读题/看细节）：`info` 基本信息 / `zoom` 放大看小字 / `crop` 裁剪局部 / `from-pdf` 提取 PDF 内图 / `page` 扫描件整页渲染 / `batch` 批量 |
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位检查 |
 | `plot_style.py` | 科研绘图一键美化：rcParams + 配色 + 中文字体探测 + 300dpi 统一导出（需 matplotlib） |
@@ -166,7 +169,7 @@ updated: 2026-09-03
 | `emergency_run.py` | **紧急全流程编排器**：7 阶段 checkpoint 不跳步 + 红警（时间vs进度自动给"砍什么保什么"）+ finish 一键收口（prize_gate+AI报告+提交清单） |
 | `gen_defense.py` | **答辩 PPT 半自动生成器**：`--format revealjs` 生成 12 页答辩骨架（浏览器直接放映，零依赖）或 `--format pptx`（需 python-pptx），从 results.json 拉数据 |
 
-> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；例外：`plot_style.py` 需 matplotlib、`pdf_extract.py`/`img_tools.py` 需 PyMuPDF、`img_tools.py` 另需 Pillow、`data_profiler.py` 需 pandas/openpyxl、`gen_defense.py --format pptx` 需 python-pptx、`ref_search.py` 需联网（OpenAlex API）。**赛前用 `check_env.py` 体检并一键装齐依赖**（表格/图片/PDF 读取工具已配好，避免赛中临时装）。**脚本全部与模型型号无关，任何 DeepSeek 系会话下直接调用。**
+> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；例外：`plot_style.py` 需 matplotlib、`pdf_extract.py`/`img_tools.py` 需 PyMuPDF、`img_tools.py` 另需 Pillow、`data_profiler.py`/`insight_miner.py` 需 pandas/openpyxl、`gen_defense.py --format pptx` 需 python-pptx、`ref_search.py` 需联网（OpenAlex API）。**赛前用 `check_env.py` 体检并一键装齐依赖**（表格/图片/PDF 读取工具已配好，避免赛中临时装）。**脚本全部与模型型号无关，任何 DeepSeek 系会话下直接调用。**
 >
 > **脚本不可运行（如无 Python 环境）时，按下面手工清单逐条替代**：① 数值对账——把论文数字逐个在 `out/results.json` 里检索，找不到即"野数字"，要么补进 json 要么删；② 量纲/量级/边界——人肉过 `validation-checklist.md` 的量级三连（权重和=1、概率∈[0,1]、单位一致）；③ 参考文献——逐条在期刊/DOI 联网核，正文引用键与文末表一一对应，孤儿/悬空都删；④ 图表——逐张看标题/单位/图例/≥300dpi/图注三件套，配色与右上 spine 照 `figure-polish.md` §5、§6；⑤ 降重——摘要/重述/结论扫"首先其次最后"套娃与零信息句；⑥ 复现——固定 seed 重跑一遍再逐位比对。
 
@@ -181,13 +184,13 @@ updated: 2026-09-03
 4. **符号约定**：统一所有符号，建立符号表（论文里也要有）。
 5. **建模与求解**：每问给出模型表达式 + 求解算法 + 代码 + 结果数值。
 6. **模型检验**：先 sanity check，再按模型类型必做检验 + 灵敏度 + 逻辑链自查（支柱一）。
-7. **论文与摘要**：按国赛或美赛规范成文，摘要覆盖四要素，过 `paper-quality-gate.md`（支柱三）。
+7. **论文与摘要**：按国赛或美赛规范成文，摘要覆盖四要素 + 数字密度过 `abstract_check.py`（`abstract-crafting.md`），过 `paper-quality-gate.md`（支柱三）。
 
 赛程节奏（详见 `references/timeline.md`）：国赛 3 天、美赛 4 天。**第 2 天晚还没跑通全部模型 = 红警，立即砍复杂度保可交付**。**开赛前 10 分钟先跑 `check_env.py` 体检环境（在真正建模用的那个 Python 环境里），缺库/过旧立刻修，别等赛中才发现。**
 
 ## 模型适配（DeepSeek 系通用）
 
-本 skill 对 **DeepSeek 系模型通用**（V3 / R1 / V4 全系列，一次会话绑定一个型号即可）：全流程、21 个本地脚本、紧急模式与 AI 报告均与型号无关，任何型号都能完整跑通。四条通用要点：① 1M 长上下文可用，贵型号省着用、便宜型号放开用；② 强推理型号在选型 / 创新 / 论证环节质量更高，轻量型号卡壳就换更强型号**开新会话**补；③ 校验脚本是本地工具，不占模型 token；④ 机械活交给便宜型号 / 本地脚本，高价值推理留给强推理型号。详见 `references/model-adaptation.md`。
+本 skill 对 **DeepSeek 系模型通用**（V3 / R1 / V4 全系列，一次会话绑定一个型号即可）：全流程、23 个本地脚本、紧急模式与 AI 报告均与型号无关，任何型号都能完整跑通。四条通用要点：① 1M 长上下文可用，贵型号省着用、便宜型号放开用；② 强推理型号在选型 / 创新 / 论证环节质量更高，轻量型号卡壳就换更强型号**开新会话**补；③ 校验脚本是本地工具，不占模型 token；④ 机械活交给便宜型号 / 本地脚本，高价值推理留给强推理型号。详见 `references/model-adaptation.md`。
 
 ## 逐段核验原则（核验防漏 · 上下文有限下的排查纪律）
 
@@ -203,7 +206,7 @@ updated: 2026-09-03
 
 1. **假设自查**：每条假设有理由？有后果？有验证？与模型双向自洽？
 2. **检验硬清单**：sanity check 过了吗？按模型类型的必做检验做全了吗？灵敏度做了吗？
-3. **质量三支柱**：逻辑链无跳步？每问有 2–3 个扎实亮点且都有证据？论文三件套与摘要四要素齐了？
+3. **质量三支柱**：逻辑链无跳步？每问有 2–3 个扎实亮点且都有证据？论文三件套与摘要四要素齐了？**摘要数字密度/四要素/灵敏度/对账过 `abstract_check.py` 了吗（`abstract-crafting.md`）？**
 4. **数据完整性**：`data_inventory.md` 与 `data/` 逐项对照无遗漏？论文每个数据数字能在数据文件里找到出处（铁律四）？
 5. **参考文献核查**：逐条联网核实（`ref_search.py` 检索/核 DOI）+ 引用键一一对应（`verify_refs.py`）。
 6. **数值对账 + 复现**：canonical 脚本逐位核对 + 干净环境复跑（`check_results.py` + `crosscheck.py` 跨文件一致性）；**整篇核验按「逐段核验原则」分段闭环，不整篇通读**（`verification-chunking.md`）。
