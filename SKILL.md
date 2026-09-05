@@ -139,9 +139,10 @@ updated: 2026-09-03
 | **交稿收口** | `reproducibility.md` + 跑 `scripts/prize_gate.py`（一键计分板，聚合全部校验） |
 | **紧急模式** | `emergency-mode.md` + 跑 `scripts/emergency_run.py`（7 阶段不跳步 + 红警 + 一键收口） |
 | **AI 使用报告（2026 合规）** | `ai-usage-report.md` + 跑 `scripts/gen_ai_report.py`（声明 + 使用详情四要素 + 匿名） |
+| **运行踩坑 / 工具链（跑脚本前扫一眼）** | `execution-gotchas.md`（Windows 中文乱码与子进程 UTF-8 捕获、PDF 页眉致 dedup_scan 误报、xelatex 不在 PATH、Python 多版本发现、编辑先读后改；附降 AI 味高杠杆点与 AI 披露边界） |
 | **模型适配（DeepSeek 系通用）** | `model-adaptation.md`（不区分型号：长上下文 / 成本意识 / 卡壳换更强型号） |
 
-脚本（位于本 SKILL.md 同级 `scripts/` 目录；除 `plot_style.py` 需 matplotlib 外，其余零第三方依赖，PIL 可选降级）：
+脚本（位于本 SKILL.md 同级 `scripts/` 目录；**基础校验/对账类脚本零第三方依赖**（PIL 可选、缺失时自动降级）；表格/图片/PDF/PPT/文献类脚本另需对应库——完整依赖见下方"运行前提"）：
 
 | 脚本 | 作用 |
 |---|---|
@@ -157,7 +158,7 @@ updated: 2026-09-03
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位检查 |
 | `plot_style.py` | 科研绘图一键美化：rcParams + 配色 + 中文字体探测 + 300dpi 统一导出（需 matplotlib） |
 | `sanity_check.py` | 量纲 / 量级 / 边界 / 输出退化自动校验（数值须在合理范围、权重和=1、概率∈[0,1]、`--distinct` 抓"预测全为同一类/解全部相同"的模型空转；可库用或对 `results.json` 批量） |
-| `dedup_scan.py` | 降 AI 味与降重自查 v2（中/英分层词库 + 每千字密度 + 段首词/被动/排比 + 题干 n-gram 比对；`dedup_scan.py 论文.md 题干.txt`） |
+| `dedup_scan.py` | 降 AI 味与降重自查 v2（中/英分层词库 + 每千字密度 + 段首词/被动/排比 + 题干 n-gram 比对；`dedup_scan.py 论文.md 题干.txt`）；PDF 抽文本分析时加 `--drop-repeat 5` 或 `--strip-header "页眉"` 剔除逐页版式行，避免页眉误报 |
 | `review_survey.py` | 赛后四维复盘问题清单 + 生成 `review_<日期>.md` 草稿（数据/模型/写作/协作） |
 | `log_run.py` | **极简实验追踪器**（72h 内试 10+ 版本救命）：qN.py 里 `from log_run import log_run` 记录（question/model/params/metrics/duration），`log_run.py` 查历史、`export` 导模型演进图 |
 | `time_budget.py` | **赛程时间预算看板**：`--contest cumcm/mcm --start <开赛时间> --watch` 显示当前阶段/剩余时间/硬截止红线，超时 ANSI 红色 + 响铃报警，护住 72h 节奏 |

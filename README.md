@@ -2,7 +2,7 @@
 
 把一个数模赛题从「读不懂」推进到「可提交的论文」的 **Agent Skill**（供 DeepSeek Harness / 各类 agent preset 使用）。覆盖国赛 **CUMCM**、美赛 **MCM/ICM**，以及电工杯、华为杯、MathorCup、APMCM 等赛种。
 
-> 与 `SKILL.md` 同步至 **v1.10.0**（2026-09-05）。以 `SKILL.md` 为准，本文件是给人看的导览。
+> 与 `SKILL.md` 同步至 **v1.10.0**（2026-09-03）。以 `SKILL.md` 为准，本文件是给人看的导览。
 
 ## 一句话介绍
 
@@ -13,7 +13,7 @@
 ```
 shumo-problem-solving/
 ├── SKILL.md          # 技能入口：门禁 / 铁律 / 质量三支柱 / 路由表 / 标准流程 / 收口
-├── references/       # 53 个专题文档（按需加载路由，勿一次全读）
+├── references/       # 54 个专题文档（按需加载路由，勿一次全读）
 ├── tools/            # skill_audit.py —— A–G 七项体检器，升级后一键回归
 └── scripts/          # 23 个脚本（13 个零第三方依赖 + data_profiler/insight_miner 需 pandas/openpyxl + img_tools 需 pillow/pymupdf + plot_style 需 matplotlib + pdf_extract 需 PyMuPDF + ref_search 需联网 + gen_defense pptx 需 python-pptx）
 ```
@@ -53,7 +53,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 
 保持 `SKILL.md` + `references/` + `scripts/` 结构即可，skill 加载器以 `SKILL.md` 为入口、按阶段路由读取 `references/`。之后在对话里直接发一道数模题（或「只写摘要」「只做灵敏度」），skill 即生效。
 
-## references/ 导览（53 个，按阶段分组）
+## references/ 导览（54 个，按阶段分组）
 
 > 完整路由表见 `SKILL.md`「按需加载路由表」——**动手前先查那里，别一次全读**。
 

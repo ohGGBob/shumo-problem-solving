@@ -3,7 +3,11 @@
 """降 AI 味 / 降重自查 v2：分层词库(中/英) + 密度统计 + 结构检测 + 题干 n-gram 比对。
 
 用法:
-    python dedup_scan.py <论文.md|.tex|.docx> [题干.txt]
+    python dedup_scan.py <论文.md|.tex|.docx> [题干.txt] [--drop-repeat N] [--strip-header TEXT]
+
+警告(踩坑): 用 PyMuPDF 等把 PDF 抽成文本再喂本脚本时，逐页重复的页眉/页脚会被当成正文，
+    导致两类误报——"段首 X 字开局 N 段"(页面标题每页都出现)与"与题干 8 字片重合"。
+    对策: 优先用 .tex/.md 源码分析；若只能用 PDF 文本，请加 --drop-repeat 或 --strip-header 剔掉版式行。
 
 检查项（对应 writing-deai-dedup.md / deai-rewrite-bank.md / paper-quality-gate.md 关卡五）:
     1. 中文 AI 味词库（套娃连接 / 空话套话 / 政论腔 / 模糊词）
@@ -106,15 +110,21 @@ def shingles(s, n=8):
 
 
 def main():
-    # 兼容 Windows GBK 控制台：遇到 ✓ 等不可编码字符降级为 ?，避免整个脚本因一个字符崩溃
+    # 兼容 Windows 管道/GBK 控制台：统一输出 UTF-8，且遇到 ✓ 等特殊字符不崩溃。
+    # 踩坑：只 reconfigure(errors=...) 不改编码时，父进程用 subprocess 捕获(非 tty)会按 cp936
+    # 编码写出中文而乱码，甚至抛 UnicodeDecodeError；必须一并把 encoding 设成 utf-8。
     for _s in (sys.stdout, sys.stderr):
         try:
-            _s.reconfigure(errors="replace")
+            _s.reconfigure(encoding="utf-8", errors="replace")
         except Exception:
             pass
     ap = argparse.ArgumentParser(description="降AI味与降重自查 v2")
     ap.add_argument("paper")
     ap.add_argument("source", nargs="?", default=None, help="题干/原题文本，用于查疑似抄题")
+    ap.add_argument("--strip-header", action="append", default=None, metavar="TEXT",
+                    help="删除等于 TEXT 的行(可多次)，用于去掉 PDF 逐页重复的页眉/页脚再分析")
+    ap.add_argument("--drop-repeat", type=int, default=None, metavar="N",
+                    help="删除出现 >= N 次的重复行(通常为逐页页眉/页脚)，降低'段首高频重复/题干重合'误报")
     args = ap.parse_args()
     if not os.path.exists(args.paper):
         print(f"[err] 论文不存在: {args.paper}", file=sys.stderr)
@@ -125,6 +135,16 @@ def main():
         print("[err] 论文内容为空或读取失败", file=sys.stderr)
         return 1
     lines = text.splitlines()
+    orig_lines = len(lines)
+    header_set = {h.strip() for h in (args.strip_header or []) if h.strip()}
+    if args.drop_repeat and args.drop_repeat >= 2:
+        cnt = Counter(ln.strip() for ln in lines if ln.strip())
+        header_set |= {ln for ln, c in cnt.items() if c >= args.drop_repeat}
+    if header_set:
+        lines = [ln for ln in lines if ln.strip() not in header_set]
+        print(f"[note] 已剔除 {orig_lines - len(lines)} 行页眉/页脚/重复版式行，"
+              f"降低'段首高频重复/题干重合'的版式误报。\n")
+    text = "\n".join(lines)
     total_hits = 0
     n_cjk = cjk_count(text)
     n_en = en_word_count(text)
