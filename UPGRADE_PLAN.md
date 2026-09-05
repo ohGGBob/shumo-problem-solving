@@ -1,8 +1,8 @@
-# 国一冲刺升级方案（UPGRADE_PLAN · v1.10.0）
+# 国一冲刺升级方案（UPGRADE_PLAN · v1.10.1）
 
 > 目标：把本 skill 从"强助教"推到"国一助攻"——不是承诺保送国一，而是把**可避免的失分清零**、把**亮点命中率抬到最高**、把 **72h 节奏管住**。国一 = 逻辑严密 × 计算准确 × 创新有据 × 表述清晰 × 规则零违规，本方案逐项打。
 
-## 一、已落地（v1.8.0 → v1.10.0，直接可用）
+## 一、已落地（v1.8.0 → v1.10.1，直接可用）
 
 | 增量 | 对应失分点 | 用法 |
 |---|---|---|
@@ -28,6 +28,7 @@
 | 远端仓库合并（v1.9.8，用户反馈"提交仓库"） | GitHub origin 分叉：远端独有 3 脚本 + init_project 模板增强（基于老版本，缺本地 v1.9.x 全部升级） | 以本地 v1.9.7 为权威 merge 远端历史（`-s ours` 保内容），再手动吸收远端 4 项资产：① `scripts/time_budget.py`（赛程时间预算看板，72h 红警 + --watch）；② `scripts/log_run.py`（极简实验追踪器，多版本对比留痕）；③ `scripts/gen_defense.py`（答辩 PPT 生成器，revealjs 零依赖 / pptx）；④ `init_project.py` 合并论文模板能力（`--template cumcm/mcm/both`：国赛 LaTeX / 美赛 DOCX 生成脚本 + 模板说明），并修复远端两处 bug（`\py{}` 占位改普通文本、`main(sys.argv[1)` 缺右括号）。SKILL/README/model-adaptation/preset 数量 18→21，路由表加"赛中实验追踪/答辩/时间红线"三行；version bump v1.9.8 |
 | 逐段核验原则（v1.9.9，用户反馈） | 模型上下文有限，把成品整篇丢给模型核验 → 前半逐条后半应付 / token 截断漏尾 / 核验清单一长必漏 | 新增**逐段核验原则**（SKILL 独立小节 + `references/verification-chunking.md`）：① 选主线（论文正文/最终方案/数据清单/代码，一次一条）；② 先给分段清单再逐段查（论文正文 8 段模板）；③ 每段 = 固定核验清单→排查→问题落盘 `out/verification_log.md`→确认干净才进下一段；④ 一段不核=未完成（分段清单逐项对照 + 问题闭环回查）；⑤ 跨段一致性最后单独跑 `crosscheck.py`，不靠每段顺手带过。路由表加"核验分段"行、收口第 6 项挂接；refs 50→51 |
 | 摘要打磨 + 数据叙事（v1.10.0，评估推荐的高杠杆方向） | 摘要占 30 分但只查"四要素齐不齐"没管"写得好不好"；C 题国一差距在数据挖掘深度而 data_profiler 只给结构概览 | ① `scripts/abstract_check.py` **摘要国一化检查**：数字密度（≥6 关键数字/每句 1 个，纯小数与中文量词计入、年份/编号排除）/ 四要素覆盖 / 灵敏度结论 / 套娃空话词 / 数字对账（--results，utf-8-sig 兼容 BOM）；② `references/abstract-crafting.md`：国一摘要四段式模板 + 数字密度规则 + 四要素"及格vs国一"对照 + 修辞清单 + 标准动作；③ `scripts/insight_miner.py` **数据洞察挖掘**：强相关对 / 偏态 / 分组差异（类别列识别兼容 pandas3.0 string dtype）/ 时间趋势 / 异常占比 / 高缺失，每条带来源+论文落点；④ `references/data-storytelling.md`：三类高价值发现（反直觉/隐藏结构/可解释规律）+ 发现四要素（陈述→证据→图→落点）+ 图选择表 + 5 个翻车实录。SKILL 路由/脚本表/收口第 3 项/标准流程第 7 步挂接；refs 51→53、scripts 21→23 |
+| 运行踩坑与工具链 + 评估后文档对齐（v1.10.1，评估发现+用户反馈） | Windows 运行踩坑无沉淀；SKILL/README 计数与版本漂移 | ① 新增 references/execution-gotchas.md（UTF-8/GBK 中文乱码、PDF 页眉致 dedup_scan 误报、xelatex 不在 PATH、Python 多版本发现、先读后改、降 AI 味高杠杆与 AI 披露边界）；② scripts/dedup_scan.py 加 --drop-repeat/--strip-header 剔除 PDF 逐页页眉/页脚 + 修正子进程 UTF-8 输出；③ README 计数 53→54、SKILL/README/UPGRADE_PLAN 版本与日期统一 v1.10.1(2026-09-05)、SKILL 脚本依赖表述澄清；SKILL 路由表接入运行踩坑行；refs 54、scripts 23 |
 
 ## 二、建议后续（按优先级，赛前窗口内能做的排前面）
 

@@ -2,7 +2,7 @@
 
 把一个数模赛题从「读不懂」推进到「可提交的论文」的 **Agent Skill**（供 DeepSeek Harness / 各类 agent preset 使用）。覆盖国赛 **CUMCM**、美赛 **MCM/ICM**，以及电工杯、华为杯、MathorCup、APMCM 等赛种。
 
-> 与 `SKILL.md` 同步至 **v1.10.0**（2026-09-03）。以 `SKILL.md` 为准，本文件是给人看的导览。
+> 与 `SKILL.md` 同步至 **v1.10.1**（2026-09-05）。以 `SKILL.md` 为准，本文件是给人看的导览。
 
 ## 一句话介绍
 
