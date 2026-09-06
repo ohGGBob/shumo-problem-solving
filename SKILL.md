@@ -2,7 +2,7 @@
 name: shumo-problem-solving
 description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）、2026 国赛 AI 使用声明与使用详情合规生成，支持时间极紧时的紧急模式（须用户显式点名「紧急模式」触发；emergency_run 不跳步走完 7 阶段 + 一键收口），并通用适配 DeepSeek 系模型（V3/R1/V4 全系列，一次会话绑定一个型号即可）。当用户给出数模题目、要求建立模型或求解、撰写数模论文或 AI 使用报告、要求紧急全流程产出、或询问 DeepSeek 系模型适配时使用。
 whenToUse: 用户给出数模竞赛题、要求建模/求解/检验、撰写数模论文与摘要、生成 AI 使用声明/详情（2026 合规）、时间紧急且显式要求进入紧急模式走完全流程，或询问 DeepSeek 系模型适配时。
-version: 1.10.1
+version: 1.10.2
 updated: 2026-09-05
 ---
 
@@ -158,7 +158,7 @@ updated: 2026-09-05
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位检查 |
 | `plot_style.py` | 科研绘图一键美化：rcParams + 配色 + 中文字体探测 + 300dpi 统一导出（需 matplotlib） |
 | `sanity_check.py` | 量纲 / 量级 / 边界 / 输出退化自动校验（数值须在合理范围、权重和=1、概率∈[0,1]、`--distinct` 抓"预测全为同一类/解全部相同"的模型空转；可库用或对 `results.json` 批量） |
-| `dedup_scan.py` | 降 AI 味与降重自查 v2（中/英分层词库 + 每千字密度 + 段首词/被动/排比 + 题干 n-gram 比对；`dedup_scan.py 论文.md 题干.txt`）；PDF 抽文本分析时加 `--drop-repeat 5` 或 `--strip-header "页眉"` 剔除逐页版式行，避免页眉误报 |
+| `dedup_scan.py` | 降 AI 味与降重自查 v2（中/英分层词库 + 每千字密度 + 段首词/被动/排比 + 题干 n-gram 比对；`dedup_scan.py 论文.md 题干.txt`）；PDF 抽文本分析时加 `--drop-repeat 5` 或 `--strip-header "页眉"` 剔除逐页版式行，避免页眉误报；加 `--dup-span 7` 做**查重式连续字符重复**自检（对齐知网/维普连续匹配，按受保护/待改写分类） |
 | `review_survey.py` | 赛后四维复盘问题清单 + 生成 `review_<日期>.md` 草稿（数据/模型/写作/协作） |
 | `log_run.py` | **极简实验追踪器**（72h 内试 10+ 版本救命）：qN.py 里 `from log_run import log_run` 记录（question/model/params/metrics/duration），`log_run.py` 查历史、`export` 导模型演进图 |
 | `time_budget.py` | **赛程时间预算看板**：`--contest cumcm/mcm --start <开赛时间> --watch` 显示当前阶段/剩余时间/硬截止红线，超时 ANSI 红色 + 响铃报警，护住 72h 节奏 |

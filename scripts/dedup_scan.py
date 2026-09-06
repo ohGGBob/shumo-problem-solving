@@ -3,7 +3,7 @@
 """降 AI 味 / 降重自查 v2：分层词库(中/英) + 密度统计 + 结构检测 + 题干 n-gram 比对。
 
 用法:
-    python dedup_scan.py <论文.md|.tex|.docx> [题干.txt] [--drop-repeat N] [--strip-header TEXT]
+    python dedup_scan.py <论文.md|.tex|.docx> [题干.txt] [--drop-repeat N] [--strip-header TEXT] [--dup-span N]
 
 警告(踩坑): 用 PyMuPDF 等把 PDF 抽成文本再喂本脚本时，逐页重复的页眉/页脚会被当成正文，
     导致两类误报——"段首 X 字开局 N 段"(页面标题每页都出现)与"与题干 8 字片重合"。
@@ -15,6 +15,8 @@
     3. 密度统计：每千字命中率 + 命中数排名（告诉你哪类最刺眼）
     4. 结构检测：段首词重复 / 被动堆砌(被…被…被) / 等长排比
     5. 题干 n-gram 比对：传第二个参数(题干文本)，标出疑似直接抄题面的句子
+    6. 查重式连续字符重复（对齐知网/维普连续匹配）：传题干时，扫与题干最大连续同文片段(默认 ≥7 字)，
+       按「受保护(含数字/字母/公式) vs 待改写(纯中文)」分类，给出需改写重点——交稿前自检降重
 
 命中 = 提醒而非禁用；同一类词**堆叠**才扣分，逐条改写见 deai-rewrite-bank.md。
 仅用标准库（Python 3.8+），无第三方依赖。
@@ -109,6 +111,40 @@ def shingles(s, n=8):
     return {s[i:i + n] for i in range(len(s) - n + 1)}
 
 
+def max_contiguous_spans(text, source, min_len):
+    """(查重式) 找出 text 中同时出现在 source 里的最大连续同文字符片段，长度 >= min_len。
+
+    返回 [(start, length, span)]，按 length 降序；记录后按该片段长度跳进步进，保证片段互不重叠。
+    对齐「知网/维普式连续字符重复」自检：种子取 source 的 min_len 子串集合，命中后贪心向右扩展成最大连续片段。
+    仅用字符串 in 判定，无第三方库；对数模论文规模足够，无需复杂后缀结构。
+    """
+    src = re.sub(r"\s+", "", source)
+    t = re.sub(r"\s+", "", text)
+    if min_len < 2 or len(src) < min_len:
+        return []
+    src_set = {src[j:j + min_len] for j in range(len(src) - min_len + 1)}
+    spans = []
+    i, n = 0, len(t)
+    while i <= n - min_len:
+        seed = t[i:i + min_len]
+        if seed not in src_set:
+            i += 1
+            continue
+        best = min_len
+        while i + best < n and t[i:i + best + 1] in src:
+            best += 1
+        spans.append((i, best, t[i:i + best]))
+        i += best
+    spans.sort(key=lambda x: (-x[1], x[0]))
+    return spans
+
+
+def classify_span(span):
+    """保护 vs 待改写：含数字/拉丁字母/百分号/单位/公式符号的片段多为专名、公式、数字或单位，
+    检测系统通常识别为受保护内容，不建议动；纯中文连续片段才判为「待改写」。"""
+    return "protected" if re.search(r"[0-9０-９A-Za-z%￥]", span) else "review"
+
+
 def main():
     # 兼容 Windows 管道/GBK 控制台：统一输出 UTF-8，且遇到 ✓ 等特殊字符不崩溃。
     # 踩坑：只 reconfigure(errors=...) 不改编码时，父进程用 subprocess 捕获(非 tty)会按 cp936
@@ -125,6 +161,8 @@ def main():
                     help="删除等于 TEXT 的行(可多次)，用于去掉 PDF 逐页重复的页眉/页脚再分析")
     ap.add_argument("--drop-repeat", type=int, default=None, metavar="N",
                     help="删除出现 >= N 次的重复行(通常为逐页页眉/页脚)，降低'段首高频重复/题干重合'误报")
+    ap.add_argument("--dup-span", type=int, default=7, metavar="N",
+                    help="查重式连续字符重复自检阈值：与题干/来源匹配的最大连续同文字符数(默认 7)。传 0 关闭本项。")
     args = ap.parse_args()
     if not os.path.exists(args.paper):
         print(f"[err] 论文不存在: {args.paper}", file=sys.stderr)
@@ -270,6 +308,33 @@ def main():
                         print(f"   ! 行 {i}：与题干 8 字片重合率 {frac:.0%}，最长连续同文 {lcs} 字——确认是转述而非照抄")
             if flagged == 0:
                 print("   ✓ 未发现与题干高重合的整句。")
+
+    # ── 5. 查重式连续字符重复（对齐知网/维普连续匹配；--dup-span 控制阈值）──
+    print("\n## 5. 连续字符重复（查重式 · 对齐知网/维普连续匹配）")
+    if not args.source or args.dup_span <= 0:
+        print("   (未提供题干文件或 --dup-span=0；传题干文件即启用本项)")
+    elif not os.path.exists(args.source):
+        print(f"   [warn] 题干文件不存在: {args.source}")
+    else:
+        src = read_text(args.source)
+        if not src.strip():
+            print("   [warn] 题干为空")
+        else:
+            spans = max_contiguous_spans(text, src, args.dup_span)
+            cjk = cjk_count(text)
+            review = [s for s in spans if classify_span(s[2]) == "review"]
+            prot = [s for s in spans if classify_span(s[2]) == "protected"]
+            rev_chars = sum(s[1] for s in review)
+            print(f"   与题干最大连续同文片段(≥{args.dup_span} 字)：共 {len(spans)} 段，"
+                  f"其中受保护(含数字/字母/公式) {len(prot)} 段，待改写(纯中文) {len(review)} 段")
+            if cjk:
+                print(f"   待改写连续重复字数 {rev_chars}，占全文中文 {rev_chars / cjk:.1%}")
+            for (start, length, span) in review[:10]:
+                total_hits += 1
+                print(f"   ! [{length} 字] 「{span}」")
+            if not review:
+                print(f"   ✓ 未发现 ≥{args.dup_span} 字的纯中文连续同文片段。")
+            print("   (受保护片段=专名/公式/数字/单位，检测系统常识别为受保护内容；纯中文连续片段才是改写重点。)")
 
     print(f"\n[dedup_scan] 共 {total_hits} 处命中/提醒。"
           f"命中=提醒而非禁用，同词堆叠才扣分；逐条改写见 writing-deai-dedup.md / deai-rewrite-bank.md。")

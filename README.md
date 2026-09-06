@@ -2,7 +2,7 @@
 
 把一个数模赛题从「读不懂」推进到「可提交的论文」的 **Agent Skill**（供 DeepSeek Harness / 各类 agent preset 使用）。覆盖国赛 **CUMCM**、美赛 **MCM/ICM**，以及电工杯、华为杯、MathorCup、APMCM 等赛种。
 
-> 与 `SKILL.md` 同步至 **v1.10.1**（2026-09-05）。以 `SKILL.md` 为准，本文件是给人看的导览。
+> 与 `SKILL.md` 同步至 **v1.10.2**（2026-09-05）。以 `SKILL.md` 为准，本文件是给人看的导览。
 
 ## 一句话介绍
 
@@ -100,7 +100,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | `ref_search.py` | **文献真实检索与核验**（需联网，OpenAlex API）：搜真实文献直出 GB/T 7714 草稿，`--verify DOI` 确认存在性 |
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位 |
 | `plot_style.py` | 科研绘图一键美化（配色 / 字号 / 中文字体 / 300dpi 导出，需 matplotlib） |
-| `dedup_scan.py` | 降 AI 味 + 降重自查 v2（中英分层词库 + 密度 + 题干 n-gram 比对） |
+| `dedup_scan.py` | 降 AI 味 + 降重自查 v2（中英分层词库 + 密度 + 题干 n-gram 比对 + `--dup-span` 查重式连续字符重复自检） |
 | `decision_log.py` | **决策日志**：每次拍板留痕，可导出论文「设计意图」与 AI 使用详情素材 |
 | `gen_ai_report.py` | **2026 国赛 AI 使用报告**：参考文献前声明 + 详情四要素 + 匿名 |
 | `prize_gate.py` | **国一冲刺计分板**：交稿前一条命令聚合 7 项校验出 PASS/FAIL 表 |
