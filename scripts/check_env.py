@@ -41,7 +41,7 @@ CORE_LIBS = [
 ]
 
 # 绘图/校验增强库：缺失可降级（脚本设计已兼容），标黄即可
-OPTIONAL_LIBS = ["PIL", "openpyxl", "sympy", "torch", "keras", "tensorflow", "pydot"]
+OPTIONAL_LIBS = ["PIL", "pymupdf", "openpyxl", "sympy", "torch", "keras", "tensorflow", "pydot"]
 
 
 def _console():

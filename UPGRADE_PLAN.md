@@ -1,4 +1,4 @@
-# 国一冲刺升级方案（UPGRADE_PLAN · v1.10.2）
+# 国一冲刺升级方案（UPGRADE_PLAN · v1.11.0）
 
 > 目标：把本 skill 从"强助教"推到"国一助攻"——不是承诺保送国一，而是把**可避免的失分清零**、把**亮点命中率抬到最高**、把 **72h 节奏管住**。国一 = 逻辑严密 × 计算准确 × 创新有据 × 表述清晰 × 规则零违规，本方案逐项打。
 
@@ -30,12 +30,13 @@
 | 摘要打磨 + 数据叙事（v1.10.0，评估推荐的高杠杆方向） | 摘要占 30 分但只查"四要素齐不齐"没管"写得好不好"；C 题国一差距在数据挖掘深度而 data_profiler 只给结构概览 | ① `scripts/abstract_check.py` **摘要国一化检查**：数字密度（≥6 关键数字/每句 1 个，纯小数与中文量词计入、年份/编号排除）/ 四要素覆盖 / 灵敏度结论 / 套娃空话词 / 数字对账（--results，utf-8-sig 兼容 BOM）；② `references/abstract-crafting.md`：国一摘要四段式模板 + 数字密度规则 + 四要素"及格vs国一"对照 + 修辞清单 + 标准动作；③ `scripts/insight_miner.py` **数据洞察挖掘**：强相关对 / 偏态 / 分组差异（类别列识别兼容 pandas3.0 string dtype）/ 时间趋势 / 异常占比 / 高缺失，每条带来源+论文落点；④ `references/data-storytelling.md`：三类高价值发现（反直觉/隐藏结构/可解释规律）+ 发现四要素（陈述→证据→图→落点）+ 图选择表 + 5 个翻车实录。SKILL 路由/脚本表/收口第 3 项/标准流程第 7 步挂接；refs 51→53、scripts 21→23 |
 | 运行踩坑与工具链 + 评估后文档对齐（v1.10.1，评估发现+用户反馈） | Windows 运行踩坑无沉淀；SKILL/README 计数与版本漂移 | ① 新增 references/execution-gotchas.md（UTF-8/GBK 中文乱码、PDF 页眉致 dedup_scan 误报、xelatex 不在 PATH、Python 多版本发现、先读后改、降 AI 味高杠杆与 AI 披露边界）；② scripts/dedup_scan.py 加 --drop-repeat/--strip-header 剔除 PDF 逐页页眉/页脚 + 修正子进程 UTF-8 输出；③ README 计数 53→54、SKILL/README/UPGRADE_PLAN 版本与日期统一 v1.10.1(2026-09-05)、SKILL 脚本依赖表述澄清；SKILL 路由表接入运行踩坑行；refs 54、scripts 23 |
 | 降重/降AI 增强（v1.10.2，用户强需求） | 缺查重式连续字符重复自检；降重方法论停留在"换词"，抗连续匹配弱 | ① scripts/dedup_scan.py 新增 `--dup-span`（对齐知网/维普连续匹配）：扫与题干最大连续同文片段（默认 ≥7 字），按「受保护(含数字/字母/公式) vs 待改写(纯中文)」分类并报重复占比；② references/writing-deai-dedup.md 补 §3.6 句群功能重组 + 段落类型分支(8 类) + 字数守恒(98–105%) + 事实保留优先 + 新增句弱介入 + 二轮打断，及检测侧通用信号(困惑度/突发率/句长多样性)；③ references/deai-rewrite-bank.md 增「句群功能重组 + 段落类型分支 + 固定术语保护」改写分支；SKILL/README 脚本行同步；refs 54、scripts 23 不变 |
+| 图表识别（v1.11.0，用户需求） | 读题/读数据只抽文字不读图，题面/数据里的机理示意、数据曲线、流程图被当装饰漏掉或看图瞎说 | 新增 `scripts/chart_read.py` **图表识别**：① from-pdf 整页渲染（矢量图/示意图也能抓到）+ 内嵌图原分辨率抽取；② page 单页高清渲染（矢量图放大看细节）；③ manifest 生成「图表识别清单」（`chart_read.md` + `chart_manifest.json`，每图一张识别卡：图表类型/标题/坐标轴+单位/图例/趋势/关键数值/论文转写句）；④ read 打印单图识别卡。识读交由带视觉的模型逐项填写，结果落 `report/figure_reading.md`，论文图解读句直接引用（支柱三「引出句→图表→解读句」三件套）。SKILL 路由表「图片查看」行改「图片/图表查看与识别」+ 脚本表挂接，README/preset/check_env 计数与依赖同步；refs 54 不变、scripts 23→24 |
 
 ## 二、建议后续（按优先级，赛前窗口内能做的排前面）
 
 ### P0 · 赛前 8 天（9/10 开赛前）
 - [x] **环境体检**：在建模环境跑 `check_env.py`，缺库立刻装、版本锁进 `requirements.txt`。
-- [x] **一键 smoke**：用 `init_project.py` 建个空项目跑 `prize_gate.py`，确认 23 个脚本在新机器全链通。
+- [x] **一键 smoke**：用 `init_project.py` 建个空项目跑 `prize_gate.py`，确认 24 个脚本在新机器全链通。
 - [ ] **规则再核验**：`rules-and-deadlines.md` 已要求开题第一动作 web_search 核官网；赛前最后一天把当年页数/AI 披露/提交渠道/查重口径打印置顶。
 
 ### P1 · 赛中 72h

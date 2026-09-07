@@ -2,7 +2,7 @@
 
 把一个数模赛题从「读不懂」推进到「可提交的论文」的 **Agent Skill**（供 DeepSeek Harness / 各类 agent preset 使用）。覆盖国赛 **CUMCM**、美赛 **MCM/ICM**，以及电工杯、华为杯、MathorCup、APMCM 等赛种。
 
-> 与 `SKILL.md` 同步至 **v1.10.2**（2026-09-05）。以 `SKILL.md` 为准，本文件是给人看的导览。
+> 与 `SKILL.md` 同步至 **v1.11.0**（2026-09-07）。以 `SKILL.md` 为准，本文件是给人看的导览。
 
 ## 一句话介绍
 
@@ -15,7 +15,7 @@ shumo-problem-solving/
 ├── SKILL.md          # 技能入口：门禁 / 铁律 / 质量三支柱 / 路由表 / 标准流程 / 收口
 ├── references/       # 54 个专题文档（按需加载路由，勿一次全读）
 ├── tools/            # skill_audit.py —— A–G 七项体检器，升级后一键回归
-└── scripts/          # 23 个脚本（13 个零第三方依赖 + data_profiler/insight_miner 需 pandas/openpyxl + img_tools 需 pillow/pymupdf + plot_style 需 matplotlib + pdf_extract 需 PyMuPDF + ref_search 需联网 + gen_defense pptx 需 python-pptx）
+└── scripts/          # 24 个脚本（13 个零第三方依赖 + data_profiler/insight_miner 需 pandas/openpyxl + img_tools/chart_read 需 pillow/pymupdf + plot_style 需 matplotlib + pdf_extract 需 PyMuPDF + ref_search 需联网 + gen_defense pptx 需 python-pptx）
 ```
 
 ## 核心特性
@@ -41,6 +41,7 @@ shumo-problem-solving/
 - **C 题数据叙事挖掘**：`insight_miner.py` 半自动挖候选发现（强相关/偏态/分组差异/时间趋势/异常/缺失），`data-storytelling.md` 把候选变成"发现→证据→图→论文落点"四要素的硬发现——数据题国一的真正分水岭。
 - **逐段核验原则（防核验漏）**：上下文有限，不整篇通读找问题——选主线 → 切分段 → 逐段闭环排查（问题落盘 `verification_log.md`）→ 一段不核=未完成 → 跨段一致性单独过。详见 `verification-chunking.md`。
 - **图片查看与提取**：`img_tools.py` 查看图片信息 / 放大看小字 / 裁剪局部 / 从 PDF 提取内图 / 扫描件整页渲染——配合模型视觉模态读题读图。
+- **图表识别**：`chart_read.py` 把题面/数据里的图抽/渲染出来（整页高清 + 内嵌图原分辨率），生成结构化「图表识别清单」（markdown + json，每图一张识别卡：类型/标题/坐标轴+单位/图例/趋势/关键数值/论文转写句），交由带视觉的模型逐项识读→转写论文图解读句——读图不漏图、不瞎说。
 - **防模型空转**：`sanity_check.py --distinct` 输出退化检查（预测全同值/解全一样当场抓住）+ `validation-checklist.md` 决策保持性检查（简化模型与完整模型最终决策必须一致）+ 图表用途四分类纪律（诊断图不入正文、每图必配解读）。
 
 ## 快速上手
@@ -64,7 +65,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | 真题定位（美赛） | `cases-2026-mcm.md`（六题解析 + O 奖率）、`mcm-icm-guide.md`（25 页硬上限 + 页面预算） |
 | 其他赛种 | `contests-catalog.md`（电工杯 / 华为杯 / MathorCup / APMCM / 深圳杯…） |
 | 数据 / 清洗 | `preprocessing-pipeline.md`、`data-science-playbook.md`、`bigdata-playbook.md` |
-| 数据 / 图片读取 | `data_profiler.py`（表格概览/清单）、`img_tools.py`（图片提取/放大/裁剪）、`pdf_extract.py`（PDF 全文） |
+| 数据 / 图片读取 | `data_profiler.py`（表格概览/清单）、`img_tools.py`（图片提取/放大/裁剪）、`chart_read.py`（图表识别/识别清单）、`pdf_extract.py`（PDF 全文） |
 | 数据完整性 | `data-reading-discipline.md`（铁律四：先建 data_inventory、数字必有出处、漏读自查、禁凭印象） |
 | 数据叙事 | `data-storytelling.md`（C 题国一胜负手：发现→证据→图→论文落点四要素，insight_miner 挖候选） |
 | 摘要打磨 | `abstract-crafting.md`（摘要 30 分：四段式模板 + 数字密度规则 + 修辞清单，abstract_check 量化检查） |
@@ -85,9 +86,9 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | 模型适配 | `model-adaptation.md`（DeepSeek 系通用） |
 | 决策交互 | `decision-cards.md`（一次一张卡 / 按小问推进 / 边做边教） |
 
-## scripts/ 一览（23 个）
+## scripts/ 一览（24 个）
 
-> 除 `plot_style.py` 需 matplotlib、`pdf_extract.py` 需 PyMuPDF、`img_tools.py` 需 pillow/pymupdf、`data_profiler.py`/`insight_miner.py` 需 pandas/openpyxl、`gen_defense.py --format pptx` 需 python-pptx 外，脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。**脚本与模型型号无关。**
+> 除 `plot_style.py` 需 matplotlib、`pdf_extract.py` 需 PyMuPDF、`img_tools.py`/`chart_read.py` 需 pillow/pymupdf、`data_profiler.py`/`insight_miner.py` 需 pandas/openpyxl、`gen_defense.py --format pptx` 需 python-pptx 外，脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。**脚本与模型型号无关。**
 
 | 脚本 | 作用 |
 |---|---|
@@ -113,6 +114,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | `insight_miner.py` | **数据洞察挖掘**：相关/偏态/分组差异/时间趋势/异常/缺失候选发现，带来源+论文落点 |
 | `abstract_check.py` | **摘要国一化检查**：数字密度/四要素/灵敏度/套娃词/数字对账（`--results`） |
 | `img_tools.py` | **图片查看/提取**：info/zoom/crop/from-pdf/page/batch（配合视觉模态读题） |
+| `chart_read.py` | **图表识别**：from-pdf 抽图渲染 / page 单页高清 / manifest 生成「图表识别清单」(md+json) / read 单图识别卡——交给视觉模型逐项识读，转写论文图解读句 |
 | `pdf_extract.py` | **PDF 全文提取**：逐页全文 + 页标记 + 完整性报告，防读题遗漏 |
 
 ### 三条命令撑起一稿
