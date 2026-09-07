@@ -103,7 +103,8 @@ def check(text, results_path=None, min_words=800, max_words=1000):
         hit = [k for k in kws if k in text_l or k.lower() in text_l]
         lines.append(f"  {'[PASS]' if hit else '[FAIL]'} {k}：{'、'.join(hit[:4]) if hit else '未检出 → 补一句'} ")
     sens = [s for s in _SENS if s in text]
-    lines.append(f"  {'[PASS]' if sens else '[FAIL]'} 灵敏度量化结论：{('、'.join(sens)) if sens else '未检出 → 加一句\"±10% 摄动下结论稳健\"'}")
+    sens_hint = '未检出 → 加一句"±10% 摄动下结论稳健"'
+    lines.append(f"  {'[PASS]' if sens else '[FAIL]'} 灵敏度量化结论：{'、'.join(sens) if sens else sens_hint}")
 
     fluff = [f for f in _FLUFF if f in text]
     lines.append(f"\n套娃/空话词：{len(fluff)} 处" + (f"（{'、'.join(fluff)}）→ 删或换具体表述" if fluff else " → [PASS] 无"))
