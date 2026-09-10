@@ -2,7 +2,7 @@
 
 把一个数模赛题从「读不懂」推进到「可提交的论文」的 **Agent Skill**（供 DeepSeek Harness / 各类 agent preset 使用）。覆盖国赛 **CUMCM**、美赛 **MCM/ICM**，以及电工杯、华为杯、MathorCup、APMCM 等赛种。
 
-> 与 `SKILL.md` 同步至 **v1.11.1**（2026-09-07）。以 `SKILL.md` 为准，本文件是给人看的导览。
+> 与 `SKILL.md` 同步至 **v1.12.0**（2026-09-10）。以 `SKILL.md` 为准，本文件是给人看的导览。
 
 ## 一句话介绍
 
@@ -13,9 +13,9 @@
 ```
 shumo-problem-solving/
 ├── SKILL.md          # 技能入口：门禁 / 铁律 / 质量三支柱 / 路由表 / 标准流程 / 收口
-├── references/       # 54 个专题文档（按需加载路由，勿一次全读）
+├── references/       # 55 个专题文档（按需加载路由，勿一次全读）
 ├── tools/            # skill_audit.py —— A–G 七项体检器，升级后一键回归
-└── scripts/          # 24 个脚本（13 个零第三方依赖 + data_profiler/insight_miner 需 pandas/openpyxl + img_tools/chart_read 需 pillow/pymupdf + plot_style 需 matplotlib + pdf_extract 需 PyMuPDF + ref_search 需联网 + gen_defense pptx 需 python-pptx）
+└── scripts/          # 25 个脚本（13 个零第三方依赖 + data_profiler/insight_miner/xlsx_deliverable 需 pandas/openpyxl + img_tools/chart_read 需 pillow/pymupdf + plot_style 需 matplotlib + pdf_extract 需 PyMuPDF + ref_search 需联网 + gen_defense pptx 需 python-pptx）
 ```
 
 ## 核心特性
@@ -54,7 +54,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 
 保持 `SKILL.md` + `references/` + `scripts/` 结构即可，skill 加载器以 `SKILL.md` 为入口、按阶段路由读取 `references/`。之后在对话里直接发一道数模题（或「只写摘要」「只做灵敏度」），skill 即生效。
 
-## references/ 导览（54 个，按阶段分组）
+## references/ 导览（55 个，按阶段分组）
 
 > 完整路由表见 `SKILL.md`「按需加载路由表」——**动手前先查那里，别一次全读**。
 
@@ -86,9 +86,9 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | 模型适配 | `model-adaptation.md`（DeepSeek 系通用） |
 | 决策交互 | `decision-cards.md`（一次一张卡 / 按小问推进 / 边做边教） |
 
-## scripts/ 一览（24 个）
+## scripts/ 一览（25 个）
 
-> 除 `plot_style.py` 需 matplotlib、`pdf_extract.py` 需 PyMuPDF、`img_tools.py`/`chart_read.py` 需 pillow/pymupdf、`data_profiler.py`/`insight_miner.py` 需 pandas/openpyxl、`gen_defense.py --format pptx` 需 python-pptx 外，脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。**脚本与模型型号无关。**
+> 除 `plot_style.py` 需 matplotlib、`pdf_extract.py` 需 PyMuPDF、`img_tools.py`/`chart_read.py` 需 pillow/pymupdf、`data_profiler.py`/`insight_miner.py`/`xlsx_deliverable.py` 需 pandas/openpyxl、`gen_defense.py --format pptx` 需 python-pptx 外，脚本仅用标准库（PIL 可选、缺失时 `figcheck.py` 自动跳过 DPI 硬检），Python 3.8+ 直接跑。**脚本与模型型号无关。**
 
 | 脚本 | 作用 |
 |---|---|
@@ -100,6 +100,7 @@ C:\Users\<你>\.dsh\.agent-presets\<preset>\skills\shumo-problem-solving\
 | `verify_refs.py` | 参考文献核验清单 + 孤儿/悬空引用检测 |
 | `ref_search.py` | **文献真实检索与核验**（需联网，OpenAlex API）：搜真实文献直出 GB/T 7714 草稿，`--verify DOI` 确认存在性 |
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位 |
+| `xlsx_deliverable.py` | **Excel 交付物「行列位」体检**（题目给 `resultN.xlsx` 模板时必跑）：`probe` 先看模板契约（表头行/标签列/数据行列区间，空模板也能推断）、`check` 体检"表头被覆盖 / 标签被数值覆盖 / 错位 / 末行末列空 / 空洞 / 溢出" |
 | `plot_style.py` | 科研绘图一键美化（配色 / 字号 / 中文字体 / 300dpi 导出，需 matplotlib） |
 | `dedup_scan.py` | 降 AI 味 + 降重自查 v2（中英分层词库 + 密度 + 题干 n-gram 比对 + `--dup-span` 查重式连续字符重复自检） |
 | `decision_log.py` | **决策日志**：每次拍板留痕，可导出论文「设计意图」与 AI 使用详情素材 |

@@ -2,8 +2,8 @@
 name: shumo-problem-solving
 description: 数学建模竞赛全流程解题，默认面向国赛 CUMCM（72 小时、中文、A/B/C），兼美赛 MCM/ICM 及电工杯、华为杯、APMCM 等——读题拆解、真题定位、模型假设、模型选型、Python 求解实现、灵敏度与误差分析、论文与摘要撰写（含科研图表美化）、2026 国赛 AI 使用声明与使用详情合规生成，支持时间极紧时的紧急模式（须用户显式点名「紧急模式」触发；emergency_run 不跳步走完 7 阶段 + 一键收口），并通用适配 DeepSeek 系模型（V3/R1/V4 全系列，一次会话绑定一个型号即可）。当用户给出数模题目、要求建立模型或求解、撰写数模论文或 AI 使用报告、要求紧急全流程产出、或询问 DeepSeek 系模型适配时使用。
 whenToUse: 用户给出数模竞赛题、要求建模/求解/检验、撰写数模论文与摘要、生成 AI 使用声明/详情（2026 合规）、时间紧急且显式要求进入紧急模式走完全流程，或询问 DeepSeek 系模型适配时。
-version: 1.11.1
-updated: 2026-09-07
+version: 1.12.0
+updated: 2026-09-10
 ---
 
 # 数学建模竞赛解题（国赛 CUMCM 为主 · MCM/ICM 及其他赛种）
@@ -139,7 +139,8 @@ updated: 2026-09-07
 | **交稿收口** | `reproducibility.md` + 跑 `scripts/prize_gate.py`（一键计分板，聚合全部校验） |
 | **紧急模式** | `emergency-mode.md` + 跑 `scripts/emergency_run.py`（7 阶段不跳步 + 红警 + 一键收口） |
 | **AI 使用报告（2026 合规）** | `ai-usage-report.md` + 跑 `scripts/gen_ai_report.py`（声明 + 使用详情四要素 + 匿名） |
-| **运行踩坑 / 工具链（跑脚本前扫一眼）** | `execution-gotchas.md`（Windows 中文乱码与子进程 UTF-8 捕获、PDF 页眉致 dedup_scan 误报、xelatex 不在 PATH、Python 多版本发现、编辑先读后改；附降 AI 味高杠杆点与 AI 披露边界） |
+| **运行踩坑 / 工具链（跑脚本前扫一眼）** | `execution-gotchas.md`（Windows 中文乱码与子进程 UTF-8 捕获、PDF 页眉致 dedup_scan 误报、xelatex 不在 PATH、Python 多版本发现、编辑先读后改、**Excel 交付物行列位错位**、**沙箱限制清单（multiprocessing 不可用 / shgo 崩 / 同路径并发写 / 孤儿进程）**、**"判据选择比数值精度更致命"**；附降 AI 味高杠杆点与 AI 披露边界） |
+| **子代理并行与交叉验证（多方法求解 / 大规模并行时）** | `subagent-orchestration.md`（先自己写好并冒烟测试核心模块再派发、提示词八要素、**必须有一条独立复核分支（实测抓出交付物行列位缺陷）**、失败模式与处置、并行度与资源、汇总纪律"分歧先问是不是同一个量"） |
 | **模型适配（DeepSeek 系通用）** | `model-adaptation.md`（不区分型号：长上下文 / 成本意识 / 卡壳换更强型号） |
 
 脚本（位于本 SKILL.md 同级 `scripts/` 目录；**基础校验/对账类脚本零第三方依赖**（PIL 可选、缺失时自动降级）；表格/图片/PDF/PPT/文献类脚本另需对应库——完整依赖见下方"运行前提"）：
@@ -157,6 +158,7 @@ updated: 2026-09-07
 | `img_tools.py` | **图片查看与提取**（配合视觉模态读题/看细节）：`info` 基本信息 / `zoom` 放大看小字 / `crop` 裁剪局部 / `from-pdf` 提取 PDF 内图 / `page` 扫描件整页渲染 / `batch` 批量 |
 | `chart_read.py` | **图表识别**（读题/读数据把图吃透）：`from-pdf` 整页渲染+内嵌图原分辨率抽取 / `page` 单页高清渲染（矢量图放大）/ `manifest` 生成「图表识别清单」（markdown+json，每图一张识别卡：类型/标题/坐标轴+单位/图例/趋势/关键数值/论文转写句）/ `read` 打印单图识别卡；识读交由带视觉的模型逐项填写，结果落 `report/figure_reading.md`，论文图解读句直接引用（支柱三「引出句→图表→解读句」三件套） |
 | `figcheck.py` | 图表 DPI / 命名 / 引用 / 标题单位检查 |
+| `xlsx_deliverable.py` | **Excel 交付物「行列位」体检**（题目给 `resultN.xlsx` 模板时的必跑项）：`probe 附件/resultN.xlsx` 先看模板契约（表头行/标签列/数据行列区间/填值约定，空模板也能推断）；`check out/resultN.xlsx --sheet 位置 --auto` 体检"表头被覆盖 / 标签被数值覆盖 / 数据区错位 / 末行末列空 / 空洞 / 溢出"。**数值全对但行列位错，自检常因复用同一套错误约定而漏检**（需 openpyxl） |
 | `plot_style.py` | 科研绘图一键美化：rcParams + 配色 + 中文字体探测 + 300dpi 统一导出（需 matplotlib） |
 | `sanity_check.py` | 量纲 / 量级 / 边界 / 输出退化自动校验（数值须在合理范围、权重和=1、概率∈[0,1]、`--distinct` 抓"预测全为同一类/解全部相同"的模型空转；可库用或对 `results.json` 批量） |
 | `dedup_scan.py` | 降 AI 味与降重自查 v2（中/英分层词库 + 每千字密度 + 段首词/被动/排比 + 题干 n-gram 比对；`dedup_scan.py 论文.md 题干.txt`）；PDF 抽文本分析时加 `--drop-repeat 5` 或 `--strip-header "页眉"` 剔除逐页版式行，避免页眉误报；加 `--dup-span 7` 做**查重式连续字符重复**自检（对齐知网/维普连续匹配，按受保护/待改写分类） |
@@ -171,7 +173,7 @@ updated: 2026-09-07
 | `emergency_run.py` | **紧急全流程编排器**：7 阶段 checkpoint 不跳步 + 红警（时间vs进度自动给"砍什么保什么"）+ finish 一键收口（prize_gate+AI报告+提交清单） |
 | `gen_defense.py` | **答辩 PPT 半自动生成器**：`--format revealjs` 生成 12 页答辩骨架（浏览器直接放映，零依赖）或 `--format pptx`（需 python-pptx），从 results.json 拉数据 |
 
-> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；例外：`plot_style.py` 需 matplotlib、`pdf_extract.py`/`img_tools.py`/`chart_read.py` 需 PyMuPDF、`img_tools.py`/`chart_read.py` 另需 Pillow、`data_profiler.py`/`insight_miner.py` 需 pandas/openpyxl、`gen_defense.py --format pptx` 需 python-pptx、`ref_search.py` 需联网（OpenAlex API）。**赛前用 `check_env.py` 体检并一键装齐依赖**（表格/图片/PDF 读取工具已配好，避免赛中临时装）。**脚本全部与模型型号无关，任何 DeepSeek 系会话下直接调用。**
+> 运行前提：本机 Python 3.8+，脚本只用标准库（无 Pillow 时 `figcheck.py` 自动跳过 DPI 硬检）；例外：`plot_style.py` 需 matplotlib、`pdf_extract.py`/`img_tools.py`/`chart_read.py` 需 PyMuPDF、`img_tools.py`/`chart_read.py` 另需 Pillow、`data_profiler.py`/`insight_miner.py` 需 pandas/openpyxl、`xlsx_deliverable.py` 需 openpyxl、`gen_defense.py --format pptx` 需 python-pptx、`ref_search.py` 需联网（OpenAlex API）。**赛前用 `check_env.py` 体检并一键装齐依赖**（表格/图片/PDF 读取工具已配好，避免赛中临时装）。**脚本全部与模型型号无关，任何 DeepSeek 系会话下直接调用。**
 >
 > **脚本不可运行（如无 Python 环境）时，按下面手工清单逐条替代**：① 数值对账——把论文数字逐个在 `out/results.json` 里检索，找不到即"野数字"，要么补进 json 要么删；② 量纲/量级/边界——人肉过 `validation-checklist.md` 的量级三连（权重和=1、概率∈[0,1]、单位一致）；③ 参考文献——逐条在期刊/DOI 联网核，正文引用键与文末表一一对应，孤儿/悬空都删；④ 图表——逐张看标题/单位/图例/≥300dpi/图注三件套，配色与右上 spine 照 `figure-polish.md` §5、§6；⑤ 降重——摘要/重述/结论扫"首先其次最后"套娃与零信息句；⑥ 复现——固定 seed 重跑一遍再逐位比对。
 
@@ -192,7 +194,7 @@ updated: 2026-09-07
 
 ## 模型适配（DeepSeek 系通用）
 
-本 skill 对 **DeepSeek 系模型通用**（V3 / R1 / V4 全系列，一次会话绑定一个型号即可）：全流程、24 个本地脚本、紧急模式与 AI 报告均与型号无关，任何型号都能完整跑通。四条通用要点：① 1M 长上下文可用，贵型号省着用、便宜型号放开用；② 强推理型号在选型 / 创新 / 论证环节质量更高，轻量型号卡壳就换更强型号**开新会话**补；③ 校验脚本是本地工具，不占模型 token；④ 机械活交给便宜型号 / 本地脚本，高价值推理留给强推理型号。详见 `references/model-adaptation.md`。
+本 skill 对 **DeepSeek 系模型通用**（V3 / R1 / V4 全系列，一次会话绑定一个型号即可）：全流程、25 个本地脚本、紧急模式与 AI 报告均与型号无关，任何型号都能完整跑通。四条通用要点：① 1M 长上下文可用，贵型号省着用、便宜型号放开用；② 强推理型号在选型 / 创新 / 论证环节质量更高，轻量型号卡壳就换更强型号**开新会话**补；③ 校验脚本是本地工具，不占模型 token；④ 机械活交给便宜型号 / 本地脚本，高价值推理留给强推理型号。详见 `references/model-adaptation.md`。
 
 ## 逐段核验原则（核验防漏 · 上下文有限下的排查纪律）
 
@@ -212,8 +214,9 @@ updated: 2026-09-07
 4. **数据完整性**：`data_inventory.md` 与 `data/` 逐项对照无遗漏？论文每个数据数字能在数据文件里找到出处（铁律四）？
 5. **参考文献核查**：逐条联网核实（`ref_search.py` 检索/核 DOI）+ 引用键一一对应（`verify_refs.py`）。
 6. **数值对账 + 复现**：canonical 脚本逐位核对 + 干净环境复跑（`check_results.py` + `crosscheck.py` 跨文件一致性）；**整篇核验按「逐段核验原则」分段闭环，不整篇通读**（`verification-chunking.md`）。
-7. **降 AI 味 / 降重**：过 `writing-deai-dedup.md` + `dedup_scan.py`。
-8. **AI 使用合规（2026 必做）**：参考文献之前有「AI工具使用声明」；用了 AI 则支撑材料含「AI工具使用详情.pdf」（匿名、四要素）；如实披露、不隐瞒（`gen_ai_report.py`，见 `ai-usage-report.md`）。
+7. **交付物格式（有 `resultN.xlsx` 模板时必做）**：先 `xlsx_deliverable.py probe 附件/resultN.xlsx` 看行列契约，填完 `check` 体检——**"数值全对但行列位错位一格"是真实高频翻车点，且自检常因复用同一套错误约定而全绿**；行列位必须由独立脚本/独立分支复核。
+8. **降 AI 味 / 降重**：过 `writing-deai-dedup.md` + `dedup_scan.py`。
+9. **AI 使用合规（2026 必做）**：参考文献之前有「AI工具使用声明」；用了 AI 则支撑材料含「AI工具使用详情.pdf」（匿名、四要素）；如实披露、不隐瞒（`gen_ai_report.py`，见 `ai-usage-report.md`）。
 
 ## 常见坑与红线
 
